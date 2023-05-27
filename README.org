@@ -1,6 +1,6 @@
 * Flappyversary
-Celebrating the tenth anniversary of Flappy Bird
+Celebrating the tenth anniversary of Flappy Bird.
 ** Requirements
 - The game has one core interaction.
-- The end
+- The end.
 ** Design
