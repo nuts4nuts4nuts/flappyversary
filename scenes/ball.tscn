@@ -1,7 +1,29 @@
-[gd_scene format=3 uid="uid://dewvpj13jxeks"]
+[gd_scene load_steps=4 format=3 uid="uid://ceposmcidlxhh"]
 
-[node name="ball" type="Node2D"]
+[ext_resource type="Script" path="res://scripts/ball-drawing.gd" id="2_nn1wk"]
+[ext_resource type="FontFile" uid="uid://yms4qa7f8yr1" path="res://fonts/Xolonium-Regular.ttf" id="2_rq6wo"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[sub_resource type="CircleShape2D" id="CircleShape2D_bkhgt"]
+radius = 60.0
 
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
+[node name="Node" type="Node"]
+
+[node name="Drawer" type="Node2D" parent="."]
+script = ExtResource("2_nn1wk")
+
+[node name="Value" type="Label" parent="."]
+offset_left = -66.0
+offset_top = -37.0
+offset_right = 69.0
+offset_bottom = 44.0
+theme_override_fonts/font = ExtResource("2_rq6wo")
+theme_override_font_sizes/font_size = 48
+text = "555"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+top_level = true
+shape = SubResource("CircleShape2D_bkhgt")
+metadata/_edit_group_ = true

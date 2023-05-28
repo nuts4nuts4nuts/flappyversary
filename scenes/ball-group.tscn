@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://b87gypk8q3qob"]
+
+[ext_resource type="Script" path="res://scripts/ball.gd" id="1_sdlll"]
+[ext_resource type="Script" path="res://scripts/ball-drawing.gd" id="3_7k7nr"]
+[ext_resource type="Script" path="res://scripts/ball-value.gd" id="4_6mm4q"]
+[ext_resource type="FontFile" uid="uid://yms4qa7f8yr1" path="res://fonts/Xolonium-Regular.ttf" id="4_xkb52"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c18o4"]
+friction = 0.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_srb4v"]
+radius = 64.0
+
+[node name="Ball" type="RigidBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_c18o4")
+gravity_scale = 2.66454e-15
+max_contacts_reported = 1
+contact_monitor = true
+lock_rotation = true
+script = ExtResource("1_sdlll")
+initial_impulse = Vector2(100, 2.08165e-12)
+metadata/_edit_group_ = true
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_srb4v")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Drawer" type="Node2D" parent="Visuals"]
+script = ExtResource("3_7k7nr")
+
+[node name="Value" type="Label" parent="Visuals"]
+offset_left = -66.0
+offset_top = -37.0
+offset_right = 69.0
+offset_bottom = 44.0
+theme_override_fonts/font = ExtResource("4_xkb52")
+theme_override_font_sizes/font_size = 48
+text = "555"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_6mm4q")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="merged" from="." to="Visuals/Value" method="_on_ball_merged"]
