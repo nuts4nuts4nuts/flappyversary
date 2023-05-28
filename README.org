@@ -4,3 +4,4 @@ Celebrating the tenth anniversary of Flappy Bird.
 - The game has one core interaction.
 - The end.
 ** Design
+How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bird?
