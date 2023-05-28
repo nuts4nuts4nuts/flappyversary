@@ -9,5 +9,5 @@
 position = Vector2(173, 465)
 
 [node name="Ball" parent="." instance=ExtResource("1_fjp4r")]
-position = Vector2(177, 206)
+position = Vector2(196, 337)
 initial_impulse = Vector2(2.08165e-12, 2.08165e-12)
