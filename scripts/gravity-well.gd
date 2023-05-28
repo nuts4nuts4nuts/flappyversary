@@ -10,8 +10,6 @@ func _ready():
 func _process(delta):
 	pass
 
-
-
 var _attracted_objects = []
 
 func _input(event):
