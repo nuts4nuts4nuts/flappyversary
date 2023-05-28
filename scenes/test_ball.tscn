@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bde642p286rq2"]
+
+[ext_resource type="Texture2D" uid="uid://5qxfnkeuhmm3" path="res://Assets/download-white-circle-png-31629716484axd08oupl9.png" id="1_jb2qp"]
+[ext_resource type="Script" path="res://scenes/test_ball.gd" id="1_vyhqo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_se2g8"]
+radius = 95.2575
+
+[node name="test_ball" type="RigidBody2D"]
+script = ExtResource("1_vyhqo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_jb2qp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_se2g8")
