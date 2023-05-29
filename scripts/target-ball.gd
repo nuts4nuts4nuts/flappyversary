@@ -3,14 +3,17 @@ extends RigidBody2D
 signal merged
 
 @export var initial_impulse: Vector2
-@export var gravity_well: Node2D
+@export var _gravity_well: Node2D
 
-var is_target = false
 var merge_boost = 0.2
-var ball_value = 1
-var force = 100000
+var ball_value = 5
+var force = 90
+var is_target = true
+var target_progress = 0
+var cashing_in = false
 
 func _ready():
+	
 	apply_central_impulse(initial_impulse)
 
 
@@ -18,24 +21,19 @@ func _ready():
 func _process(delta):
 	pass
 
-
 func _physics_process(delta):
-
-	if(gravity_well != null):
-		var me_to_well = gravity_well.global_position - global_position
-		var distance = me_to_well.length_squared()
-		var direction = me_to_well.normalized()
-
-		var base_force = force * direction
-		var falloff = 1 / max(1, distance)
-		apply_force(base_force * falloff, Vector2.ZERO)
-
+	if(_gravity_well != null):
+		var _dist = (_gravity_well.position.distance_to(position))
+		print(_dist)
+		apply_force((1/pow(_dist, 2.2)) * (_gravity_well.position - position).normalized() * force, Vector2.ZERO)
+		
+		
+		#linear_velocity *= 0.99
 
 func _on_body_entered(body):
 	var my_velocity = linear_velocity
 	var their_velocity = body.linear_velocity
-	
-	if !body.is_target && name < body.name:
+	if !body.is_target && body.ball_value == ball_value:
 		print(name + " stealing")
 		apply_central_impulse((my_velocity + their_velocity) * 0.2)
 		ball_value += ball_value
@@ -46,5 +44,17 @@ func _on_body_entered(body):
 				merged.connect(child.get_node("Value")._on_ball_merged)
 			child.reparent(self)
 		body.queue_free()
+		merged.emit()
+		target_progress += 1
+		if !cashing_in && target_progress == ball_value:
+			start_cash_in()
+	else:
+		apply_central_impulse((my_velocity + their_velocity) * 0.2)
+	
 
-	merged.emit()
+func start_cash_in():
+	get_node("Timer").start()
+
+
+func _on_timer_timeout():
+	queue_free()
