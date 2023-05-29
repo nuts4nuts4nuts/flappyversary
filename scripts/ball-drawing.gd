@@ -6,9 +6,10 @@ func _ready():
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Called every frame. '`delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
+
 func _draw():
-	draw_circle(position, 64.0, Color(1, 0, 0))
+	draw_circle(position, 32.0, Color(1, 0, 0))

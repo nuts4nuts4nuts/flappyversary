@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://iq15pnqp1p3n"]
 
 [ext_resource type="Script" path="res://scripts/MakeGravityWell.gd" id="1_4s8h1"]
-[ext_resource type="PackedScene" uid="uid://bde642p286rq2" path="res://scenes/test_ball.tscn" id="2_56q3j"]
+[ext_resource type="PackedScene" uid="uid://bde642p286rq2" path="res://scenes/test-ball.tscn" id="2_56q3j"]
 [ext_resource type="PackedScene" uid="uid://ce4vyygh8x8ey" path="res://scenes/gravity_well.tscn" id="3_o47sc"]
 
 [sub_resource type="Curve2D" id="Curve2D_xp3v8"]

@@ -9,7 +9,7 @@
 friction = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_srb4v"]
-radius = 64.0
+radius = 32.0
 
 [node name="Ball" type="RigidBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_c18o4")
@@ -35,7 +35,7 @@ offset_top = -37.0
 offset_right = 69.0
 offset_bottom = 44.0
 theme_override_fonts/font = ExtResource("4_xkb52")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 30
 text = "555"
 horizontal_alignment = 1
 vertical_alignment = 1
