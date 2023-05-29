@@ -1,36 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://iq15pnqp1p3n"]
+[gd_scene load_steps=4 format=3 uid="uid://iq15pnqp1p3n"]
 
 [ext_resource type="Script" path="res://scripts/MakeGravityWell.gd" id="1_4s8h1"]
-[ext_resource type="PackedScene" uid="uid://bde642p286rq2" path="res://scenes/test-ball.tscn" id="2_56q3j"]
-[ext_resource type="PackedScene" uid="uid://ce4vyygh8x8ey" path="res://scenes/gravity_well.tscn" id="3_o47sc"]
-
-[sub_resource type="Curve2D" id="Curve2D_xp3v8"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 62, 45, 0, 0, 0, 0, 1082, 54, 0, 0, 0, 0, 1080, 597, 0, 0, 0, 0, 71, 593, 0, 0, 0, 0, 61, 60)
-}
-point_count = 5
+[ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="2_rlxa8"]
+[ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="3_o47sc"]
 
 [node name="gravity_test" type="Node2D"]
 script = ExtResource("1_4s8h1")
-test_ball_scene = ExtResource("2_56q3j")
-
-[node name="ball_path" type="Path2D" parent="."]
-curve = SubResource("Curve2D_xp3v8")
-
-[node name="ball_path_location" type="PathFollow2D" parent="ball_path"]
-position = Vector2(62, 45)
-rotation = 0.0088233
+test_ball_scene = ExtResource("2_rlxa8")
 
 [node name="ball_timer" type="Timer" parent="."]
-autostart = true
 
 [node name="spawn_position" type="Node2D" parent="."]
 position = Vector2(109, 95)
 
 [node name="gravity_well" parent="." instance=ExtResource("3_o47sc")]
-position = Vector2(172, 414)
-gravity_space_override = 3
-gravity_point_unit_distance = 37.734
-gravity = 50.0
+position = Vector2(866, 644)
+
+[node name="Ball" parent="." instance=ExtResource("2_rlxa8")]
+position = Vector2(239, 211)
 
 [connection signal="timeout" from="ball_timer" to="." method="_on_ball_timer_timeout"]

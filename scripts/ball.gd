@@ -3,9 +3,11 @@ extends RigidBody2D
 signal merged
 
 @export var initial_impulse: Vector2
+@export var _gravity_well: Node2D
 
 var merge_boost = 0.2
 var ball_value = 1
+var force = 0.0001
 
 func _ready():
 	apply_central_impulse(initial_impulse)
@@ -15,6 +17,11 @@ func _ready():
 func _process(delta):
 	pass
 
+func _physics_process(delta):
+	if(_gravity_well != null):
+		var _dist = (_gravity_well.position.distance_to(position))
+		print(_dist)
+		apply_force(pow(_dist, 2.5) * (_gravity_well.position - position).normalized() * force, Vector2.ZERO)
 
 func _on_body_entered(body):
 	var my_velocity = linear_velocity
@@ -33,4 +40,6 @@ func _on_body_entered(body):
 		body.queue_free()
 
 	merged.emit()
+
+
 

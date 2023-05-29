@@ -4,6 +4,7 @@ extends Node
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	get_node("Ball")._gravity_well = $gravity_well
 	pass # Replace with function body.
 
 
@@ -22,6 +23,7 @@ func make_well(event):
 func _on_ball_timer_timeout():
 	print("BALLING")
 	var test_ball = test_ball_scene.instantiate()
+	test_ball
 	var ball_spawn_location = $spawn_position.position#get_node("ball_path/ball_path_location")
 	#ball_spawn_location.h_offset = randi()
 	#var direction = ball_spawn_location.rotation + PI / 2
