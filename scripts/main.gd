@@ -19,7 +19,7 @@ func _on_spawn_timer_timeout():
 
 func spawn_ball():
 	var ball = ball_scene.instantiate()
-	ball._gravity_well = $gravity_well
+	ball.gravity_well = $gravity_well
 	var spawn_pos = $BallSpawnPos
 	
 	ball.position = spawn_pos.position
