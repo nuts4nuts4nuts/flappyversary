@@ -8,7 +8,7 @@ signal merged
 var is_target = false
 var merge_boost = 0.2
 var ball_value = 1
-var force = 100000
+var base_force = 200
 
 func _ready():
 	apply_central_impulse(initial_impulse)
@@ -26,9 +26,9 @@ func _physics_process(delta):
 		var distance = me_to_well.length_squared()
 		var direction = me_to_well.normalized()
 
-		var base_force = force * direction
-		var falloff = 1 / max(1, distance)
-		apply_force(base_force * falloff, Vector2.ZERO)
+		var force = base_force * direction
+		var falloff = 1 / max(1, (distance / 10000))
+		apply_force(force * falloff, Vector2.ZERO)
 
 
 func _on_body_entered(body):
@@ -38,7 +38,7 @@ func _on_body_entered(body):
 	if !body.is_target && name < body.name:
 		print(name + " stealing")
 		apply_central_impulse((my_velocity + their_velocity) * 0.2)
-		ball_value += ball_value
+		ball_value += body.ball_value
 		var children = body.get_children()
 		for child in children:
 			print(child.name)

@@ -16,6 +16,7 @@ position = Vector2(173, 465)
 position = Vector2(512, 512)
 
 [node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 5.0
 
 [node name="target-ball" parent="." node_paths=PackedStringArray("_gravity_well") instance=ExtResource("4_laj0n")]
 position = Vector2(735, 698)
