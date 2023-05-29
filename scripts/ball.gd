@@ -4,6 +4,7 @@ signal merged
 
 @export var initial_impulse: Vector2
 @export var gravity_well: Node2D
+@export var color: Color
 
 var is_target = false
 var merge_boost = 0.2

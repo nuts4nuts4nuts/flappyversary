@@ -11,8 +11,6 @@ func _ready():
 func _process(delta):
 	pass
 
+
 func _draw():
-	if(!cash_in_timer.is_stopped()):
-		draw_circle(position, 50.0, Color(0, 0, 1))
-	else:
-		draw_circle(position, 50.0, Color(1, 1, 0))
+	draw_circle(position, 50.0, get_parent().get_parent().color)

@@ -12,4 +12,4 @@ func _process(delta):
 
 
 func _draw():
-	draw_circle(position, 32.0, Color(1, 0, 0))
+	draw_circle(position, 32.0, get_parent().get_parent().color)

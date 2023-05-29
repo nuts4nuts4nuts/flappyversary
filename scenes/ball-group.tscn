@@ -19,6 +19,7 @@ contact_monitor = true
 lock_rotation = true
 script = ExtResource("1_sdlll")
 initial_impulse = Vector2(100, 2.08165e-12)
+color = Color(1, 0, 0, 1)
 metadata/_edit_group_ = true
 
 [node name="Collider" type="CollisionShape2D" parent="."]
