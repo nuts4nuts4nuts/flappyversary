@@ -11,14 +11,14 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
 - [X] End screen
   - Similar, just score, share(?), replay button?
 - [ ] Share button
-- [ ] Ball spawning
+- [X] Ball spawning
 - [ ] Ball cashing in
   - [ ] When x balls in target ball group, trigger cash in
   - [ ] Start timer counting down to merge
   - [ ] Account for merges post-cash in (add 1 to final value for each post-cash merge)
   - [ ] When timer expires, delete target ball group, spawn a new target ball with cash value
-- [ ] Target ball
-- [ ] End game when target ball touches the side of the screen
-- [ ] Balls bounce off target if they don't match
+- [-] Target ball
+  - [X] Balls bounce off target if they don't match
+  - [ ] End game when target ball touches the side of the screen
 - [ ] Despawn balls if they go far enough away from the screen
-- [ ] Make gravity well a point that influences every ball on screen
+- [X] Make gravity well a point that influences every ball on screen
