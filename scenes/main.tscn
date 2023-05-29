@@ -18,8 +18,8 @@ position = Vector2(512, 512)
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 5.0
 
-[node name="target-ball" parent="." node_paths=PackedStringArray("_gravity_well") instance=ExtResource("4_laj0n")]
+[node name="target-ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
 position = Vector2(735, 698)
-_gravity_well = NodePath("../gravity_well")
+gravity_well = NodePath("../gravity_well")
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
