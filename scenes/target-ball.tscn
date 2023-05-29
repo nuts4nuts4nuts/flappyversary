@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://uxka1p11iue3"]
+
+[ext_resource type="Script" path="res://scripts/target-ball.gd" id="1_7247g"]
+[ext_resource type="Script" path="res://scripts/target-ball-drawer.gd" id="2_314c0"]
+[ext_resource type="FontFile" uid="uid://yms4qa7f8yr1" path="res://fonts/Xolonium-Regular.ttf" id="3_ich8p"]
+[ext_resource type="Script" path="res://scripts/ball-value.gd" id="4_nrhx3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7xngv"]
+radius = 50.0
+
+[node name="target-ball" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_7247g")
+metadata/_edit_horizontal_guides_ = []
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_7xngv")
+
+[node name="Visuals" type="Node2D" parent="."]
+
+[node name="Drawer" type="Node2D" parent="Visuals"]
+script = ExtResource("2_314c0")
+
+[node name="Value" type="Label" parent="Visuals"]
+offset_left = -66.0
+offset_top = -37.0
+offset_right = 69.0
+offset_bottom = 44.0
+theme_override_fonts/font = ExtResource("3_ich8p")
+theme_override_font_sizes/font_size = 30
+text = "555"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_nrhx3")
+metadata/_edit_use_anchors_ = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
