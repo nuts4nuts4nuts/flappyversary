@@ -6,10 +6,11 @@ Celebrating the tenth anniversary of Flappy Bird.
 ** Design
 How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bird?
 ** Things to do
-- [ ] Start screen
+- [X] Start screen
   - Just a button, where the background shows balls spawning and the gravity well doing its thing?
-- [ ] End screen
+- [X] End screen
   - Similar, just score, share(?), replay button?
+- [ ] Share button
 - [ ] Ball spawning
 - [ ] Ball cashing in
   - [ ] When x balls in target ball group, trigger cash in
