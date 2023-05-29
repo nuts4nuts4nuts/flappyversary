@@ -7,7 +7,7 @@ signal merged
 
 var merge_boost = 0.2
 var ball_value = 1
-var force = 0.0001
+var force = 0.0004
 
 func _ready():
 	apply_central_impulse(initial_impulse)
@@ -21,7 +21,7 @@ func _physics_process(delta):
 	if(_gravity_well != null):
 		var _dist = (_gravity_well.position.distance_to(position))
 		print(_dist)
-		apply_force(pow(_dist, 2.5) * (_gravity_well.position - position).normalized() * force, Vector2.ZERO)
+		apply_force(pow(_dist, 2.2) * (_gravity_well.position - position).normalized() * force, Vector2.ZERO)
 
 func _on_body_entered(body):
 	var my_velocity = linear_velocity
