@@ -10,6 +10,7 @@ var ball_value = 1
 func _ready():
 	apply_central_impulse(initial_impulse)
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
