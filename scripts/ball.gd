@@ -38,14 +38,13 @@ func _on_body_entered(body):
 	
 	if !body.is_target && name < body.name:
 		print(name + " stealing")
-		apply_central_impulse((my_velocity + their_velocity) * 0.2)
 		ball_value += body.ball_value
 		var children = body.get_children()
 		for child in children:
 			print(child.name)
 			if "Visuals" in child.name:
 				merged.connect(child.get_node("Value")._on_ball_merged)
-			child.reparent(self)
+			child.call_deferred("reparent", self)
 		body.queue_free()
 
 	merged.emit()

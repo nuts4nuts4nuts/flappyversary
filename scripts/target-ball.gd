@@ -37,13 +37,12 @@ func _on_body_entered(body):
 	var their_velocity = body.linear_velocity
 	if body.ball_value == ball_value:
 		print(name + " stealing")
-		apply_central_impulse((my_velocity + their_velocity) * 0.2)
 		var children = body.get_children()
 		for child in children:
 			print(child.name)
 			if "Visuals" in child.name:
 				merged.connect(child.get_node("Value")._on_ball_merged)
-			child.reparent(self)
+			child.call_deferred("reparent", self)
 		body.queue_free()
 		merged.emit()
 		target_progress += 1
@@ -55,6 +54,10 @@ func _on_body_entered(body):
 
 func start_cash_in():
 	get_node("Timer").start()
+	color = color_cash
+	freeze = true
+	sleeping = true
+	
 
 
 func _on_timer_timeout():
