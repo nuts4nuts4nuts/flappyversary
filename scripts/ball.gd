@@ -21,7 +21,6 @@ func _process(delta):
 
 
 func _physics_process(delta):
-
 	if(gravity_well != null):
 		var me_to_well = gravity_well.global_position - global_position
 		var distance = me_to_well.length_squared()
@@ -37,14 +36,17 @@ func _on_body_entered(body):
 	var their_velocity = body.linear_velocity
 	
 	if !body.is_target && name < body.name:
-		print(name + " stealing")
-		ball_value += body.ball_value
-		var children = body.get_children()
-		for child in children:
-			print(child.name)
-			if "Visuals" in child.name:
-				merged.connect(child.get_node("Value")._on_ball_merged)
-			child.call_deferred("reparent", self)
-		body.queue_free()
+		call_deferred("steal_children", body)
 
+
+func steal_children(other):
+	print(name + " stealing")
+	ball_value += other.ball_value
+	var children = other.get_children()
+	for child in children:
+		print(child.name)
+		if "Visuals" in child.name:
+			merged.connect(child.get_node("Value")._on_ball_merged)
+		child.reparent(self)
+	other.queue_free()
 	merged.emit()
