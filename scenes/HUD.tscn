@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmn4pqfuj8wkh"]
+
+[ext_resource type="Script" path="res://scripts/HUD.gd" id="1_bol17"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_bol17")
+
+[node name="StartButton" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -79.0
+offset_top = -96.0
+offset_right = 79.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 64
+text = "Start"
+
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
