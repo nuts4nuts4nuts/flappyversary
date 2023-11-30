@@ -22,3 +22,5 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
   - [ ] End game when target ball touches the side of the screen
 - [ ] Despawn balls if they go far enough away from the screen
 - [X] Make gravity well a point that influences every ball on screen
+** Known bugs
+- Center of gravity of ball groups?

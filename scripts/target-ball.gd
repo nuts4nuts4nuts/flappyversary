@@ -17,6 +17,7 @@ var is_target = true
 var target_progress = 1
 var cashing_in = false
 var merged_balls = []
+var cashing_bonus = 1
 
 func steal_children(other):
 	print(name + " stealing")
@@ -32,13 +33,19 @@ func steal_children(other):
 	other.queue_free()
 	if !cashing_in && target_progress >= ball_value:
 		start_cash_in()
+	elif cashing_in:
+		cashing_bonus += 1
+		var timer = get_node("Timer")
+		var time_remaining = timer.get_time_left()
+		timer.stop()
+		timer.start(time_remaining + 1)
+		print(time_remaining + 1)
 
 
 func start_cash_in():
 	cashing_in = true
 	get_node("Timer").start()
 	color = color_cash
-	freeze = true
 	sleeping = true
 
 
@@ -48,10 +55,9 @@ func finish_cash_in():
 		ball.queue_free()
 	merged_balls = []
 	color = color_normal
-	freeze = false
 	sleeping = false
 	target_progress = 1
-	ball_value += 1
+	ball_value += cashing_bonus
 	cashed.emit()
 
 
@@ -61,7 +67,7 @@ func _ready():
 
 
 func _physics_process(delta):
-	if(gravity_well != null):
+	if(gravity_well != null && !cashing_in):
 		var me_to_well = gravity_well.global_position - global_position
 		var distance = me_to_well.length_squared()
 		var direction = me_to_well.normalized()
@@ -75,6 +81,7 @@ func _on_body_entered(body):
 	var my_velocity = linear_velocity
 	var their_velocity = body.linear_velocity
 	if body.ball_value == ball_value:
+		sleeping = true
 		call_deferred("steal_children", body)
 
 
