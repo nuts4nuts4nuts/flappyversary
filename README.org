@@ -8,7 +8,7 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
 ** Things to do
 - [X] Start screen
   - Just a button, where the background shows balls spawning and the gravity well doing its thing?
-- [X] End screen
+- [ ] End screen
   - Similar, just score, share(?), replay button?
 - [ ] Share button
 - [X] Ball spawning
@@ -20,7 +20,10 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
   - [X] Bonus when groups collide mid-cash
 - [-] Target ball
   - [X] Balls bounce off target if they don't match
-  - [ ] End game when target ball touches the side of the screen
+  - [-] End game when target ball touches the side of the screen
+    - [X] Death timer
+    - [X] Death timer recovery
+    - [ ] Actual death
 - [ ] Despawn balls if they go far enough away from the screen
 - [X] Make gravity well a point that influences every ball on screen
 ** Known bugs
