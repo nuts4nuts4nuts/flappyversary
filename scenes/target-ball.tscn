@@ -40,6 +40,8 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
+one_shot = true
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="cashed" from="." to="Visuals/Value" method="_on_ball_merged"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

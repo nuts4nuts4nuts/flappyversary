@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 signal merged
+signal cashed
 
 @export var initial_impulse: Vector2
 @export var gravity_well: Node2D
@@ -13,8 +14,46 @@ var merge_boost = 0.2
 var ball_value = 2
 var base_force = 50
 var is_target = true
-var target_progress = 0
+var target_progress = 1
 var cashing_in = false
+var merged_balls = []
+
+func steal_children(other):
+	print(name + " stealing")
+	var children = other.get_children()
+	for child in children:
+		print(child.name)
+		if "Visuals" in child.name:
+			merged.connect(child.get_node("Value")._on_ball_merged)
+		child.reparent(self)
+		merged_balls.append(child)
+	merged.emit()
+	target_progress += 1
+	other.queue_free()
+	if !cashing_in && target_progress >= ball_value:
+		start_cash_in()
+
+
+func start_cash_in():
+	cashing_in = true
+	get_node("Timer").start()
+	color = color_cash
+	freeze = true
+	sleeping = true
+
+
+func finish_cash_in():
+	cashing_in = false
+	for ball in merged_balls:
+		ball.queue_free()
+	merged_balls = []
+	color = color_normal
+	freeze = false
+	sleeping = false
+	target_progress = 1
+	ball_value += 1
+	cashed.emit()
+
 
 func _ready():
 	color = color_normal
@@ -39,27 +78,5 @@ func _on_body_entered(body):
 		call_deferred("steal_children", body)
 
 
-func steal_children(other):
-	print(name + " stealing")
-	var children = other.get_children()
-	for child in children:
-		print(child.name)
-		if "Visuals" in child.name:
-			merged.connect(child.get_node("Value")._on_ball_merged)
-		child.reparent(self)
-	merged.emit()
-	target_progress += 1
-	other.queue_free()
-	if !cashing_in && target_progress >= ball_value:
-		start_cash_in()
-
-
-func start_cash_in():
-	get_node("Timer").start()
-	color = color_cash
-	freeze = true
-	sleeping = true
-
-
 func _on_timer_timeout():
-	queue_free()
+	finish_cash_in()
