@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=6 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_qkwcp"]
 [ext_resource type="PackedScene" uid="uid://uxka1p11iue3" path="res://scenes/target-ball.tscn" id="4_laj0n"]
+[ext_resource type="PackedScene" uid="uid://cmn4pqfuj8wkh" path="res://scenes/HUD.tscn" id="5_uep46"]
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
@@ -21,5 +22,7 @@ wait_time = 5.0
 [node name="target-ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
 position = Vector2(735, 698)
 gravity_well = NodePath("../gravity_well")
+
+[node name="HUD" parent="." instance=ExtResource("5_uep46")]
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

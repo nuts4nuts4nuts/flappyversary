@@ -9,9 +9,12 @@ var ball_spawner_rng : RandomNumberGenerator
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print("ready")
+
+func start_game():
+	$gravity_well.activate()
 	$SpawnTimer.start()
 	ball_spawner_rng = RandomNumberGenerator.new()
-
 
 func _on_spawn_timer_timeout():
 	spawn_ball()
