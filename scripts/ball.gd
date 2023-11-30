@@ -25,11 +25,8 @@ func _physics_process(delta):
 		var me_to_well = gravity_well.global_position - global_position
 		var distance = me_to_well.length()
 		#print(distance)
-		if(! distance > 250):
-			
-			
+		if(!distance > 250):
 			var direction = me_to_well.normalized()
-
 			var force = base_force * direction
 			var falloff = 1 / max(1, (distance / 10000))
 			apply_force(force * falloff, Vector2.ZERO)
@@ -38,8 +35,8 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	var my_velocity = linear_velocity
 	var their_velocity = body.linear_velocity
-	
-	if !body.is_target && name < body.name:
+
+	if !body.is_target and name < body.name:
 		call_deferred("steal_children", body)
 
 

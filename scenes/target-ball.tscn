@@ -15,6 +15,7 @@ contact_monitor = true
 script = ExtResource("1_7247g")
 color_normal = Color(0, 0, 1, 1)
 color_cash = Color(0, 1, 0, 1)
+death_time = 5.0
 metadata/_edit_horizontal_guides_ = []
 
 [node name="Collider" type="CollisionShape2D" parent="."]

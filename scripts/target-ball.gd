@@ -7,6 +7,7 @@ signal cashed
 @export var gravity_well: Node2D
 @export var color_normal: Color
 @export var color_cash: Color
+@export var death_time: float
 
 var color: Color
 
@@ -18,6 +19,7 @@ var target_progress = 1
 var cashing_in = false
 var merged_balls = []
 var cashing_bonus = 1
+var current_death_time = 0.0
 
 func steal_children(other):
 	print(name + " stealing")
@@ -59,6 +61,33 @@ func finish_cash_in():
 	target_progress = 1
 	ball_value += cashing_bonus
 	cashed.emit()
+
+
+func check_out_of_bounds():
+	for child in find_children("*Collider*", "Node2D", false, false):
+		var child_node = child as CollisionShape2D
+		var circle = child_node.shape as CircleShape2D
+		var pos = child_node.global_position
+		var radius = circle.radius
+		var vp_width = get_viewport_rect().size.x
+		var vp_height = get_viewport_rect().size.y
+
+		var x_min = pos.x - radius
+		var x_max = pos.x + radius
+		var y_min = pos.y - radius
+		var y_max = pos.y + radius
+		if x_min < 0.0 or x_max > vp_width or y_min < 0.0 or y_max > vp_height:
+			return true
+	return false
+
+
+func _process(delta):
+	if check_out_of_bounds():
+		current_death_time += delta
+		print(current_death_time)
+		if current_death_time > death_time:
+			# End game!
+			pass
 
 
 func _ready():
