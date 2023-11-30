@@ -82,12 +82,14 @@ func check_out_of_bounds():
 
 
 func _process(delta):
+	print(current_death_time)
 	if check_out_of_bounds():
 		current_death_time += delta
-		print(current_death_time)
 		if current_death_time > death_time:
 			# End game!
 			pass
+	elif current_death_time > 0:
+		current_death_time = max(0, current_death_time - delta)
 
 
 func _ready():
