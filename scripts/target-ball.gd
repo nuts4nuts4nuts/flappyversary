@@ -2,24 +2,38 @@ extends RigidBody2D
 
 signal merged
 signal cashed
+signal dead
 
 @export var initial_impulse: Vector2
 @export var gravity_well: Node2D
 @export var color_normal: Color
 @export var color_cash: Color
-@export var death_time: float
+@export var death_time: float = 5
+@export var base_ball_value: int = 2
+@export var base_cashing_bonus: int = 1
 
 var color: Color
-
 var merge_boost = 0.2
-var ball_value = 2
+var ball_value = base_ball_value
 var base_force = 50
 var is_target = true
 var target_progress = 1
 var cashing_in = false
 var merged_balls = []
-var cashing_bonus = 1
+var cashing_bonus = base_cashing_bonus
 var current_death_time = 0.0
+
+
+func start():
+	freeze = false
+	ball_value = 1
+	finish_cash_in()
+
+
+func end():
+	freeze = true
+	position = Vector2(500, 500)
+
 
 func steal_children(other):
 	print(name + " stealing")
@@ -60,6 +74,7 @@ func finish_cash_in():
 	sleeping = false
 	target_progress = 1
 	ball_value += cashing_bonus
+	cashing_bonus = base_cashing_bonus
 	cashed.emit()
 
 
@@ -82,12 +97,12 @@ func check_out_of_bounds():
 
 
 func _process(delta):
-	print(current_death_time)
+#	print(current_death_time)
 	if check_out_of_bounds():
 		current_death_time += delta
 		if current_death_time > death_time:
 			# End game!
-			pass
+			dead.emit()
 	elif current_death_time > 0:
 		current_death_time = max(0, current_death_time - delta)
 

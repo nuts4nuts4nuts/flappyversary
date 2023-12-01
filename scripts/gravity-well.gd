@@ -11,13 +11,21 @@ func _ready():
 func _process(delta):
 	pass
 
+
 func activate():
 	print("well active")
 	game_started = true
 
+
+func deactivate():
+	print("well not active")
+	game_started = false
+
+
 func _input(event):
 	if game_started and event.is_action_pressed("make_well"):
 		make_well(event)
+
 
 func make_well(event):
 	print("mouse button event at ", event.position)

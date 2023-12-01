@@ -11,10 +11,27 @@ var ball_spawner_rng : RandomNumberGenerator
 func _ready():
 	print("ready")
 
+
 func start_game():
 	$gravity_well.activate()
 	$SpawnTimer.start()
+	$target_ball.start()
 	ball_spawner_rng = RandomNumberGenerator.new()
+	for child in find_children("*Ball*", "", false, false):
+		print(child)
+		child.queue_free()
+
+
+func restart_game():
+	start_game()
+
+
+func end_game():
+	$gravity_well.deactivate()
+	$SpawnTimer.stop()
+	$target_ball.end()
+	$HUD.show_restart()
+
 
 func _on_spawn_timer_timeout():
 	spawn_ball()
@@ -23,7 +40,7 @@ func _on_spawn_timer_timeout():
 func spawn_ball():
 	var ball = ball_scene.instantiate()
 	ball.gravity_well = $gravity_well
-	var spawn_pos = $BallSpawnPos
+	var spawn_pos = $SpawnPos
 	
 	ball.position = spawn_pos.position
 	var initial_x = ball_spawner_rng.randf_range(30, 100)

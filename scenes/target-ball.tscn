@@ -8,14 +8,14 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_7xngv"]
 radius = 50.0
 
-[node name="target-ball" type="RigidBody2D"]
+[node name="Target" type="RigidBody2D"]
 gravity_scale = 0.0
 max_contacts_reported = 1
 contact_monitor = true
+freeze = true
 script = ExtResource("1_7247g")
 color_normal = Color(0, 0, 1, 1)
 color_cash = Color(0, 1, 0, 1)
-death_time = 5.0
 metadata/_edit_horizontal_guides_ = []
 
 [node name="Collider" type="CollisionShape2D" parent="."]

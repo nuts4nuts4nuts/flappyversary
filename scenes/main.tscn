@@ -11,18 +11,19 @@ script = ExtResource("1_qkwcp")
 ball_scene = ExtResource("1_fjp4r")
 
 [node name="gravity_well" parent="." instance=ExtResource("1_igh56")]
-position = Vector2(173, 465)
+position = Vector2(510, 510)
 
-[node name="BallSpawnPos" type="Marker2D" parent="."]
+[node name="SpawnPos" type="Marker2D" parent="."]
 position = Vector2(512, 512)
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 5.0
 
-[node name="target-ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
-position = Vector2(735, 698)
+[node name="target_ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
+position = Vector2(500, 200)
 gravity_well = NodePath("../gravity_well")
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+[connection signal="dead" from="target_ball" to="." method="end_game"]

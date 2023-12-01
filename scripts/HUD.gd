@@ -12,6 +12,16 @@ func _ready():
 func _process(delta):
 	pass
 
+
 func _on_start_button_pressed():
-	$StartButton.hide()
-	_parent.start_game()
+	if $StartButton.text == "Start":
+		$StartButton.hide()
+		_parent.start_game()
+	else:
+		$StartButton.hide()
+		_parent.restart_game()
+
+
+func show_restart():
+	$StartButton.text = "Restart"
+	$StartButton.show()
