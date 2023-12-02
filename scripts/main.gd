@@ -3,7 +3,7 @@ extends Node2D
 @export var ball_scene : PackedScene
 
 var ball_value_low = 1
-var ball_value_high = 1
+var ball_value_high = 2
 
 var ball_spawner_rng : RandomNumberGenerator
 
@@ -40,14 +40,13 @@ func _on_spawn_timer_timeout():
 func spawn_ball():
 	var ball = ball_scene.instantiate()
 	ball.gravity_well = $gravity_well
-	var spawn_pos = $SpawnPos
+	var spawn_pos = $SpawnPath/SpawnPosition
+	spawn_pos.progress_ratio = ball_spawner_rng.randf()
 	
+	var screen_center = get_viewport_rect().size / 2
 	ball.position = spawn_pos.position
-	var initial_x = ball_spawner_rng.randf_range(30, 100)
-	var initial_y = ball_spawner_rng.randf_range(30, 100)
-	var sign_x = 1 if ball_spawner_rng.randi_range(0, 1) else -1
-	var sign_y = 1 if ball_spawner_rng.randi_range(0, 1) else -1
-	ball.initial_impulse = Vector2(initial_x * sign_x, initial_y * sign_y)
-	print(ball_value_high)
+	var direction = (screen_center - ball.position).normalized()
+	var velo = ball_spawner_rng.randf_range(100, 200)
+	ball.initial_impulse = direction * velo
 	ball.ball_value = ball_spawner_rng.randi_range(ball_value_low, ball_value_high - 1)
 	add_child(ball)
