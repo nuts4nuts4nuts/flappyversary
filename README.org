@@ -14,6 +14,8 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
   - [X] Restart
   - [ ] Share?
 - [X] Ball spawning
+  - [X] Balls spawn
+  - [X] Balls spawn somewhere off screen
 - [X] Ball cashing in
   - [X] When x balls in target ball group, trigger cash in
   - [X] Start timer counting down to merge
