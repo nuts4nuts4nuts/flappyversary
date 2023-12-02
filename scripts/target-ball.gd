@@ -1,16 +1,16 @@
 extends RigidBody2D
 
 signal merged
-signal cashed
+signal update_text
 signal dead
 
-@export var initial_impulse: Vector2
 @export var gravity_well: Node2D
 @export var color_normal: Color
 @export var color_cash: Color
 @export var death_time: float = 5
 @export var base_ball_value: int = 2
 @export var base_cashing_bonus: int = 1
+@export var start_pos: Vector2 = Vector2(500, 200)
 
 var color: Color
 var merge_boost = 0.2
@@ -24,9 +24,15 @@ var cashing_bonus = base_cashing_bonus
 var current_death_time = 0.0
 
 func start():
+	position = start_pos
 	freeze = false
-	ball_value = 1
-	finish_cash_in()
+	ball_value = base_ball_value
+	for ball in merged_balls:
+		ball.queue_free()
+	merged_balls = []
+	color = color_normal
+	target_progress = 1
+	update_text.emit()
 
 
 func end():
@@ -61,7 +67,6 @@ func start_cash_in():
 	cashing_in = true
 	get_node("Timer").start()
 	color = color_cash
-	sleeping = true
 
 
 func finish_cash_in():
@@ -70,14 +75,13 @@ func finish_cash_in():
 		ball.queue_free()
 	merged_balls = []
 	color = color_normal
-	sleeping = false
 	target_progress = 1
 	ball_value += cashing_bonus
 	cashing_bonus = base_cashing_bonus
-	cashed.emit()
 
 
-func check_out_of_bounds():
+# true if ANY is out of bounds (and not cashing)
+func check_dying():
 	for child in find_children("*Collider*", "Node2D", false, false):
 		var child_node = child as CollisionShape2D
 		var circle = child_node.shape as CircleShape2D
@@ -91,24 +95,26 @@ func check_out_of_bounds():
 		var y_min = pos.y - radius
 		var y_max = pos.y + radius
 		if x_min < 0.0 or x_max > vp_width or y_min < 0.0 or y_max > vp_height:
-			return true
+			return !cashing_in
 	return false
 
 
 func _process(delta):
-#	print(current_death_time)
-	if check_out_of_bounds():
+	if check_dying():
 		current_death_time += delta
 		if current_death_time > death_time:
 			# End game!
 			dead.emit()
 	elif current_death_time > 0:
 		current_death_time = max(0, current_death_time - delta)
+	
+	if cashing_in:
+		angular_velocity = 0
+		linear_velocity = Vector2(0, 0)
 
 
 func _ready():
 	color = color_normal
-	apply_central_impulse(initial_impulse)
 
 
 func _physics_process(delta):
@@ -119,14 +125,11 @@ func _physics_process(delta):
 
 		var force = base_force * direction
 		var falloff = 1 / max(1, (distance / 10000))
-		apply_force(force * falloff, Vector2.ZERO)
+		apply_central_force(force * falloff)
 
 
 func _on_body_entered(body):
-	var my_velocity = linear_velocity
-	var their_velocity = body.linear_velocity
 	if body.ball_value == ball_value:
-		sleeping = true
 		call_deferred("steal_children", body)
 
 

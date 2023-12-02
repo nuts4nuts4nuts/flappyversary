@@ -13,13 +13,12 @@ func _ready():
 
 
 func start_game():
+	ball_spawner_rng = RandomNumberGenerator.new()
+	for child in find_children("*Ball*", "", false, false):
+		child.queue_free()
 	$gravity_well.activate()
 	$SpawnTimer.start()
 	$target_ball.start()
-	ball_spawner_rng = RandomNumberGenerator.new()
-	for child in find_children("*Ball*", "", false, false):
-		print(child)
-		child.queue_free()
 
 
 func restart_game():
@@ -53,5 +52,5 @@ func spawn_ball():
 	add_child(ball)
 
 
-func _on_target_ball_cashed():
+func _on_target_ball_update_text():
 	ball_value_high += 1

@@ -26,6 +26,8 @@ func _process(delta):
 	elif current_death_time > 0:
 		current_death_time = max(0, current_death_time - delta)
 
+
+# true if ALL are out of bounds
 func check_out_of_bounds():
 	for child in find_children("*Collider*", "Node2D", false, false):
 		var child_node = child as CollisionShape2D
@@ -39,9 +41,9 @@ func check_out_of_bounds():
 		var x_max = pos.x + radius
 		var y_min = pos.y - radius
 		var y_max = pos.y + radius
-		if x_min < 0.0 or x_max > vp_width or y_min < 0.0 or y_max > vp_height:
-			return true
-	return false
+		if x_min > 0.0 and x_max < vp_width and y_min > 0.0 and y_max < vp_height:
+			return false
+	return true
 
 func _physics_process(delta):
 	if(gravity_well != null):
