@@ -3,7 +3,7 @@ extends Node2D
 @export var ball_scene : PackedScene
 
 var ball_value_low = 1
-var ball_value_high = 2
+var ball_value_high = 1
 
 var ball_spawner_rng : RandomNumberGenerator
 
@@ -48,4 +48,6 @@ func spawn_ball():
 	var sign_x = 1 if ball_spawner_rng.randi_range(0, 1) else -1
 	var sign_y = 1 if ball_spawner_rng.randi_range(0, 1) else -1
 	ball.initial_impulse = Vector2(initial_x * sign_x, initial_y * sign_y)
+	print(ball_value_high)
+	ball.ball_value = ball_spawner_rng.randi_range(ball_value_low, ball_value_high - 1)
 	add_child(ball)
