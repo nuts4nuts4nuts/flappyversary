@@ -40,12 +40,12 @@ func _on_spawn_timer_timeout():
 func spawn_ball():
 	var ball = ball_scene.instantiate()
 	ball.gravity_well = $gravity_well
-	var spawn_pos = $SpawnPos
+	var spawn_pos = $SpawnPath/SpawnPosition
+	spawn_pos.progress_ratio = ball_spawner_rng.randf()
 	
+	var screen_center = get_viewport_rect().size / 2
 	ball.position = spawn_pos.position
-	var initial_x = ball_spawner_rng.randf_range(30, 100)
-	var initial_y = ball_spawner_rng.randf_range(30, 100)
-	var sign_x = 1 if ball_spawner_rng.randi_range(0, 1) else -1
-	var sign_y = 1 if ball_spawner_rng.randi_range(0, 1) else -1
-	ball.initial_impulse = Vector2(initial_x * sign_x, initial_y * sign_y)
+	var direction = (screen_center - ball.position).normalized()
+	var velo = ball_spawner_rng.randf_range(100, 200)
+	ball.initial_impulse = direction * velo
 	add_child(ball)
