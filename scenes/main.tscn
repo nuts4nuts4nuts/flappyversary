@@ -37,4 +37,5 @@ curve = SubResource("Curve2D_dj7lx")
 position = Vector2(-125.57, -137.44)
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+[connection signal="cashed" from="target_ball" to="." method="_on_target_ball_cashed"]
 [connection signal="dead" from="target_ball" to="." method="end_game"]

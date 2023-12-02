@@ -3,7 +3,7 @@ extends Node2D
 @export var ball_scene : PackedScene
 
 var ball_value_low = 1
-var ball_value_high = 2
+var ball_value_high = 1
 
 var ball_spawner_rng : RandomNumberGenerator
 
@@ -50,3 +50,7 @@ func spawn_ball():
 	ball.initial_impulse = direction * velo
 	ball.ball_value = ball_spawner_rng.randi_range(ball_value_low, ball_value_high - 1)
 	add_child(ball)
+
+
+func _on_target_ball_cashed():
+	ball_value_high += 1

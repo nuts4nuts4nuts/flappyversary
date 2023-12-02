@@ -22,10 +22,8 @@ var cashing_in = false
 var merged_balls = []
 var cashing_bonus = base_cashing_bonus
 var current_death_time = 0.0
-var main_ref
 
 func start():
-	main_ref = get_parent()
 	freeze = false
 	ball_value = 1
 	finish_cash_in()
@@ -76,7 +74,6 @@ func finish_cash_in():
 	target_progress = 1
 	ball_value += cashing_bonus
 	cashing_bonus = base_cashing_bonus
-	main_ref.ball_value_high+=1
 	cashed.emit()
 
 
