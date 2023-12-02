@@ -31,6 +31,7 @@ func end_game():
 	$SpawnTimer.stop()
 	$target_ball.end()
 	$HUD.show_restart()
+	ball_value_high = 1
 
 
 func _on_spawn_timer_timeout():
