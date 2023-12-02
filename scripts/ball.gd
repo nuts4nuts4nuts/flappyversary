@@ -5,11 +5,13 @@ signal merged
 @export var initial_impulse: Vector2
 @export var gravity_well: Node2D
 @export var color: Color
+@export var death_time: float = 5
 
 var is_target = false
 var merge_boost = 0.2
 var ball_value = 1
 var base_force = 200
+var current_death_time = 0.0
 
 func _ready():
 	apply_central_impulse(initial_impulse)
@@ -17,8 +19,29 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if check_out_of_bounds():
+		current_death_time += delta
+		if current_death_time > death_time:
+			queue_free()
+	elif current_death_time > 0:
+		current_death_time = max(0, current_death_time - delta)
 
+func check_out_of_bounds():
+	for child in find_children("*Collider*", "Node2D", false, false):
+		var child_node = child as CollisionShape2D
+		var circle = child_node.shape as CircleShape2D
+		var pos = child_node.global_position
+		var radius = circle.radius
+		var vp_width = get_viewport_rect().size.x
+		var vp_height = get_viewport_rect().size.y
+
+		var x_min = pos.x - radius
+		var x_max = pos.x + radius
+		var y_min = pos.y - radius
+		var y_max = pos.y + radius
+		if x_min < 0.0 or x_max > vp_width or y_min < 0.0 or y_max > vp_height:
+			return true
+	return false
 
 func _physics_process(delta):
 	if(gravity_well != null):
