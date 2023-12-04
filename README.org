@@ -28,7 +28,7 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
     - [X] Death timer
     - [X] Death timer recovery
     - [X] Actual death
-- [ ] Despawn balls if they go far enough away from the screen
+- [X] Despawn balls if they go far enough away from the screen
 - [X] Make gravity well a point that influences every ball on screen
 ** Known bugs
 - Center of gravity of ball groups?
