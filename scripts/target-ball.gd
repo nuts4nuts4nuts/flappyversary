@@ -78,6 +78,7 @@ func finish_cash_in():
 	target_progress = 1
 	ball_value += cashing_bonus
 	cashing_bonus = base_cashing_bonus
+	update_text.emit()
 
 
 # true if ANY is out of bounds (and not cashing)
