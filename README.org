@@ -1,11 +1,15 @@
 * Flappyversary
 Celebrating the tenth anniversary of Flappy Bird.
+
 ** Requirements
 - The game has one core interaction.
 - The end.
+
 ** Design
 How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bird?
+
 ** Things to do
+- [X] Make gravity well a point that influences every ball on screen
 - [X] Start screen
   - Just a button, where the background shows balls spawning and the gravity well doing its thing?
 - [-] Restart screen
@@ -16,19 +20,40 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
 - [X] Ball spawning
   - [X] Balls spawn
   - [X] Balls spawn somewhere off screen
+  - [X] Despawn balls if they go far enough away from the screen
 - [X] Ball cashing in
   - [X] When x balls in target ball group, trigger cash in
   - [X] Start timer counting down to merge
   - [X] Account for merges post-cash in (add 1 to final value for each post-cash merge)
   - [X] When timer expires, delete target ball group, spawn a new target ball with cash value
   - [X] Bonus when groups collide mid-cash
-- [X] Target ball
+- [-] Target ball
   - [X] Balls bounce off target if they don't match
-  - [X] End game when target ball touches the side of the screen
+  - [-] End game when target ball touches the side of the screen
     - [X] Death timer
     - [X] Death timer recovery
     - [X] Actual death
-- [X] Despawn balls if they go far enough away from the screen
-- [X] Make gravity well a point that influences every ball on screen
+    - [ ] Feedback when you're gonna die
+- [ ] Visuals
+  - [ ] Visual style / direction
+  - [ ] Assets
+    - [ ] Feedback for death timer
+    - [ ] Feedback for bounces
+    - [ ] Cashing in juice
+    - [ ] Black hole effect
+    - [ ] Ball spawn direction indicator
+    - [ ] Number of groups in target group indicator
+    - ...
+- [ ] Audio
+  - [ ] SFX
+  - [ ] Music
+- [ ] Platforms
+  - [ ] iOS
+  - [ ] Android
+  - [ ] PC
+- Scope creep
+  - [ ] Zoom out when we cash in?
+  - [ ] Switch??????????? (BIG?????)
+
 ** Known bugs
-- Center of gravity of ball groups?
+- [ ] Center of gravity of ball groups
