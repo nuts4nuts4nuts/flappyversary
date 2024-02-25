@@ -44,12 +44,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("6_ph4el")
 
-[node name="scoring_hud2" type="Label" parent="HUD"]
+[node name="scoring_hud" type="Label" parent="HUD"]
 offset_left = 244.0
 offset_top = 60.0
 offset_right = 296.0
 offset_bottom = 97.0
 theme_override_colors/font_color = Color(0.247059, 0.576471, 0.133333, 1)
+theme_override_fonts/font = ExtResource("6_ld0xx")
+theme_override_font_sizes/font_size = 30
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
