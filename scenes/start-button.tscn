@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dr570phnol46"]
+
+[ext_resource type="FontFile" uid="uid://yms4qa7f8yr1" path="res://fonts/Xolonium-Regular.ttf" id="1_1cuyw"]
+[ext_resource type="Script" path="res://scripts/start-button.gd" id="1_77vhx"]
+
+[node name="start-button" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_77vhx")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -66.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_1cuyw")
+theme_override_font_sizes/font_size = 96
+text = "Start"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

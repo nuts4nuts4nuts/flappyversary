@@ -7,12 +7,15 @@ var ball_value_high = 1
 
 var ball_spawner_rng : RandomNumberGenerator
 
+var game_running = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("ready")
 
 
 func start_game():
+	game_running = true
 	ball_spawner_rng = RandomNumberGenerator.new()
 	for child in find_children("*Ball*", "", false, false):
 		child.queue_free()
@@ -24,12 +27,15 @@ func start_game():
 func restart_game():
 	start_game()
 
+func sleep(sec):
+	await get_tree().create_timer(sec).timeout
 
 func end_game():
 	$gravity_well.deactivate()
 	$SpawnTimer.stop()
 	$target_ball.end()
 	$HUD.show_restart()
+	game_running = false
 	ball_value_high = 1
 
 
