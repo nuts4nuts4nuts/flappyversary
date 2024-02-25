@@ -19,12 +19,18 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+#	queue_redraw()
 	if check_out_of_bounds():
 		current_death_time += delta
 		if current_death_time > death_time:
 			queue_free()
 	elif current_death_time > 0:
 		current_death_time = max(0, current_death_time - delta)
+
+
+#func _draw():
+#	var p = avg_global_position() - global_position
+#	draw_circle(p, 15.0, Color.DARK_GREEN)
 
 
 # true if ALL are out of bounds
@@ -45,9 +51,10 @@ func check_out_of_bounds():
 			return false
 	return true
 
+
 func _physics_process(delta):
 	if(gravity_well != null):
-		var me_to_well = gravity_well.global_position - global_position
+		var me_to_well = gravity_well.global_position - avg_global_position()
 		var distance = me_to_well.length()
 		#print(distance)
 		if(!distance > 250):
@@ -76,3 +83,11 @@ func steal_children(other):
 		child.reparent(self)
 	other.queue_free()
 	merged.emit()
+
+
+func avg_global_position():
+	var pos = Vector2()
+	var children = find_children("*Collider*", "Node2D", false, false)
+	for child in children:
+		pos += child.global_position
+	return pos / children.size()

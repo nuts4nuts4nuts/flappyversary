@@ -12,6 +12,13 @@ func _ready():
 	print("ready")
 
 
+func _unhandled_key_input(event):
+	if event.is_pressed():
+		var key_number = int(event.key_label) - 48
+		if key_number >= 0 and key_number < 10:
+			spawn_ball(get_global_mouse_position(), Vector2.ZERO, key_number)
+
+
 func start_game():
 	ball_spawner_rng = RandomNumberGenerator.new()
 	for child in find_children("*Ball*", "", false, false):
@@ -34,21 +41,21 @@ func end_game():
 
 
 func _on_spawn_timer_timeout():
-	spawn_ball()
-
-
-func spawn_ball():
-	var ball = ball_scene.instantiate()
-	ball.gravity_well = $gravity_well
+	var screen_center = get_viewport_rect().size / 2
 	var spawn_pos = $SpawnPath/SpawnPosition
 	spawn_pos.progress_ratio = ball_spawner_rng.randf()
-	
-	var screen_center = get_viewport_rect().size / 2
-	ball.position = spawn_pos.position
-	var direction = (screen_center - ball.position).normalized()
+	var direction = (screen_center - spawn_pos.position).normalized()
 	var velo = ball_spawner_rng.randf_range(100, 200)
-	ball.initial_impulse = direction * velo
-	ball.ball_value = ball_spawner_rng.randi_range(ball_value_low, ball_value_high - 1)
+	spawn_ball(spawn_pos.position, direction * velo, ball_spawner_rng.randi_range(ball_value_low, ball_value_high - 1))
+
+
+func spawn_ball(pos, impulse, value):
+	var ball = ball_scene.instantiate()
+	ball.gravity_well = $gravity_well
+
+	ball.position = pos
+	ball.initial_impulse = impulse
+	ball.ball_value = value
 	add_child(ball)
 
 
