@@ -59,8 +59,8 @@ func steal_children(other):
 		var timer = get_node("Timer")
 		var time_remaining = timer.get_time_left()
 		timer.stop()
-		timer.start(time_remaining + 1)
-		print(time_remaining + 1)
+		timer.start(timer.wait_time)
+		print(timer.get_time_left())
 
 
 func start_cash_in():
@@ -100,7 +100,16 @@ func check_dying():
 	return false
 
 
+func avg_global_position():
+	var pos = Vector2()
+	var children = find_children("*Collider*", "Node2D", false, false)
+	for child in children:
+		pos += child.global_position
+	return pos / children.size()
+
+
 func _process(delta):
+#	queue_redraw()
 	if check_dying():
 		current_death_time += delta
 		if current_death_time > death_time:
@@ -114,13 +123,18 @@ func _process(delta):
 		linear_velocity = Vector2(0, 0)
 
 
+#func _draw():
+#	var p = avg_global_position() - global_position
+#	draw_circle(p, 15.0, Color.DARK_GREEN)
+
+
 func _ready():
 	color = color_normal
 
 
 func _physics_process(delta):
 	if(gravity_well != null && !cashing_in):
-		var me_to_well = gravity_well.global_position - global_position
+		var me_to_well = gravity_well.global_position - avg_global_position()
 		var distance = me_to_well.length_squared()
 		var direction = me_to_well.normalized()
 
