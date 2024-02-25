@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=9 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://uxka1p11iue3" path="res://scenes/target-ball.tscn" id="4_laj0n"]
 [ext_resource type="PackedScene" uid="uid://cmn4pqfuj8wkh" path="res://scenes/HUD.tscn" id="5_uep46"]
 [ext_resource type="Script" path="res://scenes/danger_hud.gd" id="6_v30on"]
+[ext_resource type="Script" path="res://scenes/scoring_hud.gd" id="7_xggw5"]
 
 [sub_resource type="Curve2D" id="Curve2D_dj7lx"]
 _data = {
@@ -39,6 +40,17 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("6_v30on")
+
+[node name="scoring_hud2" type="Label" parent="HUD"]
+offset_left = 244.0
+offset_top = 60.0
+offset_right = 296.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0.247059, 0.576471, 0.133333, 1)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("7_xggw5")
 
 [node name="SpawnPath" type="Path2D" parent="."]
 position = Vector2(47.0362, 58.0333)
