@@ -1,11 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=9 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_qkwcp"]
 [ext_resource type="PackedScene" uid="uid://uxka1p11iue3" path="res://scenes/target-ball.tscn" id="4_laj0n"]
 [ext_resource type="PackedScene" uid="uid://cmn4pqfuj8wkh" path="res://scenes/HUD.tscn" id="5_uep46"]
-[ext_resource type="Script" path="res://scenes/danger_hud.gd" id="6_v30on"]
+[ext_resource type="FontFile" uid="uid://yms4qa7f8yr1" path="res://fonts/Xolonium-Regular.ttf" id="6_ld0xx"]
+[ext_resource type="Script" path="res://scripts/danger_hud.gd" id="6_ph4el"]
 
 [sub_resource type="Curve2D" id="Curve2D_dj7lx"]
 _data = {
@@ -35,10 +36,12 @@ offset_top = 94.0
 offset_right = 296.0
 offset_bottom = 131.0
 theme_override_colors/font_color = Color(0.807843, 0, 0, 1)
-text = "0"
+theme_override_fonts/font = ExtResource("6_ld0xx")
+theme_override_font_sizes/font_size = 30
+text = "Test"
 horizontal_alignment = 1
 vertical_alignment = 1
-script = ExtResource("6_v30on")
+script = ExtResource("6_ph4el")
 
 [node name="SpawnPath" type="Path2D" parent="."]
 position = Vector2(47.0362, 58.0333)
