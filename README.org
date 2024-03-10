@@ -37,14 +37,14 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
 - [ ] Visuals
   - [ ] Visual style / direction
   - [ ] Assets
-    - [ ] Feedback for death timer
     - [ ] Feedback for bounces
     - [ ] Cashing in juice
     - [ ] Black hole effect
     - [ ] Ball spawn direction indicator
     - [ ] Number of groups in target group indicator
     - [ ] Cash timer
-    - ...
+    - [ ] Death timer
+    - [ ] Target group mass indicator (if that's the mechanic that we want?)
 - [ ] Audio
   - [ ] SFX
   - [ ] Music
