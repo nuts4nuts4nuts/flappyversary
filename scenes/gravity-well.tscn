@@ -23,10 +23,12 @@ turbulence_noise_strength = 12.71
 script = ExtResource("1_32knt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 z_index = -10
 texture = ExtResource("2_o8ksl")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 amount = 200
 process_material = SubResource("ParticleProcessMaterial_mnacg")
-lifetime = 2.0
+lifetime = 3.0
+speed_scale = 3.0
