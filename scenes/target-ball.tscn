@@ -9,6 +9,7 @@
 radius = 50.0
 
 [node name="Target" type="RigidBody2D"]
+mass = 5.0
 gravity_scale = 0.0
 max_contacts_reported = 1
 contact_monitor = true
@@ -16,6 +17,7 @@ freeze = true
 script = ExtResource("1_7247g")
 color_normal = Color(0, 0, 1, 1)
 color_cash = Color(0, 1, 0, 1)
+base_well_force = 300
 metadata/_edit_horizontal_guides_ = []
 
 [node name="Collider" type="CollisionShape2D" parent="."]
