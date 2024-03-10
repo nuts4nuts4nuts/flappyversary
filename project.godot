@@ -36,5 +36,3 @@ make_well={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-renderer/rendering_method.macos="forward_plus"
-renderer/rendering_method.editor="forward_plus"
