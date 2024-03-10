@@ -14,6 +14,14 @@ func _ready():
 	print("ready")
 
 
+func _process():
+	queue_redraw()
+
+
+func _draw():
+	
+
+
 func _unhandled_key_input(event):
 	if event.is_pressed():
 		var key_number = int(event.key_label) - 48
@@ -34,8 +42,10 @@ func start_game():
 func restart_game():
 	start_game()
 
+
 func sleep(sec):
 	await get_tree().create_timer(sec).timeout
+
 
 func end_game():
 	$gravity_well.deactivate()
