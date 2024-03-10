@@ -17,7 +17,7 @@ func _input(event):
 		make_well(event)
 
 func make_well(event):
-	print("mouse button event at ", event.position)
+	print("mouse button eevent at ", event.position)
 
 
 func _on_ball_timer_timeout():

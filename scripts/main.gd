@@ -1,25 +1,29 @@
 extends Node2D
 
 @export var ball_scene : PackedScene
+@export var spawn_pos_orbit_speed : float = 0.20
 
 var ball_value_low = 1
 var ball_value_high = 1
 
 var ball_spawner_rng : RandomNumberGenerator
+var screen_center: Vector2
 
 var game_running = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("ready")
+	screen_center = get_viewport_rect().get_center()
 
 
-func _process():
+func _process(delta):
+	$SpawnPath/SpawnPosition.progress_ratio += delta * spawn_pos_orbit_speed
 	queue_redraw()
 
 
 func _draw():
-	
+	draw_incoming_ball_indicator($SpawnPath/SpawnPosition.position, $SpawnTimer.time_left)
 
 
 func _unhandled_key_input(event):
@@ -57,9 +61,7 @@ func end_game():
 
 
 func _on_spawn_timer_timeout():
-	var screen_center = get_viewport_rect().size / 2
 	var spawn_pos = $SpawnPath/SpawnPosition
-	spawn_pos.progress_ratio = ball_spawner_rng.randf()
 	var direction = (screen_center - spawn_pos.position).normalized()
 	var velo = ball_spawner_rng.randf_range(100, 200)
 	spawn_ball(spawn_pos.position, direction * velo, ball_spawner_rng.randi_range(ball_value_low, ball_value_high - 1))
@@ -73,6 +75,13 @@ func spawn_ball(pos, impulse, value):
 	ball.initial_impulse = impulse
 	ball.ball_value = value
 	add_child(ball)
+
+
+func draw_incoming_ball_indicator(pos, time_to_spawn):
+	var ball_size = 32.0
+	var portion_of_spawn_timer_remaining = time_to_spawn / $SpawnTimer.wait_time
+	var ball_scale = 1.0 - portion_of_spawn_timer_remaining
+	draw_circle(pos, ball_size * ball_scale, Color.RED)
 
 
 func _on_target_ball_update_text():

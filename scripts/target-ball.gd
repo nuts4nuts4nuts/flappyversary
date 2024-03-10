@@ -23,6 +23,7 @@ var merged_balls = []
 var cashing_bonus = base_cashing_bonus
 var current_death_time = 0.0
 
+
 func start():
 	position = start_pos
 	freeze = false
