@@ -15,7 +15,7 @@ signal dead
 var color: Color
 var merge_boost = 0.2
 var ball_value = base_ball_value
-var base_force = 50
+@export var base_well_force = 50
 var is_target = true
 var target_progress = 1
 var cashing_in = false
@@ -138,7 +138,7 @@ func _physics_process(delta):
 		var distance = me_to_well.length_squared()
 		var direction = me_to_well.normalized()
 
-		var force = base_force * direction
+		var force = base_well_force * direction
 		var falloff = 1 / max(1, (distance / 10000))
 		apply_central_force(force * falloff)
 
