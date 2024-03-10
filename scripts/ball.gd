@@ -6,15 +6,18 @@ signal merged
 @export var gravity_well: Node2D
 @export var color: Color
 @export var death_time: float = 5
+@export var targetball_mass_damage: float = 0.5
 
 var is_target = false
 var merge_boost = 0.2
 var ball_value = 1
 var base_force = 200
 var current_death_time = 0.0
+var targetball
 
 func _ready():
 	apply_central_impulse(initial_impulse)
+	targetball = get_parent().get_node("target_ball")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -23,6 +26,11 @@ func _process(delta):
 	if check_out_of_bounds():
 		current_death_time += delta
 		if current_death_time > death_time:
+			if((targetball.mass - targetball_mass_damage) <= targetball.minimum_mass):
+				targetball.mass = targetball.minimum_mass
+			else:
+				targetball.mass -= targetball_mass_damage
+			print("targetball mass: " + str(targetball.mass))
 			queue_free()
 	elif current_death_time > 0:
 		current_death_time = max(0, current_death_time - delta)
