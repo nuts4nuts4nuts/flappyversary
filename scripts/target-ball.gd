@@ -13,6 +13,7 @@ signal dead
 @export var start_pos: Vector2 = Vector2(500, 200)
 @export var base_well_force = 300
 @export var minimum_mass = 0.5
+var initial_mass = mass
 
 var color: Color
 var merge_boost = 0.2
@@ -116,6 +117,7 @@ func _process(delta):
 		current_death_time += delta
 		if current_death_time > death_time:
 			# End game!
+			mass = initial_mass
 			dead.emit()
 	elif current_death_time > 0:
 		current_death_time = max(0, current_death_time - delta)
