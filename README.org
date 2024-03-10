@@ -27,13 +27,13 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
   - [X] Account for merges post-cash in (add 1 to final value for each post-cash merge)
   - [X] When timer expires, delete target ball group, spawn a new target ball with cash value
   - [X] Bonus when groups collide mid-cash
-- [-] Target ball
+- [X] Target ball
   - [X] Balls bounce off target if they don't match
-  - [-] End game when target ball touches the side of the screen
+  - [X] End game when target ball touches the side of the screen
     - [X] Death timer
     - [X] Death timer recovery
     - [X] Actual death
-    - [ ] Feedback when you're gonna die
+    - [X] Feedback when you're gonna die
 - [ ] Visuals
   - [ ] Visual style / direction
   - [ ] Assets
