@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://scripts/ball-value.gd" id="4_nrhx3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7xngv"]
-radius = 50.0
+radius = 100.0
 
 [node name="Target" type="RigidBody2D"]
 mass = 10.0
@@ -17,7 +17,6 @@ freeze = true
 script = ExtResource("1_7247g")
 color_normal = Color(0, 0, 1, 1)
 color_cash = Color(0, 1, 0, 1)
-base_well_force = 50
 metadata/_edit_horizontal_guides_ = []
 
 [node name="Collider" type="CollisionShape2D" parent="."]
@@ -29,17 +28,17 @@ shape = SubResource("CircleShape2D_7xngv")
 script = ExtResource("2_314c0")
 
 [node name="Value" type="Label" parent="Visuals"]
-offset_left = -66.0
-offset_top = -37.0
-offset_right = 69.0
-offset_bottom = 44.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_ich8p")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 60
 text = "555"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("4_nrhx3")
-metadata/_edit_use_anchors_ = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 5.0
