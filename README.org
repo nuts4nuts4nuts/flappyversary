@@ -59,3 +59,4 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
 
 ** Known bugs
 - [X] Center of gravity of ball groups
+- [ ] Balls sometimes fails to collide when they are simultaneously colliding with something else (the target ball, for example)

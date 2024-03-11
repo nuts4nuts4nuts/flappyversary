@@ -20,7 +20,7 @@ position = Vector2(510, 510)
 wait_time = 3.6
 
 [node name="target_ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
-position = Vector2(500, 200)
+position = Vector2(512, 512)
 gravity_well = NodePath("../gravity_well")
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
@@ -28,8 +28,8 @@ gravity_well = NodePath("../gravity_well")
 [node name="danger_hud" type="Label" parent="HUD"]
 offset_left = 244.0
 offset_top = 94.0
-offset_right = 296.0
-offset_bottom = 131.0
+offset_right = 315.0
+offset_bottom = 134.0
 theme_override_colors/font_color = Color(0.807843, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_ld0xx")
 theme_override_font_sizes/font_size = 30
@@ -53,4 +53,3 @@ script = ExtResource("8_trtcg")
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="dead" from="target_ball" to="." method="end_game"]
-[connection signal="update_text" from="target_ball" to="." method="_on_target_ball_update_text"]

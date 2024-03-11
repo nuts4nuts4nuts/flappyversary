@@ -8,6 +8,8 @@ var spawn_pos_ratio : float
 
 var game_running = false
 
+var steals = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("ready")
@@ -25,11 +27,21 @@ func _draw():
 	draw_incoming_ball_indicator(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), $SpawnTimer.time_left)
 
 
-func _unhandled_key_input(event):
-	if event.is_pressed():
+func _unhandled_key_input(event: InputEvent):
+	# DEBUG STUFF
+	if Engine.is_editor_hint() and event.is_pressed():
+		# spawn balls with 1 through 9
 		var key_number = int(event.key_label) - 48
 		if key_number >= 0 and key_number < 10:
 			spawn_ball(get_global_mouse_position(), Vector2.ZERO, key_number)
+		
+		# change engine speed with up and down arrow
+		if event.keycode == Key.KEY_UP:
+			Engine.time_scale += 0.25
+			print("Engine timescale: " + str(Engine.time_scale))
+		elif event.keycode == Key.KEY_DOWN:
+			Engine.time_scale -= 0.25
+			print("Engine timescale: " + str(Engine.time_scale))
 
 
 func start_game():
