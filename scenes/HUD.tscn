@@ -1,9 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmn4pqfuj8wkh"]
+[gd_scene load_steps=5 format=3 uid="uid://cmn4pqfuj8wkh"]
 
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1_bol17"]
+[ext_resource type="FontFile" uid="uid://yms4qa7f8yr1" path="res://fonts/Xolonium-Regular.ttf" id="2_modil"]
+[ext_resource type="Script" path="res://scripts/scoring_hud.gd" id="3_keee4"]
+[ext_resource type="Script" path="res://scripts/danger_hud.gd" id="4_fynj6"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_bol17")
+
+[node name="scoring_hud" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -26.0
+offset_right = 26.0
+offset_bottom = 40.0
+grow_horizontal = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.247059, 0.576471, 0.133333, 1)
+theme_override_fonts/font = ExtResource("2_modil")
+theme_override_font_sizes/font_size = 30
+text = "SCORING IN 0.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_keee4")
 
 [node name="StartButton" type="Button" parent="."]
 anchors_preset = 7
@@ -18,5 +38,21 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 64
 text = "Start"
+
+[node name="danger_hud" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -35.5
+offset_right = 35.5
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.807843, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_modil")
+theme_override_font_sizes/font_size = 30
+text = "COLLAPSE INCOMING IN 0.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_fynj6")
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

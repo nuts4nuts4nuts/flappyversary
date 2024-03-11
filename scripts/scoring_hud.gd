@@ -2,6 +2,8 @@ extends Label
 
 var target_ball
 var target_timer
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	target_ball = get_parent().get_parent().get_node("target_ball")
@@ -15,8 +17,10 @@ func _process(_delta):
 		update_value()
 	pass
 
+
 func update_value():
 	if(target_ball.cashing_in):
-		text = str("SCORING IN ") + str(snapped(target_timer.get_time_left(), 0.01))
+		var number = "%.2f" % target_timer.get_time_left()
+		text = "SCORING IN " + number
 	else:
 		text = str("")

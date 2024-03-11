@@ -1,6 +1,8 @@
 extends Label
 
 var target_ball
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	target_ball = get_parent().get_parent().get_node("target_ball")
@@ -14,6 +16,7 @@ func _process(_delta):
 
 func update_value():
 	if(target_ball.check_dying()):
-		text = str("COLLAPSE INCOMING IN ") + str(snapped(target_ball.death_time - target_ball.current_death_time, 0.01))
+		var number = "%.2f" % (target_ball.death_time - target_ball.current_death_time)
+		text = "COLLAPSE INCOMING IN " + number
 	else:
 		text = str("")
