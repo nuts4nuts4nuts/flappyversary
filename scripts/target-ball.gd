@@ -12,7 +12,7 @@ signal dead
 @export var base_cashing_bonus: int = 1
 @export var start_pos: Vector2 = Vector2(500, 200)
 @export var base_well_force = 300
-@export var minimum_mass = 0.5
+@export var minimum_mass = 2
 var initial_mass = mass
 
 var color: Color
