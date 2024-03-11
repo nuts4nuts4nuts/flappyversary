@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=9 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
@@ -8,12 +8,6 @@
 [ext_resource type="FontFile" uid="uid://yms4qa7f8yr1" path="res://fonts/Xolonium-Regular.ttf" id="6_ld0xx"]
 [ext_resource type="Script" path="res://scripts/danger_hud.gd" id="6_ph4el"]
 [ext_resource type="Script" path="res://scripts/scoring_hud.gd" id="8_trtcg"]
-
-[sub_resource type="Curve2D" id="Curve2D_dj7lx"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 2.08165e-12, 2.08165e-12, 0, 0, 0, 0, 1024, 2.08165e-12, 0, 0, 0, 0, 1024, 1024, 0, 0, 0, 0, 2.08165e-12, 1024, 2.08165e-12, 2.08165e-12, 0, 0, 0, 0)
-}
-point_count = 5
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
@@ -26,7 +20,7 @@ position = Vector2(510, 510)
 wait_time = 3.6
 
 [node name="target_ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
-position = Vector2(500, 200)
+position = Vector2(512, 512)
 gravity_well = NodePath("../gravity_well")
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
@@ -34,8 +28,8 @@ gravity_well = NodePath("../gravity_well")
 [node name="danger_hud" type="Label" parent="HUD"]
 offset_left = 244.0
 offset_top = 94.0
-offset_right = 296.0
-offset_bottom = 131.0
+offset_right = 315.0
+offset_bottom = 134.0
 theme_override_colors/font_color = Color(0.807843, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_ld0xx")
 theme_override_font_sizes/font_size = 30
@@ -57,14 +51,5 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("8_trtcg")
 
-[node name="SpawnPath" type="Path2D" parent="."]
-position = Vector2(2.08165e-12, 2.08165e-12)
-scale = Vector2(1.018, 1)
-curve = SubResource("Curve2D_dj7lx")
-
-[node name="SpawnPosition" type="PathFollow2D" parent="SpawnPath"]
-position = Vector2(2.08165e-12, 2.08165e-12)
-
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="dead" from="target_ball" to="." method="end_game"]
-[connection signal="update_text" from="target_ball" to="." method="_on_target_ball_update_text"]

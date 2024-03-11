@@ -3,34 +3,45 @@ extends Node2D
 @export var ball_scene : PackedScene
 @export var spawn_pos_orbit_speed : float = 0.20
 
-var ball_value_low = 1
-var ball_value_high = 1
-
 var ball_spawner_rng : RandomNumberGenerator
-var screen_center: Vector2
+var spawn_pos_ratio : float
 
 var game_running = false
+
+var steals = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("ready")
-	screen_center = get_viewport_rect().get_center()
 
 
 func _process(delta):
-	$SpawnPath/SpawnPosition.progress_ratio += delta * spawn_pos_orbit_speed
+	spawn_pos_ratio += delta * spawn_pos_orbit_speed
+	if spawn_pos_ratio > 1.0:
+		spawn_pos_ratio -= 1.0
+
 	queue_redraw()
 
 
 func _draw():
-	draw_incoming_ball_indicator($SpawnPath/SpawnPosition.position, $SpawnTimer.time_left)
+	draw_incoming_ball_indicator(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), $SpawnTimer.time_left)
 
 
-func _unhandled_key_input(event):
-	if event.is_pressed():
+func _unhandled_key_input(event: InputEvent):
+	# DEBUG STUFF
+	if Engine.is_editor_hint() and event.is_pressed():
+		# spawn balls with 1 through 9
 		var key_number = int(event.key_label) - 48
 		if key_number >= 0 and key_number < 10:
 			spawn_ball(get_global_mouse_position(), Vector2.ZERO, key_number)
+		
+		# change engine speed with up and down arrow
+		if event.keycode == Key.KEY_UP:
+			Engine.time_scale += 0.25
+			print("Engine timescale: " + str(Engine.time_scale))
+		elif event.keycode == Key.KEY_DOWN:
+			Engine.time_scale -= 0.25
+			print("Engine timescale: " + str(Engine.time_scale))
 
 
 func start_game():
@@ -57,14 +68,13 @@ func end_game():
 	$target_ball.end()
 	$HUD.show_restart()
 	game_running = false
-	ball_value_high = 1
+
 
 
 func _on_spawn_timer_timeout():
-	var spawn_pos = $SpawnPath/SpawnPosition
-	var direction = (screen_center - spawn_pos.position).normalized()
+	var direction = (get_viewport_rect().get_center() - ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio)).normalized()
 	var velo = ball_spawner_rng.randf_range(100, 200)
-	spawn_ball(spawn_pos.position, direction * velo, ball_spawner_rng.randi_range(ball_value_low, ball_value_high - 1))
+	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), direction * velo, ball_spawner_rng.randi_range(1, $target_ball.ball_value / 2))
 
 
 func spawn_ball(pos, impulse, value):
@@ -84,5 +94,18 @@ func draw_incoming_ball_indicator(pos, time_to_spawn):
 	draw_circle(pos, ball_size * ball_scale, Color.RED)
 
 
-func _on_target_ball_update_text():
-	ball_value_high += 1
+func ball_spawn_pos(rect: Rect2, t: float):
+	var aspect_ratio = rect.size.x / rect.size.y
+	var tx = aspect_ratio / (2 + 2 * aspect_ratio)
+	var ty = 0.5 - tx
+	if t < tx:
+		return Vector2(lerpf(rect.position.x, rect.position.x + rect.size.x, t / tx), rect.position.y)
+	elif t < tx + ty:
+		t -= tx
+		return Vector2(rect.position.x + rect.size.x, lerpf(rect.position.y, rect.position.y + rect.size.y, t / ty))
+	elif t < 2 * tx + ty:
+		t -= tx + ty
+		return Vector2(lerpf(rect.position.x + rect.size.x, rect.position.x, t / tx), rect.position.y + rect.size.y)
+	else:
+		t -= 2 * tx + ty
+		return Vector2(rect.position.x, lerpf(rect.position.y + rect.size.y, rect.position.y, t / ty))

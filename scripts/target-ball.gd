@@ -10,7 +10,7 @@ signal dead
 @export var death_time: float = 5
 @export var base_ball_value: int = 2
 @export var base_cashing_bonus: int = 1
-@export var start_pos: Vector2 = Vector2(500, 200)
+@export var start_pos: Vector2 = Vector2(0.5, 0.33)
 @export var base_well_force = 300
 @export var minimum_mass = 2
 var initial_mass = mass
@@ -27,7 +27,7 @@ var current_death_time = 0.0
 
 
 func start():
-	position = start_pos
+	position = get_viewport_rect().size * start_pos
 	freeze = false
 	ball_value = base_ball_value
 	for ball in merged_balls:
@@ -40,7 +40,7 @@ func start():
 
 func end():
 	freeze = true
-	position = Vector2(500, 500)
+	position = get_viewport_rect().get_center()
 
 
 func steal_children(other):
@@ -60,7 +60,6 @@ func steal_children(other):
 	elif cashing_in:
 		cashing_bonus += 1
 		var timer = get_node("Timer")
-		var time_remaining = timer.get_time_left()
 		timer.stop()
 		timer.start(timer.wait_time)
 		print(timer.get_time_left())
@@ -136,7 +135,7 @@ func _ready():
 	color = color_normal
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if(gravity_well != null && !cashing_in):
 		var me_to_well = gravity_well.global_position - avg_global_position()
 		var distance = me_to_well.length_squared()
