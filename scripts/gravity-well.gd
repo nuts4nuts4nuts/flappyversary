@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var gravity_distance: Curve
-@export var max_distance: int = 2048
+@export var max_distance: int = 1024
 @export var target_mult: int = 400
 @export var non_target_mult: int = 300
 
