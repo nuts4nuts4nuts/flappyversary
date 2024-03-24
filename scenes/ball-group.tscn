@@ -9,7 +9,7 @@
 friction = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_srb4v"]
-radius = 32.0
+radius = 64.0
 
 [node name="Ball" type="RigidBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_c18o4")
@@ -31,17 +31,17 @@ shape = SubResource("CircleShape2D_srb4v")
 script = ExtResource("3_7k7nr")
 
 [node name="Value" type="Label" parent="Visuals"]
-offset_left = -66.0
-offset_top = -37.0
-offset_right = 69.0
-offset_bottom = 44.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_fonts/font = ExtResource("4_xkb52")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 60
 text = "555"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("4_6mm4q")
-metadata/_edit_use_anchors_ = true
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="merged" from="." to="Visuals/Value" method="_on_ball_merged"]

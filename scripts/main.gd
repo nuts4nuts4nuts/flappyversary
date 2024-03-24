@@ -29,7 +29,7 @@ func _draw():
 
 func _unhandled_key_input(event: InputEvent):
 	# DEBUG STUFF
-	if Engine.is_editor_hint() and event.is_pressed():
+	if OS.has_feature("editor") and event.is_pressed():
 		# spawn balls with 1 through 9
 		var key_number = int(event.key_label) - 48
 		if key_number >= 0 and key_number < 10:

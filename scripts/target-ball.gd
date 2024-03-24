@@ -11,7 +11,7 @@ signal dead
 @export var base_ball_value: int = 2
 @export var base_cashing_bonus: int = 1
 @export var start_pos: Vector2 = Vector2(0.5, 0.33)
-@export var base_well_force = 300
+@export var base_well_force = 50
 @export var minimum_mass = 2
 var initial_mass = mass
 
