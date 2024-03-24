@@ -34,6 +34,11 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
     - [X] Death timer recovery
     - [X] Actual death
     - [X] Feedback when you're gonna die
+- [ ] Save physics tunings
+  - masses
+  - multipiers
+  - curve
+  - max distance
 - [ ] Visuals
   - [ ] Visual style / direction
   - [ ] Assets
@@ -45,6 +50,8 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
     - [ ] Cash timer
     - [ ] Death timer
     - [ ] Target group mass indicator (if that's the mechanic that we want?)
+    - [ ] "Graze" effect
+      - [ ] asteroid-moving-through-atmosphere-type fire / matter flying off?
 - [ ] Audio
   - [ ] SFX
   - [ ] Music

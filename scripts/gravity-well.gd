@@ -5,7 +5,6 @@ extends Node2D
 @export var target_mult: int = 400
 @export var non_target_mult: int = 300
 
-var attraction_force = 40
 var game_started = false
 
 # Called when the node enters the scene tree for the first time.
