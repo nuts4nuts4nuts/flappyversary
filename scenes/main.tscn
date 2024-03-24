@@ -12,6 +12,9 @@ ball_scene = ExtResource("1_fjp4r")
 
 [node name="gravity_well" parent="." instance=ExtResource("1_igh56")]
 position = Vector2(510, 510)
+max_distance = 2048
+target_mult = 400
+non_target_mult = 300
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 3.6
@@ -19,6 +22,11 @@ wait_time = 3.6
 [node name="target_ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
 position = Vector2(512, 512)
 gravity_well = NodePath("../gravity_well")
+death_time = 5.0
+base_ball_value = 2
+base_cashing_bonus = 1
+start_pos = Vector2(0.5, 0.33)
+minimum_mass = 2
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
 

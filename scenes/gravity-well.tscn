@@ -1,7 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://cndnlt3bclw7u"]
+[gd_scene load_steps=5 format=3 uid="uid://cndnlt3bclw7u"]
 
 [ext_resource type="Script" path="res://scripts/gravity-well.gd" id="1_32knt"]
 [ext_resource type="Texture2D" uid="uid://5qxfnkeuhmm3" path="res://assets/download-white-circle-png-31629716484axd08oupl9.png" id="2_o8ksl"]
+
+[sub_resource type="Curve" id="Curve_4xt77"]
+_data = [Vector2(0, 1), 0.0, -3.35811, 0, 0, Vector2(1, 0), -0.170755, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mnacg"]
 emission_shape = 2
@@ -21,6 +25,7 @@ turbulence_noise_strength = 12.71
 
 [node name="Gravity Well" type="Node2D"]
 script = ExtResource("1_32knt")
+gravity_distance = SubResource("Curve_4xt77")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false

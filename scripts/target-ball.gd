@@ -11,7 +11,6 @@ signal dead
 @export var base_ball_value: int = 2
 @export var base_cashing_bonus: int = 1
 @export var start_pos: Vector2 = Vector2(0.5, 0.33)
-@export var base_well_force = 50
 @export var minimum_mass = 2
 var initial_mass = mass
 
@@ -137,13 +136,7 @@ func _ready():
 
 func _physics_process(_delta):
 	if(gravity_well != null && !cashing_in):
-		var me_to_well = gravity_well.global_position - avg_global_position()
-		var distance = me_to_well.length_squared()
-		var direction = me_to_well.normalized()
-
-		var force = base_well_force * mass * direction
-		var falloff = 1 / max(1, (distance / 10000))
-		apply_central_force(force * falloff)
+		gravity_well.get_sucked(self, true)
 
 
 func _on_body_entered(body):
