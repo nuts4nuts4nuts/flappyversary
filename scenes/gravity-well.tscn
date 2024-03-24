@@ -1,27 +1,47 @@
-[gd_scene load_steps=5 format=3 uid="uid://cndnlt3bclw7u"]
+[gd_scene load_steps=8 format=3 uid="uid://cndnlt3bclw7u"]
 
 [ext_resource type="Script" path="res://scripts/gravity-well.gd" id="1_32knt"]
 [ext_resource type="Texture2D" uid="uid://5qxfnkeuhmm3" path="res://assets/download-white-circle-png-31629716484axd08oupl9.png" id="2_o8ksl"]
 
-[sub_resource type="Curve" id="Curve_4xt77"]
-_data = [Vector2(0, 1), 0.0, -3.35811, 0, 0, Vector2(1, 0), -0.170755, 0.0, 0, 0]
-point_count = 2
+[sub_resource type="Curve" id="Curve_h4hpy"]
+min_value = -360.0
+max_value = 360.0
+_data = [Vector2(0, -360), 0.0, 0.0, 0, 0, Vector2(0.807692, 235.636), 1144.33, 1144.33, 0, 0, Vector2(1, 360), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_rsrix"]
+curve = SubResource("Curve_h4hpy")
+
+[sub_resource type="Curve" id="Curve_x2p6j"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.112426, 0.572727), 3.19564, 3.19564, 0, 0, Vector2(0.872781, 0.518182), -2.1948, -2.1948, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_was50"]
+curve = SubResource("Curve_x2p6j")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mnacg"]
 emission_shape = 2
-emission_sphere_radius = 200.0
+emission_sphere_radius = 180.0
 particle_flag_disable_z = true
-direction = Vector3(1, 1, 0)
+direction = Vector3(0, 0, 0)
+spread = 180.0
 gravity = Vector3(0, 0, 0)
-orbit_velocity_min = 0.04
+orbit_velocity_min = 0.06
 orbit_velocity_max = 0.08
-radial_accel_min = -100.0
-radial_accel_max = -100.0
+radial_accel_min = -800.0
+radial_accel_max = -300.0
+tangential_accel_min = -33.15
+tangential_accel_max = 51.93
 damping_min = 21.55
 damping_max = 40.88
-scale_max = 3.0
+angle_min = -341.9
+angle_max = 199.1
+angle_curve = SubResource("CurveTexture_rsrix")
+scale_max = 6.0
+scale_curve = SubResource("CurveTexture_was50")
 color = Color(0, 0, 0, 1)
-turbulence_noise_strength = 12.71
+turbulence_noise_strength = 5.75
+turbulence_noise_speed_random = 6.35
 
 [node name="Gravity Well" type="Node2D"]
 script = ExtResource("1_32knt")
@@ -35,5 +55,4 @@ texture = ExtResource("2_o8ksl")
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 amount = 200
 process_material = SubResource("ParticleProcessMaterial_mnacg")
-lifetime = 3.0
-speed_scale = 3.0
+lifetime = 0.5
