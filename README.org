@@ -1,4 +1,4 @@
-* Flappyversary
+* [[https://github.com/nuts4nuts4nuts/flappyversary][Flappyversary]]
 Celebrating the tenth anniversary of Flappy Bird.
 
 ** Requirements
