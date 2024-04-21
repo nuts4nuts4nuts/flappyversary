@@ -37,4 +37,12 @@ make_well={
 
 [rendering]
 
+renderer/rendering_method="mobile"
 renderer/rendering_method.mobile="gl_compatibility"
+
+[shader_globals]
+
+buffer_size={
+"type": "int",
+"value": 16384
+}
