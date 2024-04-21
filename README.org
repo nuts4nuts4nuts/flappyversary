@@ -62,7 +62,7 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
   - [ ] Web
 - Scope creep
   - [ ] Zoom out when we cash in?
-  - [ ] Switch??????????? (BIG?????)
+  - [ ] Switch??? (BIG????????)
 
 ** Known bugs
 - [X] Center of gravity of ball groups
