@@ -32,10 +32,10 @@ initial_velocity_min = 10.0
 initial_velocity_max = 100.0
 orbit_velocity_min = 2.08167e-14
 orbit_velocity_max = 2.08167e-14
+radial_velocity_min = -40.0
+radial_velocity_max = -30.0
 gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
 linear_accel_max = 10.0
-radial_accel_min = -60.0
-radial_accel_max = -60.0
 scale_min = 0.0
 color_ramp = SubResource("GradientTexture1D_ekm5f")
 turbulence_noise_strength = 0.0
@@ -73,7 +73,7 @@ vertical_alignment = 1
 script = ExtResource("4_6mm4q")
 
 [node name="MovementEffect" type="GPUParticles2D" parent="Visuals"]
-amount = 200
+amount = 100
 process_material = SubResource("ParticleProcessMaterial_p8py3")
 trail_enabled = true
 script = ExtResource("5_rsxfp")
