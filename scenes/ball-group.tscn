@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://u6gk8ntmnifh"]
+[gd_scene load_steps=11 format=3 uid="uid://u6gk8ntmnifh"]
 
 [ext_resource type="Script" path="res://scripts/ball.gd" id="1_sdlll"]
 [ext_resource type="Script" path="res://scripts/ball-drawing.gd" id="3_7k7nr"]
 [ext_resource type="Script" path="res://scripts/ball-value.gd" id="4_6mm4q"]
 [ext_resource type="FontFile" uid="uid://yms4qa7f8yr1" path="res://fonts/Xolonium-Regular.ttf" id="4_xkb52"]
+[ext_resource type="Script" path="res://scripts/BallMovementParticles.gd" id="5_rsxfp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_c18o4"]
 friction = 0.0
@@ -11,14 +12,42 @@ friction = 0.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_srb4v"]
 radius = 64.0
 
+[sub_resource type="Gradient" id="Gradient_nwjip"]
+offsets = PackedFloat32Array(0, 0.551852, 1)
+colors = PackedColorArray(0.66, 0.864, 1, 1, 1, 1, 1, 0.72549, 0.94902, 0.196078, 0.027451, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ekm5f"]
+gradient = SubResource("Gradient_nwjip")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_p8py3"]
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 64.0
+emission_ring_inner_radius = 62.0
+direction = Vector3(1, 2.08165e-12, 2.08165e-12)
+spread = 5.0
+initial_velocity_min = 10.0
+initial_velocity_max = 100.0
+orbit_velocity_min = 2.08167e-14
+orbit_velocity_max = 2.08167e-14
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+linear_accel_max = 10.0
+radial_accel_min = -60.0
+radial_accel_max = -60.0
+scale_min = 0.0
+color_ramp = SubResource("GradientTexture1D_ekm5f")
+turbulence_noise_strength = 0.0
+turbulence_noise_scale = 0.0
+
 [node name="Ball" type="RigidBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_c18o4")
 gravity_scale = 2.66454e-15
+lock_rotation = true
 max_contacts_reported = 1
 contact_monitor = true
-lock_rotation = true
 script = ExtResource("1_sdlll")
-initial_impulse = Vector2(100, 2.08165e-12)
 color = Color(1, 0, 0, 1)
 metadata/_edit_group_ = true
 
@@ -42,6 +71,12 @@ text = "555"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("4_6mm4q")
+
+[node name="MovementEffect" type="GPUParticles2D" parent="Visuals"]
+amount = 200
+process_material = SubResource("ParticleProcessMaterial_p8py3")
+trail_enabled = true
+script = ExtResource("5_rsxfp")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="merged" from="." to="Visuals/Value" method="_on_ball_merged"]
