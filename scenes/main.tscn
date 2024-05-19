@@ -1,14 +1,118 @@
-[gd_scene load_steps=6 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=8 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_qkwcp"]
+[ext_resource type="Script" path="res://scripts/background_danger_element.gd" id="3_hst70"]
 [ext_resource type="PackedScene" uid="uid://uxka1p11iue3" path="res://scenes/target-ball.tscn" id="4_laj0n"]
 [ext_resource type="PackedScene" uid="uid://cmn4pqfuj8wkh" path="res://scenes/HUD.tscn" id="5_uep46"]
+
+[sub_resource type="GDScript" id="GDScript_hbbrn"]
+script/source = "extends Label
+
+var tween
+@export var node_path:NodePath
+var parent
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	parent = get_node(node_path)
+	pass
+	#tween = create_tween()
+	#tween.tween_interval(0.6)
+	#tween.tween_property(self, \"position:y\", -5355, 10).as_relative()
+	#activate()
+
+func activate():
+	if(tween):
+		tween.kill()
+	tween = create_tween()
+	tween.tween_interval(0.6)
+	tween.tween_property(self, \"position:y\", -5355, 10).as_relative()
+	
+
+func scroll():
+	tween.tween_property(self, \"position:y\", -5355, 10)
+
+func return_to_normal():
+	if(tween):
+		tween.kill()
+	tween = create_tween()
+	tween.tween_property(self, \"position:y\", 5355, 10)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if(parent.target_ball != null):
+		if(parent.target_ball.check_dying()):
+			activate()
+			#pass
+		else:
+			return_to_normal()
+			#pass
+"
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
 ball_scene = ExtResource("1_fjp4r")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -514.0
+offset_top = -2589.0
+offset_right = -1.0
+offset_bottom = 8895.0
+color = Color(0.501961, 0, 0, 1)
+script = ExtResource("3_hst70")
+color2 = Color(0.956863, 0.0392157, 0, 1)
+
+[node name="background_danger_text" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_left = 203.0
+offset_top = 4778.0
+offset_right = 511.0
+offset_bottom = 8314.0
+text = "FAMILY SOAPMAKERS SINCE 1858
+DR. BRONNER’S
+18-IN-1 HEMP TEA TREE
+PURE-CASTILE SOAP
+CERTIFIED FAIR TRADE
+MADE WITH ORGANIC OILS
+Ingredients: Water, Organic Coconut Oil*, Potassium Hydroxidet, Organic Palm Kernel Oil*, Organic Olive Oil*, Tea Tree Extract, Organic Hemp Oil, Organic Jojoba Oil, Citric Acid, Tocopherol
+*CERTIFIED FAIR TRADE INGREDIENTS
+tNone remains after saponifying oils into soap & glycerin.
+100% POST-CONSUMER RECYCLED PLASTIC BOTTLE!
+2-3x more concentrated than many leading liquid soaps, cleansers and body washes. Dilute with water. Clouds when cold. Put in warm room/water: clears at about 70oF.
+WARNING! Don’t drink soap! Keep out of eyes. If cap clogs, poke it clear. Do not squeeze bottle and shoot out soap. Soap can clog and spurt with pump dispensers. Flush eyes well with water for 15 minutes. Consult a physician if irritation persists.
+DR. BRONNER’S
+ALL-ONE!
+MAGIC SOAPS
+In all we do, let us be generous, fair & loving to Spaceship Earth and all its inhabitants. For we’re ALL-ONE OR NONE! ALL-ONE!
+OVER 150 YEARS & 5 GENERATIONS OF SOAP EXCELLENCE
+CERTIFIED UNDER THE USDA NATIONAL ORGANIC PROGRAM
+NO DETERGENTS
+NO FOAMING AGENTS
+Enjoy only 2 cosmetics, enough sleep & Dr. Bronner’s ‘Magic Soap’ to clean body-mind-soul-spirit instantly uniting One! Absolute cleanliness is Godliness! For facial packs, scalp & soothing body rub, add dash on bath towel in sink of hot water. Wring out. Lay over face & scalp. Massage with fingertips. Repeat 3 or 4 times ’til arms, legs & all are rubbed, always towards the heart. Rinse towel in plain hot water and massage again. Breathe deeply!
+MADE IN U.S.A.
+Dilute: Enjoy 1 soap for 18 uses! Shave-Shampoo-Shower-Bath-Mop-Launder-Degrease! Dr. Bronner’s Pure-Castile is the very best soap for body, home and Spaceship Earth! Synthetic preservatives? Detergents? Foaming agents? NONE! Health is our greatest wealth! Enjoy body rub to stimulate body-mind-soul-spirit and teach the Essene Moral ABC uniting all free in the shepherd-astronomer Israel’s greatest All-One-God-Faith!
+100% BIODEGRADABLE!
+DILUTE! DILUTE! OK!
+One small squirt applied to wet hands or washcloth to wash hands-face-body.
+Work 1/2 tbsp. into wet hair, rinse, with Dr. Bronner’s Organic Hair Rinse.
+Dilute 1:10 with water for hand-washed dishes, best in soft water.
+For laundry, 1/3-1/2 c. soap in large load, add 1/2 c.vinegar in rinse cycle.
+Mop floor: 1/2 c. soap in 3 gal. of hot water.
+Wash dog by wetting fur, then massage soap in for good lather, rinse thoroughly.
+A dash in bowl of water to remove residue from Fruit & Veggies. Rinse clean.
+All-Purpose Cleaner: add 1/4 c. of soap to qt. of water in spray bottle.
+One tbsp. in qt. of water to spray plants for bugs. Dash of cayenne optional.
+Shave face-underarms-legs: lather up 5-10 drops in wet hands, apply.
+Visit LisaBronner.com for more uses!
+DR. BRONNER’S IS CERTIFIED
+Contains at least 70% Fair for Life Fair Trade certified ingredients
+“The 2nd Coming of God’s Law!” Mohammed’s Arabs, 1948, found Israel Essene Scrolls & Einstein’s “Hillel” probe that as no 6-year-old can grow up free without the ABC, so certain can no 12-year-old survive free without the Moral ABC that mason, tent & sandalmaker Rabbi Hillel taught carpenter Jesus to unite all mankind free in our Eternal Father’s great All-One-God-Faith! For we’re All-One or None: “Listen Children Eternal Father Eternally One!”
+Absolute cleanliness is Godliness! Teach the Moral ABC that unites all mankind free, instantly 6 billion strong & we’re All-One. “Listen Children Eternal Father Eternally One!”
+From Jesus’ “Manual of Discipline,” based on Hillel’s Moral ABC , the Army of Principles of One-God-Faith, unites the Human race, as found 1948 by Mohammed’s Arabs in Israel Essene Scrolls! English by Soapmaker Bronner!"
+autowrap_mode = 2
+script = SubResource("GDScript_hbbrn")
+node_path = NodePath("..")
 
 [node name="gravity_well" parent="." instance=ExtResource("1_igh56")]
 position = Vector2(510, 510)
