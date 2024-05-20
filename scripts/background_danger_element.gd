@@ -42,6 +42,7 @@ func activate():
 	$AnimationPlayerMove.play("entry")
 	$AnimationPlayerColor.play("flash")
 	$AnimationPlayerText.play("scroll")
+	print("UI active")
 	#if(tween):
 	#	tween.kill()
 	#tween = create_tween()
