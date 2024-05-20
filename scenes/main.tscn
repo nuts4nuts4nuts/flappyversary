@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=13 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
@@ -50,16 +50,99 @@ func _process(delta):
 			#pass
 "
 
+[sub_resource type="Animation" id="Animation_4q0yi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.787542, 4.16331e-06, 5.77569e-07, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(2),
+"update": 0,
+"values": [Vector2(-517, -2589)]
+}
+
+[sub_resource type="Animation" id="Animation_d7njp"]
+resource_name = "entry"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(2, -2),
+"update": 0,
+"values": [Vector2(-517, -2589), Vector2(0, -2589)]
+}
+
+[sub_resource type="Animation" id="Animation_3mun1"]
+resource_name = "flash"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.787542, 4.16331e-06, 5.77569e-07, 1), Color(1, 0.397702, 0.329255, 1), Color(0.849242, 0.1155, 0.0956199, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_bxykp"]
+resource_name = "scroll"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("background_danger_text:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(203, 4778), Vector2(203, 1629)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cs2cs"]
+_data = {
+"RESET": SubResource("Animation_4q0yi"),
+"entry": SubResource("Animation_d7njp"),
+"flash": SubResource("Animation_3mun1"),
+"scroll": SubResource("Animation_bxykp")
+}
+
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
 ball_scene = ExtResource("1_fjp4r")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -514.0
+offset_left = -517.0
 offset_top = -2589.0
-offset_right = -1.0
+offset_right = -4.0
 offset_bottom = 8895.0
-color = Color(0.501961, 0, 0, 1)
+color = Color(0.787542, 4.16331e-06, 5.77569e-07, 1)
 script = ExtResource("3_hst70")
 color2 = Color(0.956863, 0.0392157, 0, 1)
 
@@ -68,7 +151,7 @@ layout_mode = 0
 offset_left = 203.0
 offset_top = 4778.0
 offset_right = 511.0
-offset_bottom = 8314.0
+offset_bottom = 8313.97
 text = "FAMILY SOAPMAKERS SINCE 1858
 DR. BRONNER’S
 18-IN-1 HEMP TEA TREE
@@ -114,6 +197,21 @@ autowrap_mode = 2
 script = SubResource("GDScript_hbbrn")
 node_path = NodePath("..")
 
+[node name="AnimationPlayerColor" type="AnimationPlayer" parent="ColorRect"]
+libraries = {
+"": SubResource("AnimationLibrary_cs2cs")
+}
+
+[node name="AnimationPlayerMove" type="AnimationPlayer" parent="ColorRect"]
+libraries = {
+"": SubResource("AnimationLibrary_cs2cs")
+}
+
+[node name="AnimationPlayerText" type="AnimationPlayer" parent="ColorRect"]
+libraries = {
+"": SubResource("AnimationLibrary_cs2cs")
+}
+
 [node name="gravity_well" parent="." instance=ExtResource("1_igh56")]
 position = Vector2(510, 510)
 
@@ -126,5 +224,7 @@ gravity_well = NodePath("../gravity_well")
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
 
+[connection signal="animation_finished" from="ColorRect/AnimationPlayerMove" to="ColorRect" method="_on_animation_player_move_animation_finished"]
+[connection signal="animation_finished" from="ColorRect/AnimationPlayerText" to="ColorRect" method="_on_animation_player_move_animation_finished"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="dead" from="target_ball" to="." method="end_game"]

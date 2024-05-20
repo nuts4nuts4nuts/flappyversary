@@ -39,20 +39,24 @@ func flash_color_back():
 
 func activate():
 	activated = true
-	if(tween):
-		tween.kill()
-	tween = create_tween()
-	tween.tween_property(self, "position", Vector2(-177, -2589), 0.6)
-	tween.tween_property(self, "position", Vector2(-177, -7930), 10)
-	#tween.tween_property(self, "position:x", 337, 0.6).as_relative()
-	#tween.tween_property(self, "position:y", 5000, 10).as_relative()
+	$AnimationPlayerMove.play("entry")
+	$AnimationPlayerColor.play("flash")
+	$AnimationPlayerText.play("scroll")
+	#if(tween):
+	#	tween.kill()
+	#tween = create_tween()
+	#tween.tween_property(self, "position", Vector2(-177, -2589), 0.6)
+	#tween.tween_property(self, "position", Vector2(-177, -7930), 10)
+	
 	
 
 func return_to_normal():
-	if(tween):
-		tween.kill()
-	tween = create_tween()
-	tween.tween_property(self, "position:x", initial_position.x, 0.6)
+	#if(tween):
+	#	tween.kill()
+	#tween = create_tween()
+	#tween.tween_property(self, "position:x", initial_position.x, 0.6)
+	$AnimationPlayerMove.play_backwards("entry")
+	$AnimationPlayerText.play_backwards("scroll")
 	activated = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -67,3 +71,9 @@ func update_value():
 		#pass
 	elif(activated and !target_ball.check_dying()):
 		return_to_normal()
+
+
+func _on_animation_player_move_animation_finished(anim_name):
+	#if(anim_name == "entry"):
+	#	$AnimationPlayerText.play("scroll")
+	pass
