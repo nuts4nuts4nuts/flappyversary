@@ -11,9 +11,9 @@ radius = 100.0
 [node name="Target" type="RigidBody2D"]
 mass = 10.0
 gravity_scale = 0.0
+freeze = true
 max_contacts_reported = 1
 contact_monitor = true
-freeze = true
 script = ExtResource("1_7247g")
 color_normal = Color(0, 0, 1, 1)
 color_cash = Color(0, 1, 0, 1)

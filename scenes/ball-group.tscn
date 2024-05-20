@@ -14,11 +14,10 @@ radius = 64.0
 [node name="Ball" type="RigidBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_c18o4")
 gravity_scale = 2.66454e-15
+lock_rotation = true
 max_contacts_reported = 1
 contact_monitor = true
-lock_rotation = true
 script = ExtResource("1_sdlll")
-initial_impulse = Vector2(100, 2.08165e-12)
 color = Color(1, 0, 0, 1)
 metadata/_edit_group_ = true
 
