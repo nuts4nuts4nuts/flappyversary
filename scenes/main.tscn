@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=14 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
@@ -16,6 +16,16 @@ var parent
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	parent = get_node(node_path)
+	text = \"融
+合
+融
+合
+融
+合
+融
+合
+融
+合\"
 	pass
 	#tween = create_tween()
 	#tween.tween_interval(0.6)
@@ -122,7 +132,22 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(203, 4778), Vector2(203, 1629)]
+"values": [Vector2(2, 4775), Vector2(2, -2188)]
+}
+
+[sub_resource type="Animation" id="Animation_3d8i4"]
+resource_name = "flash_combine"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(5.77569e-07, 0.505838, 0.140158, 1), Color(1.44392e-06, 0.731203, 0.219986, 1), Color(0, 0.505882, 0.141176, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cs2cs"]
@@ -130,6 +155,7 @@ _data = {
 "RESET": SubResource("Animation_4q0yi"),
 "entry": SubResource("Animation_d7njp"),
 "flash": SubResource("Animation_3mun1"),
+"flash_combine": SubResource("Animation_3d8i4"),
 "scroll": SubResource("Animation_bxykp")
 }
 
@@ -148,51 +174,22 @@ color2 = Color(0.956863, 0.0392157, 0, 1)
 
 [node name="background_danger_text" type="Label" parent="ColorRect"]
 layout_mode = 0
-offset_left = 203.0
-offset_top = 4778.0
+offset_left = 2.0
+offset_top = 4775.0
 offset_right = 511.0
-offset_bottom = 8313.97
-text = "FAMILY SOAPMAKERS SINCE 1858
-DR. BRONNER’S
-18-IN-1 HEMP TEA TREE
-PURE-CASTILE SOAP
-CERTIFIED FAIR TRADE
-MADE WITH ORGANIC OILS
-Ingredients: Water, Organic Coconut Oil*, Potassium Hydroxidet, Organic Palm Kernel Oil*, Organic Olive Oil*, Tea Tree Extract, Organic Hemp Oil, Organic Jojoba Oil, Citric Acid, Tocopherol
-*CERTIFIED FAIR TRADE INGREDIENTS
-tNone remains after saponifying oils into soap & glycerin.
-100% POST-CONSUMER RECYCLED PLASTIC BOTTLE!
-2-3x more concentrated than many leading liquid soaps, cleansers and body washes. Dilute with water. Clouds when cold. Put in warm room/water: clears at about 70oF.
-WARNING! Don’t drink soap! Keep out of eyes. If cap clogs, poke it clear. Do not squeeze bottle and shoot out soap. Soap can clog and spurt with pump dispensers. Flush eyes well with water for 15 minutes. Consult a physician if irritation persists.
-DR. BRONNER’S
-ALL-ONE!
-MAGIC SOAPS
-In all we do, let us be generous, fair & loving to Spaceship Earth and all its inhabitants. For we’re ALL-ONE OR NONE! ALL-ONE!
-OVER 150 YEARS & 5 GENERATIONS OF SOAP EXCELLENCE
-CERTIFIED UNDER THE USDA NATIONAL ORGANIC PROGRAM
-NO DETERGENTS
-NO FOAMING AGENTS
-Enjoy only 2 cosmetics, enough sleep & Dr. Bronner’s ‘Magic Soap’ to clean body-mind-soul-spirit instantly uniting One! Absolute cleanliness is Godliness! For facial packs, scalp & soothing body rub, add dash on bath towel in sink of hot water. Wring out. Lay over face & scalp. Massage with fingertips. Repeat 3 or 4 times ’til arms, legs & all are rubbed, always towards the heart. Rinse towel in plain hot water and massage again. Breathe deeply!
-MADE IN U.S.A.
-Dilute: Enjoy 1 soap for 18 uses! Shave-Shampoo-Shower-Bath-Mop-Launder-Degrease! Dr. Bronner’s Pure-Castile is the very best soap for body, home and Spaceship Earth! Synthetic preservatives? Detergents? Foaming agents? NONE! Health is our greatest wealth! Enjoy body rub to stimulate body-mind-soul-spirit and teach the Essene Moral ABC uniting all free in the shepherd-astronomer Israel’s greatest All-One-God-Faith!
-100% BIODEGRADABLE!
-DILUTE! DILUTE! OK!
-One small squirt applied to wet hands or washcloth to wash hands-face-body.
-Work 1/2 tbsp. into wet hair, rinse, with Dr. Bronner’s Organic Hair Rinse.
-Dilute 1:10 with water for hand-washed dishes, best in soft water.
-For laundry, 1/3-1/2 c. soap in large load, add 1/2 c.vinegar in rinse cycle.
-Mop floor: 1/2 c. soap in 3 gal. of hot water.
-Wash dog by wetting fur, then massage soap in for good lather, rinse thoroughly.
-A dash in bowl of water to remove residue from Fruit & Veggies. Rinse clean.
-All-Purpose Cleaner: add 1/4 c. of soap to qt. of water in spray bottle.
-One tbsp. in qt. of water to spray plants for bugs. Dash of cayenne optional.
-Shave face-underarms-legs: lather up 5-10 drops in wet hands, apply.
-Visit LisaBronner.com for more uses!
-DR. BRONNER’S IS CERTIFIED
-Contains at least 70% Fair for Life Fair Trade certified ingredients
-“The 2nd Coming of God’s Law!” Mohammed’s Arabs, 1948, found Israel Essene Scrolls & Einstein’s “Hillel” probe that as no 6-year-old can grow up free without the ABC, so certain can no 12-year-old survive free without the Moral ABC that mason, tent & sandalmaker Rabbi Hillel taught carpenter Jesus to unite all mankind free in our Eternal Father’s great All-One-God-Faith! For we’re All-One or None: “Listen Children Eternal Father Eternally One!”
-Absolute cleanliness is Godliness! Teach the Moral ABC that unites all mankind free, instantly 6 billion strong & we’re All-One. “Listen Children Eternal Father Eternally One!”
-From Jesus’ “Manual of Discipline,” based on Hillel’s Moral ABC , the Army of Principles of One-God-Faith, unites the Human race, as found 1948 by Mohammed’s Arabs in Israel Essene Scrolls! English by Soapmaker Bronner!"
+offset_bottom = 11792.0
+theme_override_font_sizes/font_size = 488
+text = "危
+險
+危
+險
+危
+險
+危
+險
+危
+險
+"
 autowrap_mode = 2
 script = SubResource("GDScript_hbbrn")
 node_path = NodePath("..")
@@ -223,6 +220,7 @@ position = Vector2(512, 512)
 gravity_well = NodePath("../gravity_well")
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
+layer = -1
 
 [connection signal="animation_finished" from="ColorRect/AnimationPlayerMove" to="ColorRect" method="_on_animation_player_move_animation_finished"]
 [connection signal="animation_finished" from="ColorRect/AnimationPlayerText" to="ColorRect" method="_on_animation_player_move_animation_finished"]
