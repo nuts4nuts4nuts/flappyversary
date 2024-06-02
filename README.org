@@ -68,3 +68,4 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
 - [X] Center of gravity of ball groups
 - [ ] Balls sometimes fails to collide when they are simultaneously colliding with something else (the target ball, for example)
 - [ ] non-target groups disappearing when not fully off screen
+- [ ] non-target balls can add more than their value when they collide with more than one ball at the same time
