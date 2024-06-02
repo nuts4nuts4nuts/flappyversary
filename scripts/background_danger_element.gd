@@ -6,6 +6,7 @@ var tween
 var color_tween
 var target_ball
 var activated
+var activated_cashing_in
 @export var color2 : Color
 
 # Called when the node enters the scene tree for the first time.
@@ -39,6 +40,17 @@ func flash_color_back():
 
 func activate():
 	activated = true
+	$background_danger_text.text = "危
+險
+危
+險
+危
+險
+危
+險
+危
+險
+"
 	$AnimationPlayerMove.play("entry")
 	$AnimationPlayerColor.play("flash")
 	$AnimationPlayerText.play("scroll")
@@ -51,6 +63,23 @@ func activate():
 	
 	
 
+func activate_cashing_in():
+	activated_cashing_in = true
+	$background_danger_text.text = "融
+合
+融
+合
+融
+合
+融
+合
+融
+合
+"
+	$AnimationPlayerMove.play("entry")
+	$AnimationPlayerColor.play("flash_combine")
+	$AnimationPlayerText.play("scroll")
+
 func return_to_normal():
 	#if(tween):
 	#	tween.kill()
@@ -59,6 +88,7 @@ func return_to_normal():
 	$AnimationPlayerMove.play_backwards("entry")
 	$AnimationPlayerText.play_backwards("scroll")
 	activated = false
+	activated_cashing_in = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -71,6 +101,11 @@ func update_value():
 		activate()
 		#pass
 	elif(activated and !target_ball.check_dying()):
+		return_to_normal()
+	
+	if(!activated_cashing_in and target_ball.cashing_in):
+		activate_cashing_in()
+	elif(activated_cashing_in and !target_ball.cashing_in):
 		return_to_normal()
 
 

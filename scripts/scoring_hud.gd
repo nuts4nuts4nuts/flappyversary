@@ -21,6 +21,6 @@ func _process(_delta):
 func update_value():
 	if(target_ball.cashing_in):
 		var number = "%.2f" % target_timer.get_time_left()
-		text = "SCORING IN " + number
+		text = number
 	else:
 		text = str("")
