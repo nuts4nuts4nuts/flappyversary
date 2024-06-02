@@ -8,7 +8,7 @@ signal dead
 @export var color_normal: Color
 @export var color_cash: Color
 @export var death_time: float = 5
-@export var base_ball_value: int = 2
+@export var base_ball_value: int = 5
 @export var base_cashing_bonus: int = 1
 @export var start_pos: Vector2 = Vector2(0.5, 0.33)
 @export var minimum_mass = 2
@@ -47,6 +47,7 @@ func steal_children(other):
 	var children = other.get_children()
 	for child in children:
 		print(child.name)
+		child.reparent(self)
 		merged_balls.append(child)
 	merged.emit()
 	target_progress += 1
