@@ -47,7 +47,7 @@ func _unhandled_key_input(event: InputEvent):
 func start_game():
 	game_running = true
 	ball_spawner_rng = RandomNumberGenerator.new()
-	for child in find_children("*Ball*", "", false, false):
+	for child in find_children("", "BallGroup", false, false):
 		child.queue_free()
 	$gravity_well.activate()
 	$SpawnTimer.start()

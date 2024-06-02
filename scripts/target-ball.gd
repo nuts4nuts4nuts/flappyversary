@@ -47,9 +47,6 @@ func steal_children(other):
 	var children = other.get_children()
 	for child in children:
 		print(child.name)
-		if "Visuals" in child.name:
-			merged.connect(child.get_node("Value")._on_ball_merged)
-		child.reparent(self)
 		merged_balls.append(child)
 	merged.emit()
 	target_progress += 1
@@ -84,7 +81,7 @@ func finish_cash_in():
 
 # true if ANY is out of bounds (and not cashing)
 func check_dying():
-	for child in find_children("*Collider*", "Node2D", false, false):
+	for child in find_children("", "BallCollider", false, false):
 		var child_node = child as CollisionShape2D
 		var circle = child_node.shape as CircleShape2D
 		var pos = child_node.global_position
@@ -103,7 +100,7 @@ func check_dying():
 
 func avg_global_position():
 	var pos = Vector2()
-	var children = find_children("*Collider*", "Node2D", false, false)
+	var children = find_children("", "BallCollider", false, false)
 	for child in children:
 		pos += child.global_position
 	return pos / children.size()

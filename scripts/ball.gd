@@ -1,3 +1,5 @@
+class_name BallGroup
+
 extends RigidBody2D
 
 signal merged
@@ -43,7 +45,7 @@ func _process(delta):
 
 # true if ALL are out of bounds
 func check_out_of_bounds():
-	for child in find_children("*Collider*", "Node2D", false, false):
+	for child in find_children("", "BallCollider", false, false):
 		var child_node = child as CollisionShape2D
 		var circle = child_node.shape as CircleShape2D
 		var pos = child_node.global_position
@@ -63,7 +65,7 @@ func check_out_of_bounds():
 func _physics_process(_delta):
 	if(gravity_well != null):
 		gravity_well.get_sucked(self, false)
- 
+
 
 func _on_body_entered(body):
 	if !body.is_target and name < body.name:
@@ -77,8 +79,6 @@ func steal_children(other):
 	ball_value += other.ball_value
 	var children = other.get_children()
 	for child in children:
-		if "Visuals" in child.name:
-			merged.connect(child.get_node("Value")._on_ball_merged)
 		child.reparent(self)
 	other.queue_free()
 	merged.emit()
@@ -86,7 +86,7 @@ func steal_children(other):
 
 func avg_global_position():
 	var pos = Vector2()
-	var children = find_children("*Collider*", "Node2D", false, false)
+	var children = find_children("", "BallCollider", false, false)
 	for child in children:
 		pos += child.global_position
 	return pos / children.size()

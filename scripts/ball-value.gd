@@ -1,12 +1,7 @@
 extends Label
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	update_value()
-
-
-func _on_ball_merged():
+	
+func _process(_delta):
 	update_value()
 
 
