@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=16 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
@@ -58,6 +58,10 @@ func _process(delta):
 		else:
 			return_to_normal()
 			#pass
+
+
+func _on_animation_player_text_animation_finished(anim_name):
+	pass # Replace with function body.
 "
 
 [sub_resource type="Animation" id="Animation_4q0yi"]
@@ -84,7 +88,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(2),
 "update": 0,
-"values": [Vector2(-517, -2589)]
+"values": [Vector2(-741, -2589)]
 }
 
 [sub_resource type="Animation" id="Animation_d7njp"]
@@ -100,7 +104,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(2, -2),
 "update": 0,
-"values": [Vector2(-517, -2589), Vector2(0, -2589)]
+"values": [Vector2(-741, -2589), Vector2(0, -2589)]
 }
 
 [sub_resource type="Animation" id="Animation_3mun1"]
@@ -121,6 +125,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_3d8i4"]
 resource_name = "flash_combine"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -137,6 +142,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_bxykp"]
 resource_name = "scroll"
 length = 5.0
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -150,13 +156,47 @@ tracks/0/keys = {
 "values": [Vector2(2, 4775), Vector2(2, -2188)]
 }
 
+[sub_resource type="Animation" id="Animation_wmnat"]
+resource_name = "scroll_loop"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("background_danger_text:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 2479), Vector2(2, -1444)]
+}
+
+[sub_resource type="Animation" id="Animation_1wyds"]
+resource_name = "scroll_to_loop_start"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("background_danger_text:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 4775), Vector2(2, 2479)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cs2cs"]
 _data = {
 "RESET": SubResource("Animation_4q0yi"),
 "entry": SubResource("Animation_d7njp"),
 "flash": SubResource("Animation_3mun1"),
 "flash_combine": SubResource("Animation_3d8i4"),
-"scroll": SubResource("Animation_bxykp")
+"scroll": SubResource("Animation_bxykp"),
+"scroll_loop": SubResource("Animation_wmnat"),
+"scroll_to_loop_start": SubResource("Animation_1wyds")
 }
 
 [node name="main" type="Node2D"]
@@ -164,9 +204,9 @@ script = ExtResource("1_qkwcp")
 ball_scene = ExtResource("1_fjp4r")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -517.0
+offset_left = -741.0
 offset_top = -2589.0
-offset_right = -4.0
+offset_right = -228.0
 offset_bottom = 8895.0
 color = Color(0.787542, 4.16331e-06, 5.77569e-07, 1)
 script = ExtResource("3_hst70")
@@ -175,9 +215,9 @@ color2 = Color(0.956863, 0.0392157, 0, 1)
 [node name="background_danger_text" type="Label" parent="ColorRect"]
 layout_mode = 0
 offset_left = 2.0
-offset_top = 4775.0
+offset_top = -1444.0
 offset_right = 511.0
-offset_bottom = 11792.0
+offset_bottom = 5573.01
 theme_override_font_sizes/font_size = 488
 text = "危
 險
@@ -209,6 +249,14 @@ libraries = {
 "": SubResource("AnimationLibrary_cs2cs")
 }
 
+[node name="ColorRect" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 513.0
+offset_top = 2587.0
+offset_right = 528.0
+offset_bottom = 2627.0
+scale = Vector2(1.745, 54.3)
+
 [node name="gravity_well" parent="." instance=ExtResource("1_igh56")]
 position = Vector2(510, 510)
 
@@ -222,7 +270,6 @@ gravity_well = NodePath("../gravity_well")
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
 layer = -1
 
-[connection signal="animation_finished" from="ColorRect/AnimationPlayerMove" to="ColorRect" method="_on_animation_player_move_animation_finished"]
 [connection signal="animation_finished" from="ColorRect/AnimationPlayerText" to="ColorRect" method="_on_animation_player_move_animation_finished"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="dead" from="target_ball" to="." method="end_game"]

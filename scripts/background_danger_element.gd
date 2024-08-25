@@ -78,7 +78,7 @@ func activate_cashing_in():
 "
 	$AnimationPlayerMove.play("entry")
 	$AnimationPlayerColor.play("flash_combine")
-	$AnimationPlayerText.play("scroll")
+	$AnimationPlayerText.play("scroll_to_loop_start")
 
 func return_to_normal():
 	#if(tween):
@@ -86,7 +86,7 @@ func return_to_normal():
 	#tween = create_tween()
 	#tween.tween_property(self, "position:x", initial_position.x, 0.6)
 	$AnimationPlayerMove.play_backwards("entry")
-	$AnimationPlayerText.play_backwards("scroll")
+	$AnimationPlayerText.play_backwards("scroll_loop")
 	activated = false
 	activated_cashing_in = false
 
@@ -110,6 +110,7 @@ func update_value():
 
 
 func _on_animation_player_move_animation_finished(anim_name):
-	#if(anim_name == "entry"):
-	#	$AnimationPlayerText.play("scroll")
+	if(anim_name == "scroll_to_loop_start"):
+		print("scrolled to loop start")
+		$AnimationPlayerText.play("scroll_loop")
 	pass
