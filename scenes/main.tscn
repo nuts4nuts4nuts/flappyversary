@@ -218,6 +218,7 @@ wait_time = 3.6
 [node name="target_ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
 position = Vector2(512, 512)
 gravity_well = NodePath("../gravity_well")
+color_normal = Color(0, 0, 1, 0.403922)
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
 layer = -1

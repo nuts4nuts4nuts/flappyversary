@@ -46,9 +46,15 @@ func steal_children(other):
 	print(name + " stealing")
 	var children = other.get_children()
 	for child in children:
+		for subchild in child.get_children():
+			if subchild is BallValue:
+				subchild.display_ball_value = false
+			if subchild is BallDrawer:
+				subchild.color_alpha = 0.1
 		print(child.name)
 		child.reparent(self)
 		merged_balls.append(child)
+		child = false
 	merged.emit()
 	target_progress += 1
 	other.queue_free()

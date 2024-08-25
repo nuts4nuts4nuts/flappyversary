@@ -32,6 +32,7 @@ func _unhandled_key_input(event: InputEvent):
 	if OS.has_feature("editor") and event.is_pressed():
 		# spawn balls with 1 through 9
 		var key_number = int(event.key_label) - 48
+		
 		if key_number >= 0 and key_number < 10:
 			spawn_ball(get_global_mouse_position(), Vector2.ZERO, key_number)
 		
@@ -68,7 +69,6 @@ func end_game():
 	$target_ball.end()
 	$HUD.show_restart()
 	game_running = false
-
 
 
 func _on_spawn_timer_timeout():
