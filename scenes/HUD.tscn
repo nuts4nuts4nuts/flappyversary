@@ -57,4 +57,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("4_fynj6")
 
+[node name="ShareButton" type="Button" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -92.5
+offset_right = 92.5
+offset_bottom = 96.0
+grow_horizontal = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 64
+text = "Share"
+
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="ShareButton" to="." method="_on_share_button_pressed"]
