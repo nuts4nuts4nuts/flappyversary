@@ -57,10 +57,10 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
     - [ ] Feedback for bounces
     - [ ] Cashing in juice
     - [ ] Black hole effect
-    - [ ] Ball spawn direction indicator
-    - [ ] Number of groups in target group indicator
-    - [ ] Cash timer
-    - [ ] Death timer
+    - [X] Ball spawn direction indicator
+    - [X] Number of groups in target group indicator
+    - [X] Cash timer
+    - [X] Death timer
     - [ ] Target group mass indicator (if that's the mechanic that we want?)
     - [ ] "Graze" effect
       - [ ] asteroid-moving-through-atmosphere-type fire / matter flying off?

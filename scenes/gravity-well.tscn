@@ -37,3 +37,4 @@ amount = 200
 process_material = SubResource("ParticleProcessMaterial_mnacg")
 lifetime = 3.0
 speed_scale = 3.0
+trail_enabled = true

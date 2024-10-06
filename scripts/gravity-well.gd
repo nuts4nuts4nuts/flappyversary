@@ -6,9 +6,11 @@ extends Node2D
 @export var non_target_mult: int = 300
 
 var game_started = false
+var particles
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	particles = get_node("GPUParticles2D")
 	pass # Replace with function body.
 
 
@@ -30,6 +32,7 @@ func _input(event):
 func make_well(event):
 	print("mouse button event at ", event.position)
 	self.position = event.position
+	particles.restart()
 
 
 func get_gravity_power(raw_distance: int, target_ball: bool):
