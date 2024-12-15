@@ -30,4 +30,5 @@ func screenshot():
 	var capture = get_viewport().get_texture().get_image()
 	var _time = Time.get_datetime_string_from_system()
 	var filename = OS.get_data_dir() + "/Screenshot-{0}.png".format({"0":_time})
+	print(filename)
 	capture.save_png(filename)

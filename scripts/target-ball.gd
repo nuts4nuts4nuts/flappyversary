@@ -70,7 +70,9 @@ func steal_children(other):
 
 func start_cash_in():
 	cashing_in = true
-	get_node("Timer").start()
+	var timer: Timer = get_node("Timer")
+	timer.wait_time = ball_value
+	timer.start()
 	color = color_cash
 
 
