@@ -9,6 +9,7 @@ var spawn_pos_ratio : float
 var game_running = false
 
 var steals = 0
+var last_generated_number = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -74,8 +75,21 @@ func end_game():
 func _on_spawn_timer_timeout():
 	var direction = (get_viewport_rect().get_center() - ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio)).normalized()
 	var velo = ball_spawner_rng.randf_range(100, 200)
-	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), direction * velo, ball_spawner_rng.randi_range(1, $target_ball.ball_value / 2))
+	if($target_ball.ball_value > 2):
+		last_generated_number = generate_new_number(last_generated_number)
+	else:
+		last_generated_number = 1
+	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), direction * velo, last_generated_number)
 
+func generate_new_number(previous_number):
+	var new_number
+	if($target_ball.ball_value % 2 != 0):
+		new_number = ball_spawner_rng.randi_range(1, $target_ball.ball_value / 2)
+	else:
+		new_number = ball_spawner_rng.randi_range(1, (($target_ball.ball_value / 2)-1))
+	if(new_number >= previous_number):
+		new_number += 1
+	return new_number
 
 func spawn_ball(pos, impulse, value):
 	var ball = ball_scene.instantiate()
