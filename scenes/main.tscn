@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=17 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_qkwcp"]
 [ext_resource type="Script" path="res://scripts/background_danger_element.gd" id="3_hst70"]
 [ext_resource type="PackedScene" uid="uid://uxka1p11iue3" path="res://scenes/target-ball.tscn" id="4_laj0n"]
+[ext_resource type="FontFile" uid="uid://docppmrhwm2u5" path="res://fonts/STHeiti Medium.ttc" id="4_u8emg"]
 [ext_resource type="PackedScene" uid="uid://cmn4pqfuj8wkh" path="res://scenes/HUD.tscn" id="5_uep46"]
 
 [sub_resource type="GDScript" id="GDScript_hbbrn"]
@@ -219,6 +220,7 @@ offset_left = 2.0
 offset_top = -1444.0
 offset_right = 511.0
 offset_bottom = 5573.01
+theme_override_fonts/font = ExtResource("4_u8emg")
 theme_override_font_sizes/font_size = 488
 text = "危
 險

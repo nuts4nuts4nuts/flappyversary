@@ -21,6 +21,7 @@ window/size/viewport_width=3840
 window/size/viewport_height=2160
 window/stretch/mode="viewport"
 window/stretch/aspect="keep_width"
+window/handheld/orientation=4
 
 [input]
 

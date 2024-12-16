@@ -57,7 +57,7 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
     - [ ] Feedback for bounces
     - [ ] Cashing in juice
     - [ ] Black hole effect
-    - [X] Ball spawn direction indicator
+    - [X] Ball spawn direction indicator!
     - [X] Number of groups in target group indicator
     - [X] Cash timer
     - [X] Death timer
