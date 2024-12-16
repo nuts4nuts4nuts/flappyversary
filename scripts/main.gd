@@ -1,7 +1,15 @@
 extends Node2D
 
+enum SPAWNING_ALGORITHM {PureRandom, DontRepeat, CountUp}
+var spawn_funcs = {
+	SPAWNING_ALGORITHM.PureRandom: algo_pure_random,
+	SPAWNING_ALGORITHM.DontRepeat: algo_dont_repeat,
+	SPAWNING_ALGORITHM.CountUp: algo_count_up,
+	}
+
 @export var ball_scene : PackedScene
 @export var spawn_pos_orbit_speed : float = 0.20
+@export var spawn_algorithm : SPAWNING_ALGORITHM
 
 var ball_spawner_rng : RandomNumberGenerator
 var spawn_pos_ratio : float
@@ -77,19 +85,26 @@ func _on_spawn_timer_timeout():
 	var velo = ball_spawner_rng.randf_range(100, 200)
 	if($target_ball.ball_value > 2):
 		last_generated_number = generate_new_number(last_generated_number)
+		print(last_generated_number)
 	else:
 		last_generated_number = 1
 	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), direction * velo, last_generated_number)
 
 func generate_new_number(previous_number):
-	var new_number
-	if($target_ball.ball_value % 2 != 0):
-		new_number = ball_spawner_rng.randi_range(1, $target_ball.ball_value / 2)
-	else:
-		new_number = ball_spawner_rng.randi_range(1, (($target_ball.ball_value / 2)-1))
+	var top_range = int(ceil($target_ball.ball_value / 2.0))
+	return spawn_funcs[spawn_algorithm].call(top_range, previous_number)
+
+func algo_pure_random(top_range, previous_number):
+	return ball_spawner_rng.randi_range(1, top_range)
+
+func algo_dont_repeat(top_range, previous_number):
+	var new_number = ball_spawner_rng.randi_range(1, top_range - 1)
 	if(new_number >= previous_number):
 		new_number += 1
 	return new_number
+
+func algo_count_up(top_range, previous_number):
+	return previous_number % top_range + 1
 
 func spawn_ball(pos, impulse, value):
 	var ball = ball_scene.instantiate()
