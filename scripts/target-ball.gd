@@ -28,9 +28,11 @@ var cashing_in = false
 var merged_balls = []
 var cashing_bonus = base_cashing_bonus
 var current_death_time = 0.0
+var main
 
 
 func start():
+	main = get_parent()
 	position = get_viewport_rect().size * start_pos
 	freeze = false
 	ball_value = base_ball_value
@@ -63,8 +65,14 @@ func steal_children(other):
 	merged.emit()
 	target_progress += 1
 	other.queue_free()
-	if !cashing_in && target_progress >= ball_value:
-		start_cash_in()
+#	(this is if we're still checking number of ball groups) if !cashing_in && target_progress >= ball_value:
+	if main.scoring_behavior == main.SCORING_BEHAVIOR.NOfN:
+		if !cashing_in && target_progress >= ball_value:
+			if !cashing_in:
+				start_cash_in()
+	elif main.scoring_behavior == main.SCORING_BEHAVIOR.OneOfN:
+		if !cashing_in:
+			start_cash_in()
 	elif cashing_in:
 		cashing_bonus += 1
 		var timer = get_node("Timer")
