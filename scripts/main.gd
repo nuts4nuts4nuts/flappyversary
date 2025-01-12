@@ -7,9 +7,12 @@ var spawn_funcs = {
 	SPAWNING_ALGORITHM.CountUp: algo_count_up,
 	}
 
+enum SCORING_BEHAVIOR {NOfN, OneOfN}
+
 @export var ball_scene : PackedScene
 @export var spawn_pos_orbit_speed : float = 0.20
 @export var spawn_algorithm : SPAWNING_ALGORITHM
+@export var scoring_behavior : SCORING_BEHAVIOR
 
 var ball_spawner_rng : RandomNumberGenerator
 var spawn_pos_ratio : float
