@@ -98,6 +98,9 @@ func finish_cash_in():
 func check_dying():
 	if !main:
 		return false
+	
+	if !main.game_running:
+		return false
 
 	match main.death_condition:
 		main.DEATH_CONDITION.Always:
@@ -125,14 +128,14 @@ func death_time():
 
 
 func close_to_death():
-	if !main:
+	if !check_dying():
 		return false
 
 	match main.death_condition:
 		main.DEATH_CONDITION.Always:
 			return (death_time() - current_death_time) < 15.0
 		main.DEATH_CONDITION.OffScreen:
-			return check_dying()
+			return true
 
 
 func avg_global_position():
