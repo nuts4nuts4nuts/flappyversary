@@ -4,12 +4,6 @@ signal merged
 signal update_text
 signal dead
 
-enum DEATH_CONDITION {OffScreen, Always}
-@export var death_condition : DEATH_CONDITION
-@export var death_times = {
-	DEATH_CONDITION.OffScreen: 5,
-	DEATH_CONDITION.Always: 60,
-	}
 @export var gravity_well: Node2D
 @export var color_normal: Color
 @export var color_cash: Color
@@ -66,14 +60,16 @@ func steal_children(other):
 	target_progress += 1
 	other.queue_free()
 #	(this is if we're still checking number of ball groups) if !cashing_in && target_progress >= ball_value:
-	if main.scoring_behavior == main.SCORING_BEHAVIOR.NOfN:
-		if !cashing_in && target_progress >= ball_value:
+	match main.scoring_behavior:
+		main.SCORING_BEHAVIOR.NOfN:
+			if !cashing_in && target_progress >= ball_value:
+				if !cashing_in:
+					start_cash_in()
+		main.SCORING_BEHAVIOR.OneOfN:
 			if !cashing_in:
 				start_cash_in()
-	elif main.scoring_behavior == main.SCORING_BEHAVIOR.OneOfN:
-		if !cashing_in:
-			start_cash_in()
-	elif cashing_in:
+
+	if cashing_in:
 		cashing_bonus += 1
 		var timer = get_node("Timer")
 		timer.stop()
@@ -103,10 +99,13 @@ func finish_cash_in():
 
 # true if ANY is out of bounds (and not cashing)
 func check_dying():
-	match death_condition:
-		DEATH_CONDITION.Always:
+	if !main:
+		return false
+
+	match main.death_condition:
+		main.DEATH_CONDITION.Always:
 			return !cashing_in
-		DEATH_CONDITION.OffScreen:
+		main.DEATH_CONDITION.OffScreen:
 			for child in find_children("", "BallCollider", false, false):
 				var child_node = child as CollisionShape2D
 				var circle = child_node.shape as CircleShape2D
@@ -125,14 +124,17 @@ func check_dying():
 
 
 func death_time():
-	return death_times[death_condition]
+	return main.death_times[main.death_condition]
 
 
 func close_to_death():
-	match death_condition:
-		DEATH_CONDITION.Always:
+	if !main:
+		return false
+
+	match main.death_condition:
+		main.DEATH_CONDITION.Always:
 			return (death_time() - current_death_time) < 15.0
-		DEATH_CONDITION.OffScreen:
+		main.DEATH_CONDITION.OffScreen:
 			return check_dying()
 
 
@@ -146,6 +148,9 @@ func avg_global_position():
 
 func _process(delta):
 #	queue_redraw()
+	if !main:
+		return
+
 	if check_dying():
 		current_death_time += delta
 		if current_death_time > death_time():
@@ -153,10 +158,10 @@ func _process(delta):
 			mass = initial_mass
 			dead.emit()
 	else: # not dying
-		match death_condition:
-			DEATH_CONDITION.Always:
+		match main.death_condition:
+			main.DEATH_CONDITION.Always:
 				current_death_time = 0 
-			DEATH_CONDITION.OffScreen:
+			main.DEATH_CONDITION.OffScreen:
 				current_death_time = max(0, current_death_time - delta)
 	
 	if cashing_in:

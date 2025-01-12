@@ -202,6 +202,7 @@ _data = {
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
+death_condition = 1
 ball_scene = ExtResource("1_fjp4r")
 spawn_algorithm = 2
 scoring_behavior = 1

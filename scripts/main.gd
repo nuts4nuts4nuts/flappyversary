@@ -6,8 +6,13 @@ var spawn_funcs = {
 	SPAWNING_ALGORITHM.DontRepeat: algo_dont_repeat,
 	SPAWNING_ALGORITHM.CountUp: algo_count_up,
 	}
-
 enum SCORING_BEHAVIOR {NOfN, OneOfN}
+enum DEATH_CONDITION {OffScreen, Always}
+@export var death_condition : DEATH_CONDITION
+@export var death_times = {
+	DEATH_CONDITION.OffScreen: 5,
+	DEATH_CONDITION.Always: 60,
+	}
 
 @export var ball_scene : PackedScene
 @export var spawn_pos_orbit_speed : float = 0.20

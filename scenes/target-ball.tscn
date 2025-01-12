@@ -16,7 +16,6 @@ freeze = true
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_7247g")
-death_condition = 1
 color_normal = Color(0, 0, 1, 1)
 color_cash = Color(0, 1, 0, 1)
 metadata/_edit_horizontal_guides_ = []
