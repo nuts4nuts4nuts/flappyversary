@@ -59,17 +59,14 @@ func steal_children(other):
 	merged.emit()
 	target_progress += 1
 	other.queue_free()
-#	(this is if we're still checking number of ball groups) if !cashing_in && target_progress >= ball_value:
-	match main.scoring_behavior:
-		main.SCORING_BEHAVIOR.NOfN:
-			if !cashing_in && target_progress >= ball_value:
-				if !cashing_in:
+	if !cashing_in:
+		match main.scoring_behavior:
+			main.SCORING_BEHAVIOR.NOfN:
+				if target_progress >= ball_value:
 					start_cash_in()
-		main.SCORING_BEHAVIOR.OneOfN:
-			if !cashing_in:
+			main.SCORING_BEHAVIOR.OneOfN:
 				start_cash_in()
-
-	if cashing_in:
+	else:
 		cashing_bonus += 1
 		var timer = get_node("Timer")
 		timer.stop()
