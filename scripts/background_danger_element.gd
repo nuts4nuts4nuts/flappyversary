@@ -97,10 +97,10 @@ func _process(delta):
 		#pass
 
 func update_value():
-	if(!activated and target_ball.check_dying()):
+	if(!activated and
+	target_ball.close_to_death()):
 		activate()
-		#pass
-	elif(activated and !target_ball.check_dying()):
+	elif(activated and !target_ball.close_to_death()):
 		return_to_normal()
 	
 	if(!activated_cashing_in and target_ball.cashing_in):

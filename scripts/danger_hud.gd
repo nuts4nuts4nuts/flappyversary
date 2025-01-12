@@ -15,8 +15,8 @@ func _process(_delta):
 
 
 func update_value():
-	if(target_ball.check_dying()):
-		var number = "%.2f" % (target_ball.death_time - target_ball.current_death_time)
+	if(target_ball.close_to_death()):
+		var number = "%.2f" % (target_ball.death_time() - target_ball.current_death_time)
 		text = number
 	else:
 		text = str("")

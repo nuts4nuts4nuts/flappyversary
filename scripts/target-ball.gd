@@ -4,10 +4,15 @@ signal merged
 signal update_text
 signal dead
 
+enum DEATH_CONDITION {OffScreen, Always}
+@export var death_condition : DEATH_CONDITION
+@export var death_times = {
+	DEATH_CONDITION.OffScreen: 5,
+	DEATH_CONDITION.Always: 60,
+	}
 @export var gravity_well: Node2D
 @export var color_normal: Color
 @export var color_cash: Color
-@export var death_time: float = 5
 @export var base_ball_value: int = 2
 @export var base_cashing_bonus: int = 1
 @export var start_pos: Vector2 = Vector2(0.5, 0.33)
@@ -90,21 +95,37 @@ func finish_cash_in():
 
 # true if ANY is out of bounds (and not cashing)
 func check_dying():
-	for child in find_children("", "BallCollider", false, false):
-		var child_node = child as CollisionShape2D
-		var circle = child_node.shape as CircleShape2D
-		var pos = child_node.global_position
-		var radius = circle.radius
-		var vp_width = get_viewport_rect().size.x
-		var vp_height = get_viewport_rect().size.y
-
-		var x_min = pos.x - radius
-		var x_max = pos.x + radius
-		var y_min = pos.y - radius
-		var y_max = pos.y + radius
-		if x_min < 0.0 or x_max > vp_width or y_min < 0.0 or y_max > vp_height:
+	match death_condition:
+		DEATH_CONDITION.Always:
 			return !cashing_in
-	return false
+		DEATH_CONDITION.OffScreen:
+			for child in find_children("", "BallCollider", false, false):
+				var child_node = child as CollisionShape2D
+				var circle = child_node.shape as CircleShape2D
+				var pos = child_node.global_position
+				var radius = circle.radius
+				var vp_width = get_viewport_rect().size.x
+				var vp_height = get_viewport_rect().size.y
+
+				var x_min = pos.x - radius
+				var x_max = pos.x + radius
+				var y_min = pos.y - radius
+				var y_max = pos.y + radius
+				if x_min < 0.0 or x_max > vp_width or y_min < 0.0 or y_max > vp_height:
+					return !cashing_in
+			return false
+
+
+func death_time():
+	return death_times[death_condition]
+
+
+func close_to_death():
+	match death_condition:
+		DEATH_CONDITION.Always:
+			return (death_time() - current_death_time) < 15.0
+		DEATH_CONDITION.OffScreen:
+			return check_dying()
 
 
 func avg_global_position():
@@ -119,12 +140,16 @@ func _process(delta):
 #	queue_redraw()
 	if check_dying():
 		current_death_time += delta
-		if current_death_time > death_time:
+		if current_death_time > death_time():
 			# End game!
 			mass = initial_mass
 			dead.emit()
-	elif current_death_time > 0:
-		current_death_time = max(0, current_death_time - delta)
+	else: # not dying
+		match death_condition:
+			DEATH_CONDITION.Always:
+				current_death_time = 0 
+			DEATH_CONDITION.OffScreen:
+				current_death_time = max(0, current_death_time - delta)
 	
 	if cashing_in:
 		angular_velocity = 0
