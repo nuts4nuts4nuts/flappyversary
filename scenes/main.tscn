@@ -207,6 +207,7 @@ well_profile = 1
 ball_scene = ExtResource("1_fjp4r")
 spawn_algorithm = 2
 scoring_behavior = 1
+stationary_targetball = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -741.0
@@ -267,7 +268,7 @@ scale = Vector2(1.745, 54.3)
 position = Vector2(510, 510)
 
 [node name="SpawnTimer" type="Timer" parent="."]
-wait_time = 3.6
+wait_time = 1.8
 
 [node name="target_ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
 position = Vector2(512, 512)

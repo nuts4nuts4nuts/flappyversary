@@ -16,9 +16,11 @@ var ball_value = 1
 var base_force = 200
 var current_death_time = 0.0
 var targetball
+var main
 
 func _ready():
 	apply_central_impulse(initial_impulse)
+	main = get_parent()
 	targetball = get_parent().get_node("target_ball")
 
 
@@ -28,11 +30,12 @@ func _process(delta):
 	if check_out_of_bounds():
 		current_death_time += delta
 		if current_death_time > death_time:
-			if((targetball.mass - targetball.initial_mass * targetball_mass_damage_portion) <= targetball.minimum_mass):
-				targetball.mass = targetball.minimum_mass
-			else:
-				targetball.mass -= targetball.initial_mass * targetball_mass_damage_portion
-			print("targetball mass: " + str(targetball.mass))
+			if(main.mass_damage):
+				if((targetball.mass - targetball.initial_mass * targetball_mass_damage_portion) <= targetball.minimum_mass):
+					targetball.mass = targetball.minimum_mass
+				else:
+					targetball.mass -= targetball.initial_mass * targetball_mass_damage_portion
+				print("targetball mass: " + str(targetball.mass))
 			queue_free()
 	elif current_death_time > 0:
 		current_death_time = max(0, current_death_time - delta)

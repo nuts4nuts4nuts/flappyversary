@@ -164,7 +164,7 @@ func _process(delta):
 			main.DEATH_CONDITION.OffScreen:
 				current_death_time = max(0, current_death_time - delta)
 	
-	if cashing_in:
+	if cashing_in or main.stationary_targetball:
 		angular_velocity = 0
 		linear_velocity = Vector2(0, 0)
 

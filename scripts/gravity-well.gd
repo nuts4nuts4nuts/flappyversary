@@ -9,6 +9,8 @@ var main
 func _ready():
 	main = get_parent()
 	particles = get_node("GPUParticles2D")
+	if(main.stationary_targetball):
+		target_mult = 0
 
 func activate():
 	print("well active")
