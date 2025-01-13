@@ -1,18 +1,14 @@
 extends Node2D
 
-@export var gravity_distance: Curve
-@export var max_distance: int = 1024
-@export var target_mult: int = 400
-@export var non_target_mult: int = 300
-
 var game_started = false
 var particles
+var main
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	main = get_parent()
 	particles = get_node("GPUParticles2D")
-	pass # Replace with function body.
-
 
 func activate():
 	print("well active")
@@ -36,6 +32,10 @@ func make_well(event):
 
 
 func get_gravity_power(raw_distance: int, target_ball: bool):
+	var gravity_distance = main.well_mappings[main.well_profile]["gravity_distance"]
+	var max_distance = main.well_mappings[main.well_profile]["max_distance"]
+	var target_mult = main.well_mappings[main.well_profile]["target_mult"]
+	var non_target_mult = main.well_mappings[main.well_profile]["non_target_mult"]
 	var power_mult = target_mult if target_ball else non_target_mult
 	return gravity_distance.sample(min(float(raw_distance) / float(max_distance), 1.0)) * power_mult
 

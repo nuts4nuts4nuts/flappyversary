@@ -5,14 +5,28 @@ var spawn_funcs = {
 	SPAWNING_ALGORITHM.PureRandom: algo_pure_random,
 	SPAWNING_ALGORITHM.DontRepeat: algo_dont_repeat,
 	SPAWNING_ALGORITHM.CountUp: algo_count_up,
-	}
+}
 enum SCORING_BEHAVIOR {NOfN, OneOfN}
 enum DEATH_CONDITION {OffScreen, Always}
 @export var death_condition : DEATH_CONDITION
 @export var death_times = {
 	DEATH_CONDITION.OffScreen: 5,
 	DEATH_CONDITION.Always: 60,
-	}
+}
+enum WELL_PROFILE {Standard, FastAndClose}
+@export var well_profile : WELL_PROFILE
+var standard_well = {"max_distance": 1024,
+					 "target_mult": 400,
+					 "non_target_mult": 300,
+					 "gravity_distance": load("res://gravity_curves/standard.tres")}
+var fast_and_close_well = {"max_distance": 256,
+						   "target_mult": 300,
+						   "non_target_mult": 800,
+						   "gravity_distance": load("res://gravity_curves/fast_and_close.tres")}
+var well_mappings = {
+	WELL_PROFILE.Standard: standard_well,
+	WELL_PROFILE.FastAndClose: fast_and_close_well
+}
 
 @export var ball_scene : PackedScene
 @export var spawn_pos_orbit_speed : float = 0.20
@@ -99,7 +113,7 @@ func _on_spawn_timer_timeout():
 	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), direction * velo, last_generated_number)
 
 func generate_new_number(previous_number):
-	var top_range = int(ceil($target_ball.ball_value / 2.0))
+	var top_range = int(ceil($target_ball.ball_value / 4.0))
 	return spawn_funcs[spawn_algorithm].call(top_range, previous_number)
 
 func algo_pure_random(top_range, previous_number):
