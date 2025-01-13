@@ -20,7 +20,6 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_sdlll")
 color = Color(1, 0, 0, 1)
-targetball_mass_damage_portion = 0.0
 metadata/_edit_group_ = true
 
 [node name="Collider" type="CollisionShape2D" parent="."]

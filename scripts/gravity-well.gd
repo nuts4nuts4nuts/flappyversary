@@ -9,8 +9,6 @@ var main
 func _ready():
 	main = get_parent()
 	particles = get_node("GPUParticles2D")
-	if(main.stationary_targetball):
-		target_mult = 0
 
 func activate():
 	print("well active")
@@ -36,7 +34,7 @@ func make_well(event):
 func get_gravity_power(raw_distance: int, target_ball: bool):
 	var gravity_distance = main.well_mappings[main.well_profile]["gravity_distance"]
 	var max_distance = main.well_mappings[main.well_profile]["max_distance"]
-	var target_mult = main.well_mappings[main.well_profile]["target_mult"]
+	var target_mult = 0 if main.stationary_targetball else main.well_mappings[main.well_profile]["target_mult"]
 	var non_target_mult = main.well_mappings[main.well_profile]["non_target_mult"]
 	var power_mult = target_mult if target_ball else non_target_mult
 	return gravity_distance.sample(min(float(raw_distance) / float(max_distance), 1.0)) * power_mult
