@@ -18,6 +18,8 @@ enum DEATH_CONDITION {OffScreen, Always}
 @export var spawn_pos_orbit_speed : float = 0.20
 @export var spawn_algorithm : SPAWNING_ALGORITHM
 @export var scoring_behavior : SCORING_BEHAVIOR
+@export var mass_damage : bool = false
+@export var stationary_targetball : bool = false
 
 var ball_spawner_rng : RandomNumberGenerator
 var spawn_pos_ratio : float

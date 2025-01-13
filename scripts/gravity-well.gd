@@ -7,10 +7,14 @@ extends Node2D
 
 var game_started = false
 var particles
+var main
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	particles = get_node("GPUParticles2D")
+	main = get_parent()
+	if(main.stationary_targetball):
+		target_mult = 0
 	pass # Replace with function body.
 
 
