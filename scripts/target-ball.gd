@@ -61,10 +61,10 @@ func steal_children(other):
 	other.queue_free()
 	if !cashing_in:
 		match main.scoring_behavior:
-			main.SCORING_BEHAVIOR.NOfN:
+			main.SCORING_CONDITION.NOfN:
 				if target_progress >= ball_value:
 					start_cash_in()
-			main.SCORING_BEHAVIOR.OneOfN:
+			main.SCORING_CONDITION.OneOfN:
 				start_cash_in()
 	else:
 		cashing_bonus += 1
@@ -89,7 +89,9 @@ func finish_cash_in():
 	merged_balls = []
 	color = color_normal
 	target_progress = 1
-	ball_value += cashing_bonus
+	var increase_by = main.scoring_methods[main.scoring_method].call(cashing_bonus)
+	print("increase by ", increase_by)
+	ball_value += increase_by
 	cashing_bonus = base_cashing_bonus
 	update_text.emit()
 

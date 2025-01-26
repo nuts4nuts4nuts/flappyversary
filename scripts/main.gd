@@ -6,7 +6,7 @@ var spawn_funcs = {
 	SPAWNING_ALGORITHM.DontRepeat: algo_dont_repeat,
 	SPAWNING_ALGORITHM.CountUp: algo_count_up,
 }
-enum SCORING_BEHAVIOR {NOfN, OneOfN}
+enum SCORING_CONDITION {NOfN, OneOfN}
 enum DEATH_CONDITION {OffScreen, Always}
 @export var death_condition : DEATH_CONDITION
 @export var death_times = {
@@ -27,11 +27,17 @@ var well_mappings = {
 	WELL_PROFILE.Standard: standard_well,
 	WELL_PROFILE.FastAndClose: fast_and_close_well
 }
+enum SCORING_METHOD {AddN, TwoToN}
+var scoring_methods = {
+	SCORING_METHOD.AddN: func (n): return n,
+	SCORING_METHOD.TwoToN: func (n): return 2**(n-1)
+}
+@export var scoring_method : SCORING_METHOD
 
 @export var ball_scene : PackedScene
 @export var spawn_pos_orbit_speed : float = 0.20
 @export var spawn_algorithm : SPAWNING_ALGORITHM
-@export var scoring_behavior : SCORING_BEHAVIOR
+@export var scoring_behavior : SCORING_CONDITION
 @export var mass_damage : bool = false
 @export var stationary_targetball : bool = false
 
@@ -114,12 +120,15 @@ func _on_spawn_timer_timeout():
 		last_generated_number = 1
 	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), direction * velo, last_generated_number)
 
+
 func generate_new_number(previous_number):
 	var top_range = int(ceil($target_ball.ball_value / 4.0))
 	return spawn_funcs[spawn_algorithm].call(top_range, previous_number)
 
+
 func algo_pure_random(top_range, previous_number):
 	return ball_spawner_rng.randi_range(1, top_range)
+
 
 func algo_dont_repeat(top_range, previous_number):
 	var new_number = ball_spawner_rng.randi_range(1, top_range - 1)
@@ -127,8 +136,10 @@ func algo_dont_repeat(top_range, previous_number):
 		new_number += 1
 	return new_number
 
+
 func algo_count_up(top_range, previous_number):
 	return previous_number % top_range + 1
+
 
 func spawn_ball(pos, impulse, value):
 	var ball = ball_scene.instantiate()
