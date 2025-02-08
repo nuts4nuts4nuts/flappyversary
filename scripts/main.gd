@@ -33,6 +33,19 @@ var scoring_methods = {
 	SCORING_METHOD.TwoToN: func (n): return 2**(n-1)
 }
 @export var scoring_method : SCORING_METHOD
+enum CASHING_METHOD {N, FiveBaseFastGrowth}
+var cashing_methods = {
+	CASHING_METHOD.N: func (n): return n,
+	CASHING_METHOD.FiveBaseFastGrowth: func (n): return 5 + floor(n*1.5)
+}
+@export var cashing_method : CASHING_METHOD
+enum MAX_SPAWN_VALUE_METHOD {N, NDivTwo, NDivFour}
+var max_spawn_value_methods = {
+	MAX_SPAWN_VALUE_METHOD.N: func (n): return n,
+	MAX_SPAWN_VALUE_METHOD.NDivTwo: func (n): return n / 2,
+	MAX_SPAWN_VALUE_METHOD.NDivFour: func (n): return n / 4
+}
+@export var max_spawn_value_method : MAX_SPAWN_VALUE_METHOD
 
 @export var ball_scene : PackedScene
 @export var spawn_interval : float = 4.0
@@ -124,7 +137,7 @@ func _on_spawn_timer_timeout():
 
 
 func generate_new_number(previous_number):
-	var top_range = int(ceil($target_ball.ball_value / 4.0))
+	var top_range = int(ceil(max_spawn_value_methods[max_spawn_value_method].call($target_ball.ball_value)))
 	return spawn_funcs[spawn_algorithm].call(top_range, previous_number)
 
 

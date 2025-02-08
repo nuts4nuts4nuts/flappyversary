@@ -23,7 +23,7 @@ func _on_share_button_pressed() -> void:
 func show_restart():
 	$StartButton.text = "Restart"
 	$StartButton.show()
-	$ShareButton	.show()
+	# $ShareButton	.show()
 
 
 func screenshot():
