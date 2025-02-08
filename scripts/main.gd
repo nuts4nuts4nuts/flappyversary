@@ -35,6 +35,7 @@ var scoring_methods = {
 @export var scoring_method : SCORING_METHOD
 
 @export var ball_scene : PackedScene
+@export var spawn_interval : float = 4.0
 @export var spawn_pos_orbit_speed : float = 0.20
 @export var spawn_algorithm : SPAWNING_ALGORITHM
 @export var scoring_behavior : SCORING_CONDITION
@@ -55,6 +56,7 @@ func _ready():
 
 
 func _process(delta):
+	$SpawnTimer.wait_time = spawn_interval
 	spawn_pos_ratio += delta * spawn_pos_orbit_speed
 	if spawn_pos_ratio > 1.0:
 		spawn_pos_ratio -= 1.0
