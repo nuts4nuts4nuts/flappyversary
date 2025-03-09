@@ -206,6 +206,7 @@ _data = {
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
+well_profile = 2
 scoring_method = 1
 cashing_method = 1
 max_spawn_value_method = 1
