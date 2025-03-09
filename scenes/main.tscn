@@ -26,6 +26,10 @@ func _ready():
 融
 合
 融
+合
+融
+合
+融
 合\"
 	pass
 	#tween = create_tween()
@@ -221,9 +225,9 @@ color2 = Color(0.956863, 0.0392157, 0, 1)
 [node name="background_danger_text" type="Label" parent="ColorRect"]
 layout_mode = 0
 offset_left = 2.0
-offset_top = -1444.0
+offset_top = 4775.0
 offset_right = 511.0
-offset_bottom = 5573.01
+offset_bottom = 11792.0
 theme_override_fonts/font = ExtResource("4_u8emg")
 theme_override_font_sizes/font_size = 488
 text = "危
@@ -236,7 +240,10 @@ text = "危
 險
 危
 險
-"
+危
+險
+危
+險"
 autowrap_mode = 2
 script = SubResource("GDScript_hbbrn")
 node_path = NodePath("..")
