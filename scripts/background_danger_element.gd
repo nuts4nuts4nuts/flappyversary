@@ -50,6 +50,10 @@ func activate():
 險
 危
 險
+危
+險
+危
+險
 "
 	$AnimationPlayerMove.play("entry")
 	$AnimationPlayerColor.play("flash")
@@ -66,6 +70,10 @@ func activate():
 func activate_cashing_in():
 	activated_cashing_in = true
 	$background_danger_text.text = "融
+合
+融
+合
+融
 合
 融
 合

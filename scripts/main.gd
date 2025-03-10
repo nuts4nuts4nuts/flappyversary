@@ -13,7 +13,7 @@ enum DEATH_CONDITION {OffScreen, Always}
 	DEATH_CONDITION.OffScreen: 5,
 	DEATH_CONDITION.Always: 60,
 }
-enum WELL_PROFILE {Standard, FastAndClose}
+enum WELL_PROFILE {Standard, FastAndClose, Strong}
 @export var well_profile : WELL_PROFILE
 var standard_well = {"max_distance": 1024,
 					 "target_mult": 400,
@@ -23,9 +23,14 @@ var fast_and_close_well = {"max_distance": 256,
 						   "target_mult": 300,
 						   "non_target_mult": 800,
 						   "gravity_distance": load("res://gravity_curves/fast_and_close.tres")}
+var strong_well = {"max_distance": 256,
+					"target_mult": 300,
+					"non_target_mult": 800,
+					"gravity_distance": load("res://gravity_curves/strong.tres")}
 var well_mappings = {
 	WELL_PROFILE.Standard: standard_well,
-	WELL_PROFILE.FastAndClose: fast_and_close_well
+	WELL_PROFILE.FastAndClose: fast_and_close_well,
+	WELL_PROFILE.Strong: strong_well
 }
 enum SCORING_METHOD {AddN, TwoToN}
 var scoring_methods = {
