@@ -148,6 +148,18 @@ func avg_global_position():
 	return pos / children.size()
 
 
+func nearest_global_position(point: Vector2):
+	var distance: float = INF
+	var nearest_so_far: Vector2
+	var children = find_children("", "BallCollider", false, false)
+	for child in children:
+		var child_to_point_distance = (point - child.global_position).length()
+		if child_to_point_distance < distance:
+			distance = child_to_point_distance
+			nearest_so_far = child.global_position
+	return nearest_so_far
+
+
 func _process(delta):
 #	queue_redraw()
 	if !main:
