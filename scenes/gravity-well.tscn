@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cndnlt3bclw7u"]
 
 [ext_resource type="Script" path="res://scripts/gravity-well.gd" id="1_32knt"]
-[ext_resource type="Texture2D" uid="uid://5qxfnkeuhmm3" path="res://assets/download-white-circle-png-31629716484axd08oupl9.png" id="2_o8ksl"]
+[ext_resource type="Texture2D" uid="uid://2wdr0adquyno" path="res://assets/black-circle.png" id="2_sxt7w"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mnacg"]
 particle_flag_disable_z = true
@@ -25,7 +25,7 @@ script = ExtResource("1_32knt")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
 z_index = -10
-texture = ExtResource("2_o8ksl")
+texture = ExtResource("2_sxt7w")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 amount = 200

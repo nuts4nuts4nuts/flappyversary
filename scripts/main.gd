@@ -65,7 +65,6 @@ var spawn_pos_ratio : float
 
 var game_running = false
 
-var steals = 0
 var last_generated_number = 0
 
 # Called when the node enters the scene tree for the first time.

@@ -10,6 +10,7 @@ func _ready():
 	main = get_parent()
 	particles = get_node("GPUParticles2D")
 
+
 func activate():
 	print("well active")
 	game_started = true
@@ -42,7 +43,7 @@ func get_gravity_power(raw_distance: int, target_ball: bool):
 
 func get_sucked(other, target_ball: bool):
 	var other_to_well = global_position - other.avg_global_position()
-	var distance = other_to_well.length()
+	var distance = (global_position - other.nearest_global_position(global_position)).length()
 	var force = get_gravity_power(distance, target_ball)
 	var direction = other_to_well.normalized()
 	other.apply_central_force(force * direction)

@@ -72,13 +72,10 @@ func _physics_process(_delta):
 
 func _on_body_entered(body):
 	if !body.is_target and name < body.name:
-		get_parent().steals += 1
-		print("collision" + str(get_parent().steals))
 		call_deferred("steal_children", body)
 
 
 func steal_children(other):
-	print("steal" + str(get_parent().steals))
 	ball_value += other.ball_value
 	var children = other.get_children()
 	for child in children:
@@ -93,3 +90,15 @@ func avg_global_position():
 	for child in children:
 		pos += child.global_position
 	return pos / children.size()
+
+
+func nearest_global_position(point: Vector2):
+	var distance: float = INF
+	var nearest_so_far: Vector2
+	var children = find_children("", "BallCollider", false, false)
+	for child in children:
+		var child_to_point_distance = (point - child.global_position).length()
+		if child_to_point_distance < distance:
+			distance = child_to_point_distance
+			nearest_so_far = child.global_position
+	return nearest_so_far
