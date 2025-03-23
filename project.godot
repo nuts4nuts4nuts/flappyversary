@@ -23,6 +23,10 @@ window/stretch/mode="viewport"
 window/stretch/aspect="keep_width"
 window/handheld/orientation=4
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
+
 [input]
 
 make_well={
