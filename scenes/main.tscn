@@ -212,6 +212,7 @@ max_spawn_value_method = 1
 ball_scene = ExtResource("1_fjp4r")
 spawn_interval = 3.0
 spawn_algorithm = 2
+stationary_targetball = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -741.0

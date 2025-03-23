@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3i5y6ujuyri6"]
+
+[ext_resource type="Texture2D" uid="uid://ch5xq8yc4vd5r" path="res://assets/ball_warning.png" id="1_4edmh"]
+[ext_resource type="Script" path="res://scenes/ball_spawn_warning.gd" id="2_jgmi7"]
+
+[node name="Sprite2D" type="Sprite2D"]
+texture = ExtResource("1_4edmh")
+script = ExtResource("2_jgmi7")
+
+[node name="spawn_timer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="flicker_timer" type="Timer" parent="."]
+wait_time = 0.5

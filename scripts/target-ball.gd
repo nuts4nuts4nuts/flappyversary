@@ -94,6 +94,7 @@ func finish_cash_in():
 	ball_value += increase_by
 	cashing_bonus = base_cashing_bonus
 	update_text.emit()
+	#main.populate_with_new_balls()
 
 
 # true if ANY is out of bounds (and not cashing)

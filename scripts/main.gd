@@ -23,9 +23,9 @@ var fast_and_close_well = {"max_distance": 256,
 						   "target_mult": 300,
 						   "non_target_mult": 800,
 						   "gravity_distance": load("res://gravity_curves/fast_and_close.tres")}
-var strong_well = {"max_distance": 256,
+var strong_well = {"max_distance": 300,
 					"target_mult": 300,
-					"non_target_mult": 800,
+					"non_target_mult": 1200,
 					"gravity_distance": load("res://gravity_curves/strong.tres")}
 var well_mappings = {
 	WELL_PROFILE.Standard: standard_well,
@@ -140,6 +140,10 @@ func _on_spawn_timer_timeout():
 		last_generated_number = 1
 	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), direction * velo, last_generated_number)
 
+func populate_with_new_balls():
+	for x in range(4):
+		for y in range(3):
+			spawn_ball(Vector2(x * 900 + 700, y * 700 + 500), Vector2.ZERO, 1)
 
 func generate_new_number(previous_number):
 	var top_range = int(ceil(max_spawn_value_methods[max_spawn_value_method].call($target_ball.ball_value)))
