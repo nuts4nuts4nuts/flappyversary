@@ -3,3 +3,5 @@
 .godot/
 \#*
 /build/
+anvil.dump
+*.keystore
