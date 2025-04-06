@@ -4,11 +4,16 @@
 [ext_resource type="Script" path="res://scenes/ball_spawn_warning.gd" id="2_jgmi7"]
 
 [node name="Sprite2D" type="Sprite2D"]
+visible = false
 texture = ExtResource("1_4edmh")
 script = ExtResource("2_jgmi7")
 
-[node name="spawn_timer" type="Timer" parent="."]
+[node name="despawn_timer" type="Timer" parent="."]
 wait_time = 2.0
+one_shot = true
 
-[node name="flicker_timer" type="Timer" parent="."]
-wait_time = 0.5
+[node name="visibility_timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="despawn_timer" to="." method="_on_despawn_timer_timeout"]
+[connection signal="timeout" from="visibility_timer" to="." method="_on_visibility_timer_timeout"]

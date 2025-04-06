@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=18 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_qkwcp"]
+[ext_resource type="PackedScene" uid="uid://d3i5y6ujuyri6" path="res://scenes/ball_spawn_warning.tscn" id="3_eh4ta"]
 [ext_resource type="Script" path="res://scripts/background_danger_element.gd" id="3_hst70"]
 [ext_resource type="PackedScene" uid="uid://uxka1p11iue3" path="res://scenes/target-ball.tscn" id="4_laj0n"]
 [ext_resource type="FontFile" uid="uid://docppmrhwm2u5" path="res://fonts/STHeiti Medium.ttc" id="4_u8emg"]
@@ -206,13 +207,17 @@ _data = {
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
+well_profile = 1
 scoring_method = 1
 cashing_method = 1
 max_spawn_value_method = 1
 ball_scene = ExtResource("1_fjp4r")
+ball_spawn_warning_scene = ExtResource("3_eh4ta")
 spawn_interval = 3.0
 spawn_algorithm = 2
+scoring_behavior = 1
 stationary_targetball = true
+spawn_balls_on_cash_in = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -741.0
