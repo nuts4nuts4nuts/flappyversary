@@ -51,9 +51,9 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
   - multipiers
   - curve
   - max distance
-- [ ] Visuals
+- [-] Visuals
   - [ ] Visual style / direction
-  - [ ] Assets
+  - [-] Assets
     - [ ] Feedback for bounces
     - [ ] Cashing in juice
     - [ ] Black hole effect
@@ -69,7 +69,7 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
   - [ ] Music
 - [-] Platforms
   - [X] iOS
-  - [ ] Android
+  - [X] Android
   - [ ] PC
   - [ ] Web
 - Scope creep
