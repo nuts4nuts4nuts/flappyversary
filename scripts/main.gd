@@ -61,6 +61,8 @@ var max_spawn_value_methods = {
 @export var mass_damage : bool = false
 @export var stationary_targetball : bool = false
 @export var spawn_balls_on_cash_in : bool = false
+@export var cash_in_ball_spawn_offset_min : float = -300
+@export var cash_in_ball_spawn_offset_max : float = 300
 
 var cashin_ball_spawn_initial_delay = 0.2
 
@@ -148,7 +150,7 @@ func populate_with_new_balls():
 		for y in range(3):
 			var warning = ball_spawn_warning_scene.instantiate()
 			add_child(warning)
-			warning.global_position = Vector2(x * 1200 + 700, y * 700 + 500)
+			warning.global_position = Vector2(x * 1200 + 700 + ball_spawner_rng.randi_range(cash_in_ball_spawn_offset_min, cash_in_ball_spawn_offset_max), y * 700 + 500 + ball_spawner_rng.randi_range(cash_in_ball_spawn_offset_min, cash_in_ball_spawn_offset_max))
 			warning.expired.connect(spawn_ball)
 			warning.init(delay, generate_new_number(last_generated_number))
 			delay += cashin_ball_spawn_initial_delay
