@@ -3,6 +3,7 @@ extends RigidBody2D
 signal merged
 signal update_text
 signal dead
+signal cashed_in
 
 @export var gravity_well: Node2D
 @export var color_normal: Color
@@ -73,7 +74,6 @@ func steal_children(other):
 		timer.start(timer.wait_time)
 		print(timer.get_time_left())
 
-
 func start_cash_in():
 	cashing_in = true
 	var timer: Timer = get_node("Timer")
@@ -94,6 +94,8 @@ func finish_cash_in():
 	ball_value += increase_by
 	cashing_bonus = base_cashing_bonus
 	update_text.emit()
+	cashed_in.emit()
+	#main.populate_with_new_balls()
 
 
 # true if ANY is out of bounds (and not cashing)

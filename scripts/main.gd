@@ -23,9 +23,9 @@ var fast_and_close_well = {"max_distance": 256,
 						   "target_mult": 300,
 						   "non_target_mult": 800,
 						   "gravity_distance": load("res://gravity_curves/fast_and_close.tres")}
-var strong_well = {"max_distance": 256,
+var strong_well = {"max_distance": 300,
 					"target_mult": 300,
-					"non_target_mult": 800,
+					"non_target_mult": 1200,
 					"gravity_distance": load("res://gravity_curves/strong.tres")}
 var well_mappings = {
 	WELL_PROFILE.Standard: standard_well,
@@ -53,12 +53,18 @@ var max_spawn_value_methods = {
 @export var max_spawn_value_method : MAX_SPAWN_VALUE_METHOD
 
 @export var ball_scene : PackedScene
+@export var ball_spawn_warning_scene : PackedScene
 @export var spawn_interval : float = 4.0
 @export var spawn_pos_orbit_speed : float = 0.20
 @export var spawn_algorithm : SPAWNING_ALGORITHM
 @export var scoring_behavior : SCORING_CONDITION
 @export var mass_damage : bool = false
 @export var stationary_targetball : bool = false
+@export var spawn_balls_on_cash_in : bool = false
+@export var cash_in_ball_spawn_offset_min : float = -300
+@export var cash_in_ball_spawn_offset_max : float = 300
+
+var cashin_ball_spawn_initial_delay = 0.2
 
 var ball_spawner_rng : RandomNumberGenerator
 var spawn_pos_ratio : float
@@ -70,6 +76,8 @@ var last_generated_number = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("ready")
+	if(spawn_balls_on_cash_in):
+		$target_ball.cashed_in.connect(populate_with_new_balls)
 
 
 func _process(delta):
@@ -92,7 +100,7 @@ func _unhandled_key_input(event: InputEvent):
 		var key_number = int(event.key_label) - 48
 		
 		if key_number >= 0 and key_number < 10:
-			spawn_ball(get_global_mouse_position(), Vector2.ZERO, key_number)
+			spawn_ball(get_global_mouse_position(), key_number, Vector2.ZERO)
 		
 		# change engine speed with up and down arrow
 		if event.keycode == Key.KEY_UP:
@@ -132,17 +140,26 @@ func end_game():
 func _on_spawn_timer_timeout():
 	var direction = (get_viewport_rect().get_center() - ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio)).normalized()
 	var velo = ball_spawner_rng.randf_range(100, 200)
-	if($target_ball.ball_value > 2):
-		last_generated_number = generate_new_number(last_generated_number)
-		print(last_generated_number)
-	else:
-		last_generated_number = 1
-	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), direction * velo, last_generated_number)
+	var ball_value = generate_new_number(last_generated_number)
+	print(last_generated_number)
+	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), last_generated_number, direction * velo)
+
+func populate_with_new_balls():
+	var delay = cashin_ball_spawn_initial_delay
+	for x in range(3):
+		for y in range(3):
+			var warning = ball_spawn_warning_scene.instantiate()
+			add_child(warning)
+			warning.global_position = Vector2(x * 1200 + 700 + ball_spawner_rng.randi_range(cash_in_ball_spawn_offset_min, cash_in_ball_spawn_offset_max), y * 700 + 500 + ball_spawner_rng.randi_range(cash_in_ball_spawn_offset_min, cash_in_ball_spawn_offset_max))
+			warning.expired.connect(spawn_ball)
+			warning.init(delay, generate_new_number(last_generated_number))
+			delay += cashin_ball_spawn_initial_delay
 
 
 func generate_new_number(previous_number):
 	var top_range = int(ceil(max_spawn_value_methods[max_spawn_value_method].call($target_ball.ball_value)))
-	return spawn_funcs[spawn_algorithm].call(top_range, previous_number)
+	last_generated_number = spawn_funcs[spawn_algorithm].call(top_range, previous_number)
+	return last_generated_number
 
 
 func algo_pure_random(top_range, previous_number):
@@ -160,10 +177,11 @@ func algo_count_up(top_range, previous_number):
 	return previous_number % top_range + 1
 
 
-func spawn_ball(pos, impulse, value):
+func spawn_ball(pos, value = 1, impulse = Vector2.ZERO):
+	print("ball spawning")
 	var ball = ball_scene.instantiate()
 	ball.gravity_well = $gravity_well
-
+	
 	ball.position = pos
 	ball.initial_impulse = impulse
 	ball.ball_value = value
