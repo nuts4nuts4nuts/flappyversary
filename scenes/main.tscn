@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=19 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://uxka1p11iue3" path="res://scenes/target-ball.tscn" id="4_laj0n"]
 [ext_resource type="FontFile" uid="uid://docppmrhwm2u5" path="res://fonts/STHeiti Medium.ttc" id="4_u8emg"]
 [ext_resource type="PackedScene" uid="uid://cmn4pqfuj8wkh" path="res://scenes/HUD.tscn" id="5_uep46"]
+[ext_resource type="Texture2D" uid="uid://ecteeg2lgp51" path="res://assets/face_neutral.png" id="9_ql313"]
 
 [sub_resource type="GDScript" id="GDScript_hbbrn"]
 script/source = "extends Label
@@ -289,6 +290,11 @@ color_normal = Color(0, 0, 1, 0.403922)
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
 layer = -1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1967, 1095)
+scale = Vector2(0.319999, 0.319999)
+texture = ExtResource("9_ql313")
 
 [connection signal="animation_finished" from="ColorRect/AnimationPlayerText" to="ColorRect" method="_on_animation_player_move_animation_finished"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
