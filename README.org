@@ -66,7 +66,28 @@ How do we turn [[https://tig.fandom.com/wiki/Blocksum][Blocksum]] into Flappy Bi
       - [ ] asteroid-moving-through-atmosphere-type fire / matter flying off?
 - [ ] Audio
   - [ ] SFX
+    - [ ] Placing the well
+    - [ ] Normal ball joining
+    - [ ] Normal ball reaching target number
+    - [ ] Ball joining target ball
+    - [ ] Start cashing
+    - [ ] Ball join while cashing
+    - [ ] Finish cashing
+    - [ ] Warning for death
+    - [ ] Game over
+    - [ ] Group of target number leaves the screen
+    - [ ] Group of target number goes over target number
+    - [ ] Ball spawn
+    - [ ] Near miss
+    - [ ] Ambient well sucking effect
+    - [ ] Menu things
+    - [ ] Start game
+  - [ ] Effects
+    - [ ] Sounds closer to well are louder / more prominent in some way?
   - [ ] Music
+    - [ ] Menu song
+    - [ ] Game song
+      - [ ] Evolves in some way as you progress
 - [-] Platforms
   - [X] iOS
   - [X] Android
