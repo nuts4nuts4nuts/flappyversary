@@ -5,3 +5,4 @@
 /build/
 anvil.dump
 *.keystore
+.aider*
