@@ -30,6 +30,7 @@ func make_well(event):
 	print("mouse button event at ", event.position)
 	self.position = event.position
 	particles.restart()
+	$place_well_sound.play()
 
 
 func get_gravity_power(raw_distance: int, target_ball: bool):
