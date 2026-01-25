@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=29 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
@@ -13,8 +13,10 @@
 [ext_resource type="AudioStream" uid="uid://c80abottnewhp" path="res://sounds/block_2.mp3" id="11_txmd8"]
 [ext_resource type="AudioStream" uid="uid://cgb7ycousgkk8" path="res://sounds/block_3.mp3" id="12_12qfv"]
 [ext_resource type="AudioStream" uid="uid://be5ggwuutbkc6" path="res://sounds/block_4.mp3" id="13_oo53f"]
+[ext_resource type="AudioStream" uid="uid://50ufvo7voihq" path="res://sounds/deepdrum_processed.mp3" id="14_aditj"]
 [ext_resource type="AudioStream" uid="uid://iok0rlt0dbwi" path="res://sounds/block_5.mp3" id="14_xn2qs"]
 [ext_resource type="AudioStream" uid="uid://dggyykw00en1" path="res://sounds/block_6.mp3" id="15_olbi6"]
+[ext_resource type="AudioStream" uid="uid://g732acd5r5ta" path="res://sounds/keen1_low_processed.mp3" id="15_x1muu"]
 
 [sub_resource type="GDScript" id="GDScript_hbbrn"]
 script/source = "extends Label
@@ -214,6 +216,7 @@ _data = {
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_kk6h2"]
 playback_mode = 1
+random_pitch = 1.18
 streams_count = 6
 stream_0/stream = ExtResource("10_mq25f")
 stream_1/stream = ExtResource("11_txmd8")
@@ -221,6 +224,11 @@ stream_2/stream = ExtResource("12_12qfv")
 stream_3/stream = ExtResource("13_oo53f")
 stream_4/stream = ExtResource("14_xn2qs")
 stream_5/stream = ExtResource("15_olbi6")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_uebx2"]
+playback_mode = 1
+streams_count = 1
+stream_0/stream = ExtResource("15_x1muu")
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
@@ -299,6 +307,7 @@ position = Vector2(510, 510)
 
 [node name="place_well_sound" type="AudioStreamPlayer" parent="gravity_well"]
 stream = SubResource("AudioStreamRandomizer_kk6h2")
+volume_db = -1.5
 
 [node name="SpawnTimer" type="Timer" parent="."]
 
@@ -306,6 +315,14 @@ stream = SubResource("AudioStreamRandomizer_kk6h2")
 position = Vector2(512, 512)
 gravity_well = NodePath("../gravity_well")
 color_normal = Color(0, 0, 1, 0.403922)
+
+[node name="cash_in_sound" type="AudioStreamPlayer" parent="target_ball"]
+stream = ExtResource("14_aditj")
+volume_db = -3.67
+
+[node name="cash_increase_sound" type="AudioStreamPlayer" parent="target_ball"]
+stream = SubResource("AudioStreamRandomizer_uebx2")
+volume_db = -5.71
 
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
 layer = -1

@@ -24,6 +24,8 @@ var merged_balls = []
 var cashing_bonus = base_cashing_bonus
 var current_death_time = 0.0
 var main
+var current_cashin_sound_pitch_increment = 0.005
+var current_cashin_sound_pitch_increase = -current_cashin_sound_pitch_increment
 
 
 func start():
@@ -80,6 +82,9 @@ func start_cash_in():
 	timer.wait_time = main.cashing_methods[main.cashing_method].call(ball_value)
 	timer.start()
 	color = color_cash
+	current_cashin_sound_pitch_increase = 0
+	$cash_increase_sound.pitch_scale = 1
+	$cash_in_sound.play()
 
 
 func finish_cash_in():
@@ -202,6 +207,11 @@ func _physics_process(_delta):
 func _on_body_entered(body):
 	if body.ball_value == ball_value:
 		call_deferred("steal_children", body)
+		if(current_cashin_sound_pitch_increase >= 0):
+			$cash_increase_sound.play()
+		$cash_increase_sound.pitch_scale += current_cashin_sound_pitch_increase
+		current_cashin_sound_pitch_increase += current_cashin_sound_pitch_increment
+		
 
 
 func _on_timer_timeout():
