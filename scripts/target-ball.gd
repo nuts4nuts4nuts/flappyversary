@@ -23,11 +23,15 @@ var cashing_in = false
 var merged_balls = []
 var cashing_bonus = base_cashing_bonus
 var current_death_time = 0.0
-var main
+var config: Dictionary = {}
+var was_close_to_death_last_frame = false
+
+
+func configure(game_config: Dictionary):
+	config = game_config
 
 
 func start():
-	main = get_parent()
 	position = get_viewport_rect().size * start_pos
 	freeze = false
 	ball_value = base_ball_value
@@ -36,12 +40,22 @@ func start():
 	merged_balls = []
 	color = color_normal
 	target_progress = 1
+	current_death_time = 0.0
+	was_close_to_death_last_frame = false
+	cashing_in = false
+	GameEvents.target_ball_safe.emit()
 	update_text.emit()
 
 
 func end():
 	freeze = true
 	position = get_viewport_rect().get_center()
+
+
+func apply_mass_damage(damage_portion: float):
+	var damage = initial_mass * damage_portion
+	mass = max(minimum_mass, mass - damage)
+	print("targetball mass: " + str(mass))
 
 
 func steal_children(other):
@@ -61,25 +75,27 @@ func steal_children(other):
 	target_progress += 1
 	other.queue_free()
 	if !cashing_in:
-		match main.scoring_behavior:
-			main.SCORING_CONDITION.NOfN:
+		match config.scoring_behavior:
+			config.SCORING_CONDITION_NOfN:
 				if target_progress >= ball_value:
 					start_cash_in()
-			main.SCORING_CONDITION.OneOfN:
+			config.SCORING_CONDITION_OneOfN:
 				start_cash_in()
 	else:
 		cashing_bonus += 1
 		var timer = get_node("Timer")
 		timer.stop()
 		timer.start(timer.wait_time)
+		GameEvents.target_ball_cashing_in.emit(timer.wait_time)
 		print(timer.get_time_left())
 
 func start_cash_in():
 	cashing_in = true
 	var timer: Timer = get_node("Timer")
-	timer.wait_time = main.cashing_methods[main.cashing_method].call(ball_value)
+	timer.wait_time = config.cashing_method.call(ball_value)
 	timer.start()
 	color = color_cash
+	GameEvents.target_ball_cashing_in.emit(timer.wait_time)
 
 
 func finish_cash_in():
@@ -89,27 +105,27 @@ func finish_cash_in():
 	merged_balls = []
 	color = color_normal
 	target_progress = 1
-	var increase_by = main.scoring_methods[main.scoring_method].call(cashing_bonus)
+	var increase_by = config.scoring_method.call(cashing_bonus)
 	print("increase by ", increase_by)
 	ball_value += increase_by
 	cashing_bonus = base_cashing_bonus
 	update_text.emit()
 	cashed_in.emit()
-	#main.populate_with_new_balls()
+	GameEvents.target_ball_cashed_in.emit()
 
 
 # true if ANY is out of bounds (and not cashing)
 func check_dying():
-	if !main:
-		return false
-	
-	if !main.game_running:
+	if config.is_empty():
 		return false
 
-	match main.death_condition:
-		main.DEATH_CONDITION.Always:
+	if !config.is_game_running.call():
+		return false
+
+	match config.death_condition:
+		config.DEATH_CONDITION_Always:
 			return !cashing_in
-		main.DEATH_CONDITION.OffScreen:
+		config.DEATH_CONDITION_OffScreen:
 			for child in find_children("", "BallCollider", false, false):
 				var child_node = child as CollisionShape2D
 				var circle = child_node.shape as CircleShape2D
@@ -128,17 +144,17 @@ func check_dying():
 
 
 func death_time():
-	return main.death_times[main.death_condition]
+	return config.death_times[config.death_condition]
 
 
 func close_to_death():
 	if !check_dying():
 		return false
 
-	match main.death_condition:
-		main.DEATH_CONDITION.Always:
+	match config.death_condition:
+		config.DEATH_CONDITION_Always:
 			return (death_time() - current_death_time) < 15.0
-		main.DEATH_CONDITION.OffScreen:
+		config.DEATH_CONDITION_OffScreen:
 			return true
 
 
@@ -164,23 +180,34 @@ func nearest_global_position(point: Vector2):
 
 func _process(delta):
 #	queue_redraw()
-	if !main:
+	if config.is_empty():
 		return
 
-	if check_dying():
+	var is_dying = check_dying()
+	if is_dying:
 		current_death_time += delta
 		if current_death_time > death_time():
 			# End game!
 			mass = initial_mass
 			dead.emit()
 	else: # not dying
-		match main.death_condition:
-			main.DEATH_CONDITION.Always:
-				current_death_time = 0 
-			main.DEATH_CONDITION.OffScreen:
+		match config.death_condition:
+			config.DEATH_CONDITION_Always:
+				current_death_time = 0
+			config.DEATH_CONDITION_OffScreen:
 				current_death_time = max(0, current_death_time - delta)
-	
-	if cashing_in or main.stationary_targetball:
+
+	# Emit signals based on close_to_death() for UI updates
+	var is_close = close_to_death()
+	if is_close:
+		var time_remaining = death_time() - current_death_time
+		GameEvents.target_ball_dying.emit(time_remaining)
+	elif was_close_to_death_last_frame:
+		GameEvents.target_ball_safe.emit()
+
+	was_close_to_death_last_frame = is_close
+
+	if cashing_in or config.stationary_targetball:
 		angular_velocity = 0
 		linear_velocity = Vector2(0, 0)
 

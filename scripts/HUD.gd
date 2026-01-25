@@ -1,19 +1,21 @@
 extends CanvasLayer
 
-var _parent
+signal start_requested
+signal restart_requested
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	_parent = get_parent()
-	$ShareButton	.hide()
+	$ShareButton.hide()
+
 
 func _on_start_button_pressed():
 	$StartButton.hide()
-	$ShareButton	.hide()
+	$ShareButton.hide()
 	if $StartButton.text == "Start":
-		_parent.start_game()
+		start_requested.emit()
 	else:
-		_parent.restart_game()
+		restart_requested.emit()
 
 
 func _on_share_button_pressed() -> void:

@@ -76,8 +76,24 @@ var last_generated_number = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("ready")
+	$gravity_well.configure(well_mappings[well_profile], stationary_targetball)
+	$target_ball.configure({
+		"scoring_behavior": scoring_behavior,
+		"SCORING_CONDITION_NOfN": SCORING_CONDITION.NOfN,
+		"SCORING_CONDITION_OneOfN": SCORING_CONDITION.OneOfN,
+		"scoring_method": scoring_methods[scoring_method],
+		"cashing_method": cashing_methods[cashing_method],
+		"death_condition": death_condition,
+		"DEATH_CONDITION_OffScreen": DEATH_CONDITION.OffScreen,
+		"DEATH_CONDITION_Always": DEATH_CONDITION.Always,
+		"death_times": death_times,
+		"is_game_running": func(): return game_running,
+		"stationary_targetball": stationary_targetball
+	})
 	if(spawn_balls_on_cash_in):
 		$target_ball.cashed_in.connect(populate_with_new_balls)
+	$HUD.start_requested.connect(start_game)
+	$HUD.restart_requested.connect(restart_game)
 
 
 func _process(delta):
@@ -112,10 +128,9 @@ func _unhandled_key_input(event: InputEvent):
 
 
 func start_game():
+	GameEvents.game_restarting.emit()  # Balls self-cleanup
 	game_running = true
 	ball_spawner_rng = RandomNumberGenerator.new()
-	for child in find_children("", "BallGroup", false, false):
-		child.queue_free()
 	$gravity_well.activate()
 	$SpawnTimer.start()
 	$target_ball.start()
@@ -181,7 +196,10 @@ func spawn_ball(pos, value = 1, impulse = Vector2.ZERO):
 	print("ball spawning")
 	var ball = ball_scene.instantiate()
 	ball.gravity_well = $gravity_well
-	
+	ball.mass_damage_enabled = mass_damage
+	if mass_damage:
+		ball.ball_expired_offscreen.connect($target_ball.apply_mass_damage)
+
 	ball.position = pos
 	ball.initial_impulse = impulse
 	ball.ball_value = value

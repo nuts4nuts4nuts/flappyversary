@@ -1,22 +1,22 @@
 extends Label
 
-var target_ball
+var time_remaining: float = 0.0
+var is_dying: bool = false
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	target_ball = get_parent().get_parent().get_node("target_ball")
+	text = ""
+	GameEvents.target_ball_dying.connect(_on_target_dying)
+	GameEvents.target_ball_safe.connect(_on_target_safe)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	if(target_ball != null):
-		update_value()
+func _on_target_dying(remaining: float):
+	is_dying = true
+	time_remaining = remaining
+	text = "%.2f" % time_remaining
 
 
-func update_value():
-	if(target_ball.close_to_death()):
-		var number = "%.2f" % (target_ball.death_time() - target_ball.current_death_time)
-		text = number
-	else:
-		text = str("")
+func _on_target_safe():
+	is_dying = false
+	text = ""

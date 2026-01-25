@@ -4,25 +4,42 @@ var initial_position = position
 var initial_color = color
 var tween
 var color_tween
-var target_ball
-var activated
-var activated_cashing_in
+var activated = false
+var activated_cashing_in = false
+var is_dying = false
+var is_cashing_in = false
 @export var color2 : Color
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	activated = false
-	target_ball = get_parent().get_node("target_ball")
-	#tween = create_tween()
-	#tween.tween_property(self, "position", Vector2(-177, -2589), 0.6)
-	#tween.tween_property(self, "position", Vector2(-177, -7930), 10)
-	#flash_color_to()
-	
-	
-	#tween.tween_property(self, "position", Vector2(-177, -2591), 0.6)
-	#tween.tween_property(self, "position", initial_position, 0.6)
-	#tween.tween_property(self, "position", Vector2(-177, -7591), 10)
-	#activate()
+	GameEvents.target_ball_dying.connect(_on_target_dying)
+	GameEvents.target_ball_safe.connect(_on_target_safe)
+	GameEvents.target_ball_cashing_in.connect(_on_cashing_in)
+	GameEvents.target_ball_cashed_in.connect(_on_cashed_in)
+
+
+func _on_target_dying(_time_remaining: float):
+	is_dying = true
+	if !activated:
+		activate()
+
+
+func _on_target_safe():
+	is_dying = false
+	if activated and !is_cashing_in:
+		return_to_normal()
+
+
+func _on_cashing_in(_wait_time: float):
+	is_cashing_in = true
+	if !activated_cashing_in:
+		activate_cashing_in()
+
+
+func _on_cashed_in():
+	is_cashing_in = false
+	if activated_cashing_in:
+		return_to_normal()
 
 func flash_color_to():
 	color_tween = create_tween()
@@ -98,23 +115,6 @@ func return_to_normal():
 	activated = false
 	activated_cashing_in = false
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if(target_ball != null):
-		update_value()
-		#pass
-
-func update_value():
-	if(!activated and
-	target_ball.close_to_death()):
-		activate()
-	elif(activated and !target_ball.close_to_death()):
-		return_to_normal()
-	
-	if(!activated_cashing_in and target_ball.cashing_in):
-		activate_cashing_in()
-	elif(activated_cashing_in and !target_ball.cashing_in):
-		return_to_normal()
 
 
 func _on_animation_player_move_animation_finished(anim_name):

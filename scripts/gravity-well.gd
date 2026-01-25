@@ -2,13 +2,18 @@ extends Node2D
 
 var game_started = false
 var particles
-var main
+var well_config: Dictionary
+var stationary_targetball: bool = false
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	main = get_parent()
 	particles = get_node("GPUParticles2D")
+
+
+func configure(config: Dictionary, stationary: bool):
+	well_config = config
+	stationary_targetball = stationary
 
 
 func activate():
@@ -33,10 +38,10 @@ func make_well(event):
 
 
 func get_gravity_power(raw_distance: int, target_ball: bool):
-	var gravity_distance = main.well_mappings[main.well_profile]["gravity_distance"]
-	var max_distance = main.well_mappings[main.well_profile]["max_distance"]
-	var target_mult = 0 if main.stationary_targetball else main.well_mappings[main.well_profile]["target_mult"]
-	var non_target_mult = main.well_mappings[main.well_profile]["non_target_mult"]
+	var gravity_distance = well_config["gravity_distance"]
+	var max_distance = well_config["max_distance"]
+	var target_mult = 0 if stationary_targetball else well_config["target_mult"]
+	var non_target_mult = well_config["non_target_mult"]
 	var power_mult = target_mult if target_ball else non_target_mult
 	return gravity_distance.sample(min(float(raw_distance) / float(max_distance), 1.0)) * power_mult
 

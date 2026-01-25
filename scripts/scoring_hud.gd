@@ -1,24 +1,31 @@
 extends Label
 
-var target_ball
-var target_timer
+var is_cashing_in: bool = false
+var cash_in_start_time: float = 0.0
+var cash_in_wait_time: float = 0.0
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	target_ball = get_parent().get_parent().get_node("target_ball")
-	target_timer = target_ball.get_node("Timer")
+	text = ""
+	GameEvents.target_ball_cashing_in.connect(_on_cashing_in)
+	GameEvents.target_ball_cashed_in.connect(_on_cashed_in)
+
+
+func _on_cashing_in(wait_time: float):
+	is_cashing_in = true
+	cash_in_wait_time = wait_time
+	cash_in_start_time = Time.get_ticks_msec() / 1000.0
+
+
+func _on_cashed_in():
+	is_cashing_in = false
+	text = ""
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if(target_ball != null):
-		update_value()
-
-
-func update_value():
-	if(target_ball.cashing_in):
-		var number = "%.2f" % target_timer.get_time_left()
-		text = number
-	else:
-		text = str("")
+	if is_cashing_in:
+		var elapsed = (Time.get_ticks_msec() / 1000.0) - cash_in_start_time
+		var remaining = max(0, cash_in_wait_time - elapsed)
+		text = "%.2f" % remaining

@@ -3,25 +3,33 @@ class_name BallGroup
 extends RigidBody2D
 
 signal merged
+signal ball_expired_offscreen(damage_portion: float)
 
 @export var initial_impulse: Vector2
 @export var gravity_well: Node2D
 @export var color: Color
 @export var death_time: float = 5
 @export var targetball_mass_damage_portion: float = 0.2
+@export var mass_damage_enabled: bool = false
 
 var is_target = false
 var merge_boost = 0.2
 var ball_value = 1
 var base_force = 200
 var current_death_time = 0.0
-var targetball
-var main
 
 func _ready():
 	apply_central_impulse(initial_impulse)
-	main = get_parent()
-	targetball = get_parent().get_node("target_ball")
+	GameEvents.game_restarting.connect(_on_game_restarting)
+
+
+func _on_game_restarting():
+	queue_free()
+
+
+func _exit_tree():
+	if GameEvents.game_restarting.is_connected(_on_game_restarting):
+		GameEvents.game_restarting.disconnect(_on_game_restarting)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,12 +38,8 @@ func _process(delta):
 	if check_out_of_bounds():
 		current_death_time += delta
 		if current_death_time > death_time:
-			if(main.mass_damage):
-				if((targetball.mass - targetball.initial_mass * targetball_mass_damage_portion) <= targetball.minimum_mass):
-					targetball.mass = targetball.minimum_mass
-				else:
-					targetball.mass -= targetball.initial_mass * targetball_mass_damage_portion
-				print("targetball mass: " + str(targetball.mass))
+			if mass_damage_enabled:
+				ball_expired_offscreen.emit(targetball_mass_damage_portion)
 			queue_free()
 	elif current_death_time > 0:
 		current_death_time = max(0, current_death_time - delta)

@@ -14,11 +14,10 @@
 script/source = "extends Label
 
 var tween
-@export var node_path:NodePath
-var parent
+var is_dying = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	parent = get_node(node_path)
 	text = \"融
 合
 融
@@ -33,11 +32,21 @@ func _ready():
 合
 融
 合\"
-	pass
-	#tween = create_tween()
-	#tween.tween_interval(0.6)
-	#tween.tween_property(self, \"position:y\", -5355, 10).as_relative()
-	#activate()
+	GameEvents.target_ball_dying.connect(_on_target_dying)
+	GameEvents.target_ball_safe.connect(_on_target_safe)
+
+
+func _on_target_dying(_time_remaining: float):
+	if !is_dying:
+		is_dying = true
+		activate()
+
+
+func _on_target_safe():
+	if is_dying:
+		is_dying = false
+		return_to_normal()
+
 
 func activate():
 	if(tween):
@@ -45,26 +54,17 @@ func activate():
 	tween = create_tween()
 	tween.tween_interval(0.6)
 	tween.tween_property(self, \"position:y\", -5355, 10).as_relative()
-	
+
 
 func scroll():
 	tween.tween_property(self, \"position:y\", -5355, 10)
+
 
 func return_to_normal():
 	if(tween):
 		tween.kill()
 	tween = create_tween()
 	tween.tween_property(self, \"position:y\", 5355, 10)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if(parent.target_ball != null):
-		if(parent.target_ball.check_dying()):
-			activate()
-			#pass
-		else:
-			return_to_normal()
-			#pass
 
 
 func _on_animation_player_text_animation_finished(anim_name):
@@ -253,7 +253,6 @@ text = "危
 險"
 autowrap_mode = 2
 script = SubResource("GDScript_hbbrn")
-node_path = NodePath("..")
 
 [node name="AnimationPlayerColor" type="AnimationPlayer" parent="ColorRect"]
 libraries = {
