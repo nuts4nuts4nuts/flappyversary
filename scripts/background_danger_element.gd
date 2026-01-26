@@ -14,8 +14,9 @@ var is_cashing_in = false
 func _ready():
 	GameEvents.target_ball_dying.connect(_on_target_dying)
 	GameEvents.target_ball_safe.connect(_on_target_safe)
-	GameEvents.target_ball_cashing_in.connect(_on_cashing_in)
-	GameEvents.target_ball_cashed_in.connect(_on_cashed_in)
+	GameEvents.cluster_cashing_in.connect(_on_cashing_in)
+	GameEvents.cluster_merged.connect(_on_cashed_in)
+	GameEvents.game_restarting.connect(_on_game_restarting)
 
 
 func _on_target_dying(_time_remaining: float):
@@ -30,13 +31,13 @@ func _on_target_safe():
 		return_to_normal()
 
 
-func _on_cashing_in(_wait_time: float):
+func _on_cashing_in(_cluster_id: int, _value: int, _ball_count: int, _time: float):
 	is_cashing_in = true
 	if !activated_cashing_in:
 		activate_cashing_in()
 
 
-func _on_cashed_in():
+func _on_cashed_in(_new_value: int, _position: Vector2):
 	is_cashing_in = false
 	if activated_cashing_in:
 		return_to_normal()
@@ -106,14 +107,23 @@ func activate_cashing_in():
 	$AnimationPlayerText.play("scroll_to_loop_start")
 
 func return_to_normal():
-	#if(tween):
-	#	tween.kill()
-	#tween = create_tween()
-	#tween.tween_property(self, "position:x", initial_position.x, 0.6)
 	$AnimationPlayerMove.play_backwards("entry")
 	$AnimationPlayerText.play_backwards("scroll_loop")
 	activated = false
 	activated_cashing_in = false
+
+
+func _on_game_restarting():
+	# Reset all state and hide immediately
+	is_dying = false
+	is_cashing_in = false
+	activated = false
+	activated_cashing_in = false
+	$AnimationPlayerMove.stop()
+	$AnimationPlayerColor.stop()
+	$AnimationPlayerText.stop()
+	position = initial_position
+	color = initial_color
 
 
 

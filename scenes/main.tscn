@@ -1,11 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://bev206jk65om0"]
+[gd_scene load_steps=18 format=3 uid="uid://bev206jk65om0"]
 
 [ext_resource type="PackedScene" uid="uid://u6gk8ntmnifh" path="res://scenes/ball-group.tscn" id="1_fjp4r"]
 [ext_resource type="PackedScene" uid="uid://cndnlt3bclw7u" path="res://scenes/gravity-well.tscn" id="1_igh56"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_qkwcp"]
 [ext_resource type="PackedScene" uid="uid://d3i5y6ujuyri6" path="res://scenes/ball_spawn_warning.tscn" id="3_eh4ta"]
 [ext_resource type="Script" path="res://scripts/background_danger_element.gd" id="3_hst70"]
-[ext_resource type="PackedScene" uid="uid://uxka1p11iue3" path="res://scenes/target-ball.tscn" id="4_laj0n"]
 [ext_resource type="FontFile" uid="uid://docppmrhwm2u5" path="res://fonts/STHeiti Medium.ttc" id="4_u8emg"]
 [ext_resource type="PackedScene" uid="uid://cmn4pqfuj8wkh" path="res://scenes/HUD.tscn" id="5_uep46"]
 [ext_resource type="Texture2D" uid="uid://ecteeg2lgp51" path="res://assets/face_neutral.png" id="9_ql313"]
@@ -209,16 +208,11 @@ _data = {
 [node name="main" type="Node2D"]
 script = ExtResource("1_qkwcp")
 well_profile = 1
-scoring_method = 1
-cashing_method = 1
 max_spawn_value_method = 1
 ball_scene = ExtResource("1_fjp4r")
 ball_spawn_warning_scene = ExtResource("3_eh4ta")
 spawn_interval = 3.0
 spawn_algorithm = 2
-scoring_behavior = 1
-stationary_targetball = true
-spawn_balls_on_cash_in = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -741.0
@@ -282,11 +276,6 @@ position = Vector2(510, 510)
 
 [node name="SpawnTimer" type="Timer" parent="."]
 
-[node name="target_ball" parent="." node_paths=PackedStringArray("gravity_well") instance=ExtResource("4_laj0n")]
-position = Vector2(512, 512)
-gravity_well = NodePath("../gravity_well")
-color_normal = Color(0, 0, 1, 0.403922)
-
 [node name="HUD" parent="." instance=ExtResource("5_uep46")]
 layer = -1
 
@@ -297,4 +286,3 @@ texture = ExtResource("9_ql313")
 
 [connection signal="animation_finished" from="ColorRect/AnimationPlayerText" to="ColorRect" method="_on_animation_player_move_animation_finished"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
-[connection signal="dead" from="target_ball" to="." method="end_game"]

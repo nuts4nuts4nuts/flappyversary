@@ -3,7 +3,6 @@ extends Node2D
 var game_started = false
 var particles
 var well_config: Dictionary
-var stationary_targetball: bool = false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -11,9 +10,8 @@ func _ready():
 	particles = get_node("GPUParticles2D")
 
 
-func configure(config: Dictionary, stationary: bool):
+func configure(config: Dictionary):
 	well_config = config
-	stationary_targetball = stationary
 
 
 func activate():
@@ -37,18 +35,16 @@ func make_well(event):
 	particles.restart()
 
 
-func get_gravity_power(raw_distance: int, target_ball: bool):
+func get_gravity_power(raw_distance: int):
 	var gravity_distance = well_config["gravity_distance"]
 	var max_distance = well_config["max_distance"]
-	var target_mult = 0 if stationary_targetball else well_config["target_mult"]
 	var non_target_mult = well_config["non_target_mult"]
-	var power_mult = target_mult if target_ball else non_target_mult
-	return gravity_distance.sample(min(float(raw_distance) / float(max_distance), 1.0)) * power_mult
+	return gravity_distance.sample(min(float(raw_distance) / float(max_distance), 1.0)) * non_target_mult
 
 
-func get_sucked(other, target_ball: bool):
+func get_sucked(other):
 	var other_to_well = global_position - other.avg_global_position()
 	var distance = (global_position - other.nearest_global_position(global_position)).length()
-	var force = get_gravity_power(distance, target_ball)
+	var force = get_gravity_power(distance)
 	var direction = other_to_well.normalized()
 	other.apply_central_force(force * direction)
