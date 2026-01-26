@@ -63,7 +63,6 @@ func _exit_tree():
 		ClusterManager.remove_ball_from_cluster(self)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# Pause death timer while any cluster is cashing in
 	var any_cluster_cashing = ClusterManager.clusters.size() > 0
@@ -81,11 +80,6 @@ func _process(delta):
 			current_death_time = max(0, current_death_time - delta)
 		if is_dying_offscreen:
 			is_dying_offscreen = false
-
-
-#func _draw():
-#	var p = avg_global_position() - global_position
-#	draw_circle(p, 15.0, Color.DARK_GREEN)
 
 
 # true if ALL are out of bounds
@@ -132,10 +126,6 @@ func _on_body_entered(body):
 		# Only process if we're the "lower" name to avoid double-processing
 		if name < body.name:
 			ClusterManager.handle_same_value_collision(self, body)
-	# Different value balls just bounce (physics handles it)
-
-
-# steal_children removed - cluster merging now handled by ClusterManager
 
 
 func avg_global_position():

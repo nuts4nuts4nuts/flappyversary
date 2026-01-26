@@ -5,7 +5,6 @@ var cash_in_start_time: float = 0.0
 var cash_in_wait_time: float = 0.0
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	text = ""
 	GameEvents.target_ball_cashing_in.connect(_on_cashing_in)
@@ -23,7 +22,6 @@ func _on_cashed_in():
 	text = ""
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if is_cashing_in:
 		var elapsed = (Time.get_ticks_msec() / 1000.0) - cash_in_start_time

@@ -31,6 +31,10 @@ func clear_all_clusters():
 
 
 func handle_same_value_collision(ball_a, ball_b):
+	# Don't allow new clusters after game has ended
+	if main_scene and not main_scene.game_running:
+		return
+
 	var a_cluster = ball_a.cluster_id
 	var b_cluster = ball_b.cluster_id
 
@@ -73,8 +77,6 @@ func create_cluster(balls: Array, value: int):
 	clusters[next_cluster_id] = cluster
 
 	GameEvents.cluster_cashing_in.emit(next_cluster_id, value, balls.size(), cash_in_duration)
-	print("Created cluster %d with %d balls of value %d" % [next_cluster_id, balls.size(), value])
-
 	next_cluster_id += 1
 
 
@@ -92,7 +94,6 @@ func add_ball_to_cluster(ball, cluster_id: int):
 	cluster.timer.start(cash_in_duration)
 
 	GameEvents.cluster_cashing_in.emit(cluster_id, cluster.value, cluster.balls.size(), cash_in_duration)
-	print("Ball joined cluster %d, now has %d balls" % [cluster_id, cluster.balls.size()])
 
 
 func merge_clusters(cluster_id_a: int, cluster_id_b: int):
@@ -119,7 +120,6 @@ func merge_clusters(cluster_id_a: int, cluster_id_b: int):
 	cluster_a.timer.start(cash_in_duration)
 
 	GameEvents.cluster_cashing_in.emit(cluster_id_a, cluster_a.value, cluster_a.balls.size(), cash_in_duration)
-	print("Merged cluster %d into %d, now has %d balls" % [cluster_id_b, cluster_id_a, cluster_a.balls.size()])
 
 
 func _on_cluster_timer_timeout(cluster_id: int):
@@ -157,8 +157,6 @@ func _on_cluster_timer_timeout(cluster_id: int):
 		main_scene.spawn_ball(center, new_value, Vector2.ZERO)
 
 	GameEvents.cluster_merged.emit(new_value, center)
-	print("Cluster %d merged: %d balls of value %d -> 1 ball of value %d" % [cluster_id, b, n, new_value])
-
 	cluster.timer.queue_free()
 	clusters.erase(cluster_id)
 
@@ -183,4 +181,3 @@ func remove_ball_from_cluster(ball):
 		cluster.timer.stop()
 		cluster.timer.queue_free()
 		clusters.erase(cluster_id)
-		print("Cluster %d dissolved (not enough balls)" % cluster_id)

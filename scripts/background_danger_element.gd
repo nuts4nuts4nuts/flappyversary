@@ -2,15 +2,12 @@ extends ColorRect
 
 var initial_position = position
 var initial_color = color
-var tween
-var color_tween
 var activated = false
 var activated_cashing_in = false
 var is_dying = false
 var is_cashing_in = false
-@export var color2 : Color
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready():
 	GameEvents.target_ball_dying.connect(_on_target_dying)
 	GameEvents.target_ball_safe.connect(_on_target_safe)
@@ -42,19 +39,6 @@ func _on_cashed_in(_new_value: int, _position: Vector2):
 	if activated_cashing_in:
 		return_to_normal()
 
-func flash_color_to():
-	color_tween = create_tween()
-	color_tween.tween_property(self, "color", color2, 0.6)
-	#color_tween.tween_callback(flash_color_back()).set_delay(0.6)
-	await color_tween.finished
-	flash_color_back()
-
-func flash_color_back():
-	var color_tween2 = create_tween()
-	color_tween2.tween_property(self, "color", initial_color, 0.6)
-	#color_tween2.tween_callback(flash_color_to()).set_delay(0.6)
-	await color_tween2.finished
-	flash_color_to()
 
 func activate():
 	activated = true
@@ -76,14 +60,7 @@ func activate():
 	$AnimationPlayerMove.play("entry")
 	$AnimationPlayerColor.play("flash")
 	$AnimationPlayerText.play("scroll")
-	print("UI active")
-	#if(tween):
-	#	tween.kill()
-	#tween = create_tween()
-	#tween.tween_property(self, "position", Vector2(-177, -2589), 0.6)
-	#tween.tween_property(self, "position", Vector2(-177, -7930), 10)
-	
-	
+
 
 func activate_cashing_in():
 	activated_cashing_in = true
@@ -128,7 +105,5 @@ func _on_game_restarting():
 
 
 func _on_animation_player_move_animation_finished(anim_name):
-	if(anim_name == "scroll_to_loop_start"):
-		print("scrolled to loop start")
+	if anim_name == "scroll_to_loop_start":
 		$AnimationPlayerText.play("scroll_loop")
-	pass

@@ -50,9 +50,7 @@ var last_generated_number = 0
 var high_score: int = 2
 var was_any_ball_dying: bool = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	print("ready")
 	$gravity_well.configure(well_mappings[well_profile])
 	ClusterManager.main_scene = self
 
@@ -174,8 +172,7 @@ func _on_cluster_cashed_in_spawn_balls(_new_value, _pos):
 func _on_spawn_timer_timeout():
 	var direction = (get_viewport_rect().get_center() - ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio)).normalized()
 	var velo = ball_spawner_rng.randf_range(100, 200)
-	var ball_value = generate_new_number(last_generated_number)
-	print(last_generated_number)
+	generate_new_number(last_generated_number)
 	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), last_generated_number, direction * velo)
 
 func populate_with_new_balls():
@@ -223,7 +220,6 @@ func algo_count_up(max_power, previous_number):
 
 
 func spawn_ball(pos, value = 1, impulse = Vector2.ZERO):
-	print("ball spawning")
 	var ball = ball_scene.instantiate()
 	ball.gravity_well = $gravity_well
 	ball.position = pos

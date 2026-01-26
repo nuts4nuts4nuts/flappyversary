@@ -5,7 +5,6 @@ var particles
 var well_config: Dictionary
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	particles = get_node("GPUParticles2D")
 
@@ -15,12 +14,10 @@ func configure(config: Dictionary):
 
 
 func activate():
-	print("well active")
 	game_started = true
 
 
 func deactivate():
-	print("well not active")
 	game_started = false
 
 
@@ -30,7 +27,6 @@ func _input(event):
 
 
 func make_well(event):
-	print("mouse button event at ", event.position)
 	self.position = event.position
 	particles.restart()
 

@@ -221,7 +221,6 @@ offset_right = -228.0
 offset_bottom = 8895.0
 color = Color(0.787542, 4.16331e-06, 5.77569e-07, 1)
 script = ExtResource("3_hst70")
-color2 = Color(0.956863, 0.0392157, 0, 1)
 
 [node name="background_danger_text" type="Label" parent="ColorRect"]
 layout_mode = 0
