@@ -15,7 +15,10 @@ signal ball_expired_offscreen(damage_portion: float)
 
 var is_target = false
 var merge_boost = 0.2
-var ball_value = 1
+var ball_value = 1:
+	set(value):
+		ball_value = value
+		update_scale_for_value()
 var base_force = 200
 var current_death_time = 0.0
 var cluster_id: int = -1  # -1 = not in cluster
@@ -26,8 +29,26 @@ var has_triggered_death: bool = false
 
 func _ready():
 	original_color = color
+	update_scale_for_value()
 	apply_central_impulse(initial_impulse)
 	GameEvents.game_restarting.connect(_on_game_restarting)
+
+
+func update_scale_for_value():
+	# Scale based on value - value 1 is base size, value 64 is 2x size
+	var scale_factor = pow(float(ball_value), 1.0 / 6.0)  # Sixth root: 64 -> 2x
+
+	# Scale the visuals
+	var visuals = get_node_or_null("Visuals")
+	if visuals:
+		visuals.scale = Vector2(scale_factor, scale_factor)
+
+	# Scale the collision shape
+	var collider = get_node_or_null("Collider")
+	if collider and collider.shape:
+		var new_shape = CircleShape2D.new()
+		new_shape.radius = 64.0 * scale_factor
+		collider.shape = new_shape
 
 
 func _on_game_restarting():

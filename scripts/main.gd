@@ -124,7 +124,7 @@ func _unhandled_key_input(event: InputEvent):
 func start_game():
 	GameEvents.game_restarting.emit()  # Balls self-cleanup
 	game_running = true
-	high_score = 2
+	high_score = 1
 	was_any_ball_dying = false
 	ball_spawner_rng = RandomNumberGenerator.new()
 	ClusterManager.clear_all_clusters()
@@ -135,7 +135,7 @@ func start_game():
 
 func spawn_starting_ball():
 	var start_pos = get_viewport_rect().size * Vector2(0.5, 0.33)
-	spawn_ball(start_pos, 2, Vector2.ZERO)
+	spawn_ball(start_pos, 1, Vector2.ZERO)
 
 
 func restart_game():
@@ -191,24 +191,35 @@ func populate_with_new_balls():
 
 
 func generate_new_number(previous_number):
-	var top_range = int(ceil(max_spawn_value_methods[max_spawn_value_method].call(high_score)))
-	last_generated_number = spawn_funcs[spawn_algorithm].call(top_range, previous_number)
+	var top_value = max(1, int(ceil(max_spawn_value_methods[max_spawn_value_method].call(high_score))))
+	# Calculate max power of 2 index (0=1, 1=2, 2=4, 3=8, etc.)
+	var max_power = int(floor(log(top_value) / log(2)))
+	last_generated_number = spawn_funcs[spawn_algorithm].call(max_power, previous_number)
 	return last_generated_number
 
 
-func algo_pure_random(top_range, previous_number):
-	return ball_spawner_rng.randi_range(1, top_range)
+func algo_pure_random(max_power, previous_number):
+	# Return a random power of 2 from 1 to 2^max_power
+	var power = ball_spawner_rng.randi_range(0, max_power)
+	return int(pow(2, power))
 
 
-func algo_dont_repeat(top_range, previous_number):
-	var new_number = ball_spawner_rng.randi_range(1, top_range - 1)
-	if(new_number >= previous_number):
-		new_number += 1
-	return new_number
+func algo_dont_repeat(max_power, previous_number):
+	# Return a random power of 2 different from previous
+	if max_power == 0:
+		return 1
+	var prev_power = int(round(log(max(1, previous_number)) / log(2)))
+	var new_power = ball_spawner_rng.randi_range(0, max_power - 1)
+	if new_power >= prev_power:
+		new_power += 1
+	return int(pow(2, new_power))
 
 
-func algo_count_up(top_range, previous_number):
-	return previous_number % top_range + 1
+func algo_count_up(max_power, previous_number):
+	# Count up through powers of 2
+	var prev_power = int(round(log(max(1, previous_number)) / log(2)))
+	var new_power = (prev_power + 1) % (max_power + 1)
+	return int(pow(2, new_power))
 
 
 func spawn_ball(pos, value = 1, impulse = Vector2.ZERO):
