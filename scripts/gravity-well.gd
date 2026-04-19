@@ -29,7 +29,7 @@ func _input(event):
 func make_well(event):
 	self.position = event.position
 	particles.restart()
-	# $place_well_sound.play()
+	$place_well_sound.play()
 
 
 func get_gravity_power(raw_distance: int):
