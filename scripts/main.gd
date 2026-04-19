@@ -157,6 +157,24 @@ func end_game():
 	if was_any_ball_dying:
 		was_any_ball_dying = false
 		GameEvents.target_ball_safe.emit()
+	celebrate_winner_balls()
+
+
+func celebrate_winner_balls():
+	var center = get_viewport_rect().get_center()
+	var max_value = 0
+	var winner: BallGroup = null
+	for child in get_children():
+		if child is BallGroup:
+			var closer = winner == null or child.position.distance_to(center) < winner.position.distance_to(center)
+			if child.ball_value > max_value or (child.ball_value == max_value and closer):
+				max_value = child.ball_value
+				winner = child
+
+	if winner:
+		winner.freeze = true
+		create_tween().tween_property(winner, "position", center, 0.5) \
+			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
 
 
 func _on_ball_leaving_screen(_ball):
