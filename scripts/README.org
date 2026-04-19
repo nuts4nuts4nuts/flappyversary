@@ -1,0 +1,328 @@
+#+TITLE: Flappyversary Scripts
+#+DESCRIPTION: Code architecture overview
+
+* Overview
+
+A physics-based puzzle game where the player places gravity wells to attract
+balls. Two gameplay modes are being prototyped in parallel:
+
+- *Target-ball mode* (main branch): one special "target ball" sits on screen.
+  Regular balls of the same value are absorbed by it. Absorbing enough raises
+  the target's value; the game ends when the target ball leaves the screen.
+- *2048-cluster mode* (notarget branch): all balls are equal. Two balls of the
+  same value that touch form a cluster; when the timer expires they merge into
+  a single higher-value ball. Any ball leaving the screen ends the game.
+
+Neither mode is final; the goal is to keep both playable from the same
+codebase so they can be compared.
+
+* Script Inventory
+
+** Core Game Loop
+
+*** ~main.gd~
+The root scene script. Owns everything: spawning, game-state lifecycle,
+score tracking, and the spawn-position indicator drawn each frame.
+
+Key responsibilities:
+- Configures the gravity well from the exported ~well_profile~ enum.
+- Drives the spawn timer; each tick picks a value with the selected algorithm
+  and calls ~spawn_ball~.
+- Listens for ~ball_leaving_screen~ → calls ~end_game~.
+- Draws a growing red dot at the next spawn position as a countdown cue.
+
+Spawn position math (~ball_spawn_pos~): walks the screen perimeter as a
+normalised 0–1 parameter, distributing time proportionally to each edge's
+length so the dot moves at a constant visual speed.
+
+*Differences between branches:*
+
+Spawning algorithm value ranges differ by mode:
+- *Target-ball (main)*: linear integers 1..N where N = ~$target_ball.ball_value~.
+  Algorithms pick any integer in range.
+- *2048-cluster (notarget)*: powers of 2 only (1, 2, 4, 8…) up to 2^floor(log2(high_score)).
+  Algorithms pick a power index.
+
+| Enum          | Target-ball behaviour          | 2048-cluster behaviour                    |
+|---------------+--------------------------------+-------------------------------------------|
+| PureRandom    | Random integer 1..N            | Random power of 2                         |
+| DontRepeat    | Random integer, not last value | Random power of 2, not last              |
+| CountUp       | Cycles 1 → 2 → … → N → 1      | Cycles 1 → 2 → 4 → … → max → 1 → …      |
+
+Well profiles — main branch has an extra ~target_mult~ field (the target ball
+gets pulled harder than regular balls); this is absent on ~notarget~:
+| Enum          | max_distance | target_mult | non_target_mult | Notes              |
+|---------------+--------------+-------------+-----------------+--------------------|
+| Standard      | 1024         | 400         | 300             | Wide, gentle pull  |
+| FastAndClose  | 256          | 300         | 800             | Short, snappy pull |
+| Strong        | 300          | 300         | 1200            | Short, very strong |
+
+Configuration enums that exist only on ~main~ (target-ball mode):
+- ~SCORING_CONDITION~: NOfN (need N balls of value N) vs OneOfN (any absorption scores)
+- ~DEATH_CONDITION~: OffScreen (5 s timer) vs Always (60 s timer regardless)
+- ~SCORING_METHOD~: AddN (linear growth) vs TwoToN (exponential growth)
+- ~CASHING_METHOD~: N (cash-in time = ball value) vs FiveBaseFastGrowth
+
+Max spawn value methods control how high spawned values can go relative to
+the current score ceiling (N, N/2, or N/4). Shared by both modes.
+
+*** ~game_events.gd~
+Auto-loaded singleton. Declares all game-wide signals so scripts can
+communicate without hard references.
+
+| Signal                  | Payload                               | Purpose                                    |
+|-------------------------+---------------------------------------+--------------------------------------------|
+| game_started            | —                                     | (unused in current code)                   |
+| game_restarting         | —                                     | Balls listen and ~queue_free~ themselves   |
+| game_ended              | —                                     | (unused in current code)                   |
+| game_running_changed    | is_running: bool                      | (unused in current code)                   |
+| cluster_cashing_in      | id, value, ball_count, time           | A cluster is counting down to merge        |
+| cluster_merged          | new_value, position                   | Cluster timer fired; merged ball spawned   |
+| ball_leaving_screen     | ball                                  | A ball exceeded the death timer off-screen |
+| high_score_updated      | value: int                            | New highest merged value                   |
+| target_ball_dying       | time_remaining: float                 | Danger UI countdown                        |
+| target_ball_safe        | —                                     | Danger UI hide                             |
+| target_ball_cashing_in  | wait_time: float                      | (legacy, from old target-ball system)      |
+| target_ball_cashed_in   | —                                     | (legacy)                                   |
+
+** Ball System
+
+*** ~ball.gd~ (class ~BallGroup~)
+Each spawned ball is a ~RigidBody2D~ that holds its numeric value and handles
+its own physics, death timer, and cluster membership state.
+
+Important state:
+- ~ball_value~: setter calls ~update_scale_for_value~ immediately, so visual
+  size and collision radius are always in sync. Scale is the sixth-root of the
+  value (value 64 → 2× base size).
+- ~cluster_id~: ~-1~ means "not in any cluster"; set by ~ClusterManager~.
+- ~is_dying_offscreen~ / ~current_death_time~: accumulates while ~check_out_of_bounds~
+  returns true. Death timer pauses while any cluster is cashing in.
+- ~is_cashing~: while true the ball freezes in place and turns green.
+
+Collision handling: when two ~BallGroup~ nodes with the same value touch,
+the one with the lexicographically lower node name delegates to
+~ClusterManager.handle_same_value_collision~ (prevents double-processing the
+same collision).
+
+~check_out_of_bounds~: returns ~true~ only when *all* child ~BallCollider~
+shapes are outside the viewport — a ball is not "out" while any part is still
+visible.
+
+*** ~target-ball.gd~
+The special "target ball" used in *target-ball mode* (~main~ branch). A
+separate ~RigidBody2D~ that the player must keep on screen. Regular balls are
+absorbed by it when their value matches.
+
+Key mechanics:
+- ~steal_children~: reparents the sub-nodes of an absorbed ball into itself and
+  fades them, building up a ~merged_balls~ list.
+- ~SCORING_CONDITION~ (NOfN / OneOfN): how many absorptions are needed to
+  trigger a cash-in.
+- ~DEATH_CONDITION~ (OffScreen / Always): when the death timer starts ticking.
+- ~finish_cash_in~: applies a ~scoring_method~ callable to determine by how
+  much ~ball_value~ grows, then emits ~cashed_in~ so ~main.gd~ can spawn
+  more balls.
+- Receives a ~config~ dict from ~main.gd~ containing all the above callables
+  and enums, keeping the configuration in one place.
+
+On the ~notarget~ branch the script is still present but the ~$target_ball~
+scene node is unwired — ~main.gd~ no longer calls ~start()/end()~ on it and
+doesn't pass a config. The script is *not dead code*; it is the implementation
+of one of the two modes being compared.
+
+*** ~ball-collider.gd~ (class ~BallCollider~)
+Marker subclass of ~CollisionShape2D~. Provides a named type so ~ball.gd~ can
+find collision shapes with ~find_children("", "BallCollider")~ instead of
+relying on node names.
+
+*** ~ball-drawing.gd~ (class ~BallDrawer~)
+~Node2D~ child that draws the ball circle each frame using the parent's
+~color~ property. Supports a ~color_alpha~ override (set to 0.1 by
+~target-ball.gd~ when absorbing balls to fade them out).
+
+*** ~ball-value.gd~ (class ~BallValue~)
+~Label~ child that displays the ball's numeric value each frame by walking up
+two levels in the scene tree to read ~ball_value~ (or ~target_progress~ when
+~display_ball_value~ is false).
+
+*** ~BallMovementParticles.gd~
+~GPUParticles2D~ child. Emits particles trailing behind the ball's movement.
+Scale and opacity are proportional to the squared speed (length_squared of
+displacement since last frame), so fast-moving balls leave a visible trail and
+stationary balls emit nothing.
+
+** Cluster / Merging System
+
+*** ~cluster_manager.gd~ (AutoLoad singleton)
+Implements the 2048-style merge mechanic. Manages a dictionary of live
+~ClusterData~ objects keyed by integer ID.
+
+Flow:
+1. Two same-value balls collide → ~handle_same_value_collision~ is called.
+2. Depending on whether either ball is already in a cluster, one of three
+   paths is taken:
+   - Both free → ~create_cluster~ (new cluster, timer starts).
+   - One free → ~add_ball_to_cluster~ (join existing cluster, timer resets).
+   - Both in different clusters → ~merge_clusters~ (absorb smaller into larger,
+     timer resets).
+3. All balls in a cluster enter the "cashing" visual state (frozen, green).
+4. When the timer fires, ~_on_cluster_timer_timeout~ computes the merged value:
+   ~new_value = n × 2^(b-1)~  where ~n~ is the base value and ~b~ is the ball
+   count. Old balls are freed; a new ball is spawned at the centroid.
+
+Timer resets on every new addition, so large cascading merges are encouraged.
+A cluster with fewer than 2 balls is immediately cancelled and balls are
+returned to normal.
+
+** Gravity Well
+
+*** ~gravity-well.gd~
+Player-controlled attractor. Moves to the tap/click position, plays a sound,
+and restarts the particle effect.
+
+Force calculation (~get_gravity_power~): samples a ~Curve~ resource at the
+normalised distance (clamped 0–1 over ~max_distance~) and multiplies by
+~non_target_mult~. Designers can shape the force falloff in the Godot editor
+by editing the curve asset.
+
+~get_sucked(other)~: applies a central force to ~other~ directed toward the
+well. Uses ~nearest_global_position~ for distance (closest sub-collider) and
+~avg_global_position~ for direction (centre of mass), which means multi-ball
+clusters get pulled smoothly.
+
+*** ~MakeGravityWell.gd~
+Early prototype / test scene script. Wires a test ball to a gravity well node.
+Not used in the main game scene; can be removed or kept as a playground.
+
+** HUD / UI
+
+*** ~HUD.gd~
+~CanvasLayer~ with Start/Restart and Share buttons. Minimal logic: emits
+~start_requested~ or ~restart_requested~ signals based on button text state.
+Also provides a ~screenshot~ helper that saves a PNG to the OS data directory.
+
+*** ~danger_hud.gd~
+~Label~ that shows a countdown (seconds to 2 d.p.) when ~target_ball_dying~
+fires, and clears when ~target_ball_safe~ fires.
+
+*** ~scoring_hud.gd~
+~Label~ that shows a cash-in countdown timer. Listens to the legacy
+~target_ball_cashing_in~ / ~target_ball_cashed_in~ signals.
+
+*** ~background_danger_element.gd~
+Full-screen ~ColorRect~ that slides in and flashes animations when the player
+is in danger (ball off-screen) or when a merge is cashing in.
+
+Two visual states:
+- *Danger* (~activate~): Chinese character 危險 ("danger") scrolling text,
+  red flashing background.
+- *Cashing in* (~activate_cashing_in~): Chinese character 融合 ("fusion/merge")
+  scrolling text, different flash animation.
+
+Returns to normal on ~target_ball_safe~ / ~cluster_merged~, and resets
+immediately on ~game_restarting~.
+
+*** ~background_danger_text.gd~
+Empty stub extending ~Label~. Placeholder for the scrolling text node; all
+actual behaviour is driven by ~background_danger_element.gd~ setting the text
+and triggering animations.
+
+*** ~start-button.gd~
+Unused stub (~Control~ with a button). The working start button is wired
+through ~HUD.gd~.
+
+** Tests
+
+*** ~test_example.gd~ / ~test_ball.gd~
+GUT (Godot Unit Testing) test files. ~test_example.gd~ is a minimal template.
+~test_ball.gd~ contains ball-specific unit tests.
+
+* Dependency / Signal Graph
+
+#+begin_src
+main.gd ──────────────────── GameEvents ──────────────────────────┐
+  │  spawns BallGroup                │                             │
+  │  owns gravity-well.gd            │ ball_leaving_screen         │
+  │  owns HUD.gd                     ├──────────→ main.gd::end_game│
+  │                                  │                             │
+BallGroup ──body_entered──→ ClusterManager                         │
+  │  child: BallCollider              │ cluster_cashing_in          │
+  │  child: BallDrawer                ├──────────→ background_danger_element
+  │  child: BallValue                 │ cluster_merged              │
+  │  child: BallMovementParticles     ├──────────→ background_danger_element
+  │                                  │                             │
+main.gd::update_death_danger_state    │ target_ball_dying           │
+  └─ emits target_ball_dying/safe ───┴──────────→ danger_hud       │
+                                                                    │
+HUD.gd ──start_requested──→ main.gd::start_game                   │
+       ──restart_requested→ main.gd::restart_game                  │
+#+end_src
+
+* What's Shared vs Mode-Specific
+
+| Component                       | Target-ball mode | 2048-cluster mode |
+|---------------------------------+------------------+-------------------|
+| ~main.gd~ scaffolding           | shared           | shared            |
+| ~gravity-well.gd~               | shared           | shared            |
+| ~HUD.gd~                        | shared           | shared            |
+| ~game_events.gd~                | shared           | shared            |
+| ~ball-collider/drawing/value~   | shared           | shared            |
+| ~BallMovementParticles.gd~      | shared           | shared            |
+| ~background_danger_element.gd~  | shared           | shared            |
+| ~danger_hud.gd~                 | shared           | shared            |
+| ~target-ball.gd~                | active           | unwired           |
+| ~cluster_manager.gd~            | unused           | active            |
+| ~scoring_hud.gd~                | active           | stale signals     |
+| ~ball.gd~ cluster collision     | unused           | active            |
+| ~main.gd~ scoring enums         | active           | removed           |
+| ~main.gd~ update_death_danger_state | unused       | active            |
+| Well profile ~target_mult~      | active           | removed           |
+
+* Refactoring Notes
+
+** Uncontroversial cleanup (safe regardless of which mode wins)
+- ~MakeGravityWell.gd~ and ~start-button.gd~ are prototype stubs with no
+  callers; they are safe to delete now.
+- ~background_danger_text.gd~ is an empty stub; the node can just be a plain
+  ~Label~ with no script attached.
+- ~ball-drawing.gd~ and ~ball-value.gd~ walk up two levels with
+  ~get_parent().get_parent()~. Storing a reference in ~_ready~ would be safer.
+
+** To make both modes playable from one codebase
+The cleanest approach is a single ~GAMEPLAY_MODE~ export in ~main.gd~ that
+gates the mode-specific wiring at ~start_game~ time:
+
+1. *Restore ~target_mult~ to well profiles* — it was removed on ~notarget~.
+   It is harmless in cluster mode (the well just ignores it).
+
+2. *Restore scoring/death config enums* (~SCORING_CONDITION~, ~DEATH_CONDITION~,
+   ~SCORING_METHOD~, ~CASHING_METHOD~) to ~main.gd~. In cluster mode these can
+   be ignored; they only drive ~target-ball.gd~.
+
+3. *In ~start_game~*, branch on the mode flag:
+   - Target-ball: build a config dict and call ~$target_ball.start()~; skip
+     ~ClusterManager~.
+   - Cluster: call ~ClusterManager.clear_all_clusters()~; skip ~$target_ball~.
+
+4. *In ~end_game~*, same branch: call ~$target_ball.end()~ only in target-ball
+   mode.
+
+5. *In ~generate_new_number~*: branch on mode — linear integer range
+   (target ball value) vs power-of-2 range (high score).
+
+6. *~ball.gd~ collision handling* already delegates to ~ClusterManager~.
+   ~ClusterManager.handle_same_value_collision~ already checks ~game_running~,
+   so in target-ball mode (where all merging happens through the target ball)
+   it will simply never trigger — no change needed there.
+
+7. *~scoring_hud.gd~* listens to ~target_ball_cashing_in~ / ~target_ball_cashed_in~
+   which are not emitted in cluster mode. Either update it to also listen to
+   ~cluster_cashing_in~ / ~cluster_merged~, or replace with a single HUD that
+   handles both signal sets.
+
+** Things to defer until a mode is chosen
+- Removing ~target-ball.gd~, its scene node, or the scoring enums.
+- Removing ~cluster_manager.gd~.
+- Simplifying ~ball-value.gd~'s ~display_ball_value~ branch (it exists to show
+  ~target_progress~ for the target ball).

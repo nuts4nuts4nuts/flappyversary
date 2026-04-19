@@ -32,6 +32,7 @@ var max_spawn_value_methods = {
 
 @export var ball_scene : PackedScene
 @export var ball_spawn_warning_scene : PackedScene
+@export var cash_in_timer_scene : PackedScene
 @export var spawn_interval : float = 4.0
 @export var spawn_pos_orbit_speed : float = 0.20
 @export var spawn_algorithm : SPAWNING_ALGORITHM
@@ -45,6 +46,7 @@ var ball_spawner_rng : RandomNumberGenerator
 var spawn_pos_ratio : float
 
 var game_running = false
+var cash_in_timers: Dictionary = {}
 
 var last_generated_number = 0
 var high_score: int = 2
@@ -57,6 +59,7 @@ func _ready():
 	# Connect to cluster signals
 	GameEvents.ball_leaving_screen.connect(_on_ball_leaving_screen)
 	GameEvents.cluster_merged.connect(_on_cluster_merged)
+	GameEvents.cluster_cashing_in.connect(_on_cluster_cashing_in)
 
 	if spawn_balls_on_cash_in:
 		GameEvents.cluster_merged.connect(_on_cluster_cashed_in_spawn_balls)
@@ -126,6 +129,7 @@ func start_game():
 	was_any_ball_dying = false
 	ball_spawner_rng = RandomNumberGenerator.new()
 	ClusterManager.clear_all_clusters()
+	cash_in_timers.clear()
 	$gravity_well.activate()
 	spawn_starting_ball()
 	$SpawnTimer.start()
@@ -163,6 +167,15 @@ func _on_cluster_merged(new_value, _pos):
 	if new_value > high_score:
 		high_score = new_value
 		GameEvents.high_score_updated.emit(high_score)
+
+
+func _on_cluster_cashing_in(cluster_id: int, _value: int, _ball_count: int, duration: float):
+	if cash_in_timers.has(cluster_id):
+		return
+	var timer = cash_in_timer_scene.instantiate()
+	add_child(timer)
+	timer.init(cluster_id, duration)
+	cash_in_timers[cluster_id] = timer
 
 
 func _on_cluster_cashed_in_spawn_balls(_new_value, _pos):
