@@ -173,6 +173,7 @@ func celebrate_winner_balls():
 
 	if winner:
 		winner.freeze = true
+		winner.color = winner.color_cashing
 		create_tween().tween_property(winner, "position", center, 0.5) \
 			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
 
