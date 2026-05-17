@@ -14,7 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://be5ggwuutbkc6" path="res://sounds/block_4.mp3" id="13_oo53f"]
 [ext_resource type="AudioStream" uid="uid://iok0rlt0dbwi" path="res://sounds/block_5.mp3" id="14_xn2qs"]
 [ext_resource type="AudioStream" uid="uid://dggyykw00en1" path="res://sounds/block_6.mp3" id="15_olbi6"]
-[ext_resource type="PackedScene" path="res://scenes/cash_in_timer.tscn" id="16_cit01"]
+[ext_resource type="PackedScene" uid="uid://cashtimer0001" path="res://scenes/cash_in_timer.tscn" id="16_cit01"]
 
 [sub_resource type="GDScript" id="GDScript_hbbrn"]
 script/source = "extends Label
@@ -229,8 +229,9 @@ max_spawn_value_method = 1
 ball_scene = ExtResource("1_fjp4r")
 ball_spawn_warning_scene = ExtResource("3_eh4ta")
 cash_in_timer_scene = ExtResource("16_cit01")
-spawn_interval = 3.0
-spawn_algorithm = 2
+spawn_interval = 10.0
+spawn_algorithm = 3
+spawn_balls_on_cash_in = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -741.0
