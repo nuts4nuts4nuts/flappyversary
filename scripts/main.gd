@@ -194,7 +194,7 @@ func _on_spawn_timer_timeout():
 	spawn_ball(ball_spawn_pos(get_viewport_rect(), spawn_pos_ratio), last_generated_number, direction * velo)
 
 func populate_with_new_balls():
-	var ball_count = ball_spawner_rng.randi_range(1, 2)
+	var ball_count = floor(ball_spawner_rng.randf_range(0, 1.3)) + 1
 	var rect = get_viewport_rect().size
 	var delay = cashin_ball_spawn_initial_delay
 	for x in range(ball_count):
