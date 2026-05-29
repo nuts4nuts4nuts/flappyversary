@@ -58,15 +58,16 @@ func _ready():
 	ClusterManager.main_scene = self
 
 	# Connect to cluster signals
-	GameEvents.ball_leaving_screen.connect(_on_ball_leaving_screen)
 	GameEvents.cluster_merged.connect(_on_cluster_merged)
 	GameEvents.cluster_cashing_in.connect(_on_cluster_cashing_in)
+	$LossConditionSystem.game_over_requested.connect(end_game)
 
 	if spawn_balls_on_cash_in:
 		GameEvents.cluster_merged.connect(_on_cluster_cashed_in_spawn_balls)
 
 	$HUD.start_requested.connect(start_game)
 	$HUD.restart_requested.connect(restart_game)
+	$OffscreenIndicatorSystem.set_active(false)
 
 func _process(delta):
 	$SpawnTimer.wait_time = spawn_interval
@@ -75,9 +76,8 @@ func _process(delta):
 		spawn_pos_ratio -= 1.0
 
 	# Centralized death tracking - find ball with highest death time
-	if game_running:
+	if game_running and $LossConditionSystem.should_track_offscreen_danger():
 		update_death_danger_state()
-
 	queue_redraw()
 
 func update_death_danger_state():
@@ -122,6 +122,8 @@ func start_game():
 	GameEvents.game_restarting.emit()  # Balls self-cleanup
 	game_running = true
 	high_score = 1
+	$LossConditionSystem.start_condition(high_score)
+	$OffscreenIndicatorSystem.set_active($LossConditionSystem.should_track_offscreen_danger())
 	was_any_ball_dying = false
 	ball_spawner_rng = RandomNumberGenerator.new()
 	ClusterManager.clear_all_clusters()
@@ -145,6 +147,8 @@ func end_game():
 	$SpawnTimer.stop()
 	$HUD.show_restart()
 	game_running = false
+	$OffscreenIndicatorSystem.set_active(false)
+	$LossConditionSystem.stop_condition()
 	# Reset danger state so UI hides
 	if was_any_ball_dying:
 		was_any_ball_dying = false
@@ -167,9 +171,6 @@ func celebrate_winner_balls():
 		winner.color = winner.color_cashing
 		create_tween().tween_property(winner, "position", center, 0.5) \
 			.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART)
-
-func _on_ball_leaving_screen(_ball):
-	end_game()
 
 func _on_cluster_merged(new_value, _pos):
 	if new_value > high_score:

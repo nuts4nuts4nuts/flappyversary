@@ -1,6 +1,6 @@
 extends Node2D
 
-var game_started = false
+var is_active = false
 var particles
 var well_config: Dictionary
 
@@ -14,15 +14,15 @@ func configure(config: Dictionary):
 
 
 func activate():
-	game_started = true
+	is_active = true
 
 
 func deactivate():
-	game_started = false
+	is_active = false
 
 
 func _input(event):
-	if game_started and event.is_action_pressed("make_well"):
+	if is_active and event.is_action_pressed("make_well"):
 		make_well(event)
 
 

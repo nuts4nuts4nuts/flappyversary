@@ -1,10 +1,7 @@
 extends Node
 
 # Game state signals
-signal game_started
 signal game_restarting  # Emitted BEFORE restart - balls listen to this
-signal game_ended
-signal game_running_changed(is_running: bool)
 
 # Cluster signals (2048-style merging)
 signal cluster_cashing_in(cluster_id: int, value: int, ball_count: int, time: float)

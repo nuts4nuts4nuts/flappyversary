@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/loss_condition_system.gd" id="1_loss01"]
+
+[node name="LossConditionSystem" type="Node"]
+script = ExtResource("1_loss01")
